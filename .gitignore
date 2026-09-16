@@ -42,3 +42,23 @@ PPT_TM 1 ASEC.pdf
 
 # Temporary scripts
 Codes/build_*.py
+
+# -------------------------------------------------------------------------
+# DRAFT, ADMINISTRATIVE, & AUXILIARY FILES (LOCAL ONLY)
+# -------------------------------------------------------------------------
+# Root text extraction files
+/*.txt
+
+# Competition administration & templates
+/Guidebook Penyisihan ASEC 2026.pdf
+/TEMPLATE KARYA ASEC 2026.docx
+/SURAT PERNYATAAN ORISINALITAS KARYA ASEC 2026.docx
+/Virtual Background TM 1 ASEC.png
+/convert_to_pdf.py
+
+# Topic planning & reference archives
+/Rencana_Topik/
+/Referensi/
+/Analisis_Data/
+/Daftar/
+/Dashboard/
