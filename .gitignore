@@ -1,5 +1,44 @@
-/*
+# =========================================================================
+# GITIGNORE - CSPI GRAND SYNTHESIS PANTURA JAWA (ASEC 2026)
+# =========================================================================
 
+# Python & Jupyter Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
 
-!/code/
-!/.gitignore
+# Virtual Environments & IDE
+venv/
+env/
+.env
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# -------------------------------------------------------------------------
+# LARGE FILES EXCEEDING GITHUB 100MB LIMIT (DO NOT PUSH TO REPO)
+# -------------------------------------------------------------------------
+# 1. Large Raw GIS Archives (>1 GB)
+Dataset/01_Fisik_Hazard/Garis_Pantai_Coastline/Arsip_Mentah_OSM_Global/
+Dataset/02_Ekologis_Mangrove/Arsip_Mentah_GMW_Global/
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.sbn
+*.sbx
+
+# 2. Large GeoTIFF Satellite & GMW Rasters (~2 GB total, reproducible via GEE Script)
+*.tif
+*.tiff
+Dataset/03_Raster_Satelit_10m_2021_2024/
+Dataset/02_Ekologis_Mangrove/GMW_v4112_Annual_1985_2025/
+
+# 3. Large Presentation Files (>100MB)
+PPT_TM 1 ASEC.pdf
+
+# Temporary scripts
+Codes/build_*.py

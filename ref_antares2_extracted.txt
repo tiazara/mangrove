@@ -1,0 +1,515 @@
+FILE: Referensi/SMATIC_Antares_Coraly Sistem Pendukung Keputusan Berbasis Indeks Prioritas untuk Konservasi Terumbu Karang di Indonesia _Universitas Gadjah Mada.pdf
+TOTAL PAGES: 19
+
+=== PAGE 1 ===
+ 
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ANTARES 
+ 
+ 
+UNIVERSITAS GADJAH MADA 
+ 
+=== PAGE 2 ===
+ 
+   
+ 
+Coraly: Sistem Pendukung Keputusan Berbasis Indeks Prioritas untuk Konservasi 
+Terumbu Karang di Indonesia 
+ 
+1. Pendahuluan 
+Coral bleaching menjadi ancaman besar bagi keberlanjutan ekosistem laut. Pada 15 April 
+2024, NOAA (National Oceanic and Atmospheric Administration ) bersama ICRI 
+(International Coral Reef Initiative ) menetapkan Fourth Global Coral Bleaching Event  
+setelah pemutihan karang terdeteksi luas di Samudra Atlantik, Pasifik, dan Hindia 
+(NOAA, 2024). Hingga 30 September 2025, sekitar 84,4% wilayah terumbu karang dunia 
+telah menga lami paparan stre s panas tingkat bleaching, menjadikannya peristiwa 
+pemutihan karang global terbesar yang pernah tercatat (NOAA Coral Reef Watch, 2026).  
+Indonesia menghadapi risiko besar dalam krisis ini karena memiliki habitat terumbu 
+karang terluas di dunia, sekitar 9.703 km² (Allen Coral Atlas,  2023). Ekosistem ini 
+memberikan manfaat ekonomi lebih dari  USD 6 miliar per tahun  dari perikanan, 
+pariwisata, dan perlindungan pesisir, dengan sekitar 60 juta penduduk pesisir bergantung 
+pada jasa ekosistemnya ( World Bank, 2025; COREMAP -CTI, 2023). Besarnya nilai 
+ekologis dan sosial-ekonomi menjadikan penentuan wilayah prioritas konservasi penting 
+dalam menjaga keberlanjutan ekosistem sekaligus kesejahteraan masyarakat. 
+Beberapa pendekatan seperti Marine Protected Areas  (MPAs), Reef Health Index , dan 
+penilaian biofisik telah digunakan untuk mengevaluasi kondisi terumbu karang (Makino 
+et al., 2013). Namun, pendekatan tersebut belum mengintegrasikan aspek sosial-ekonomi, 
+seperti tingkat ketergantungan masyarakat terhadap jasa ekosistem serta tingkat  
+adaptasinya. Wilayah dengan tekanan ekologis sedang dapat menjadi prioritas konservasi 
+apabila masyarakat sekitarnya memiliki ketergantungan dan kerentanan sosial -ekonomi 
+yang lebih besar.  
+Berdasarkan kebutuhan tersebut, penelitian ini mengembangkan Indeks Priority yang 
+mengintegrasikan Threat, Dependence, dan Vulnerability yang merepresentasikan 
+ancaman ekologis dan dimensi sosial -ekonomi. Melalui studi kasus di Nusa Tenggara 
+Timur, Wakatobi, dan Kepulauan Spermonde, penelitian ini mengidentifikasi wilayah 
+prioritas konservasi serta karakter sosial-ekologis yang mendasarinya. Hasil analisis 
+kemudian diimplementasikan dalam dashboard Coraly sebagai decision support system  
+=== PAGE 3 ===
+ 
+   
+ 
+untuk mendukung perencanaan konservasi yang lebih adaptif, berbasis data, dan sejalan 
+dengan pencapaian SDG 14. 
+2. Pembahasan  
+2.1.  Metodologi Analisis 
+Penelitian menggunakan pen dekatan analisis spasial pada wilayah  perairan Nusa 
+Tenggara Timur di sekitar busur Flores –Alor, perairan Wakatobi di Sulawesi Tenggara, 
+dan perairan Kepulauan Spermonde di barat daya Sulawesi Selatan. Alur analisis 
+ditunjukkan pada Gambar 1. 
+ 
+Gambar 1. Alur Analisis 
+2.1.1. Pengumpulan Data 
+Indeks Priority terdiri atas tkomponen Threat (T), Dependence (D), dan Vulnerability (V). 
+Threat merepresentasikan tingkat ancaman ekologis terhadap terumbu karang, 
+Dependence menggambarkan potensi ketergantungan masyarakat terhadap jasa 
+ekosistem terumbu karang, sedangk an Vulnerability menunjukkan tingkat kerentanan 
+sosial-ekonomi masyarakat pesisir. Penelitian menggunakan empat dataset pembangun 
+komponen dan satu batas administrasi. Ringkasan data disajikan pada Tabel 1.  
+Tabel 1. Dataset yang Digunakan 
+Data Sumber (Resolusi/Level) Deskripsi 
+Degree Heating 
+Weeks (DHW) 
+NOAA Coral Reef Watch 
+(±5 km) 
+Indikator tekanan panas laut 
+(Threat) 
+Tutupan 
+terumbu karang 
+Allen Coral Atlas (~5 m) Sebaran karang sebagai sumber jasa 
+ekosistem (Dependence) 
+
+=== PAGE 4 ===
+ 
+   
+ 
+Populasi 
+penduduk 
+WorldPop (~100 m) Jumlah penduduk pesisir yang 
+berpotensi bergantung pada karang 
+(Dependence) 
+Relative Wealth 
+Index (RWI) 
+Meta (~2,4 km) Indikator kondisi ekonomi sebagai 
+proksi kerentanan (Vulnerability) 
+Batas 
+administrasi 
+GADM, Level 1 dan 2 Batas administrasi untuk 
+menentukan cakupan perairan  studi 
+ 
+2.1.2. Prapemrosesan Data  
+ 
+Gambar 2. Perbedaan Resolusi Data 
+Keempat dataset memiliki bentuk dan resolusi spasial berbeda (Gambar 2) sehingga 
+seluruh data diseragamkan ke dalam grid 1 × 1 km  (selanjutnya disebut gri d indeks). 
+Seluruh perhitungan spasial dilakukan menggunakan proyeksi equal-area (EPSG:6933) 
+bersatuan meter. Unit analisis dibatasi pada grid dengan daratan terdekat di wilayah studi 
+(berdasarkan GADM) dengan jarak tidak lebih dari 12 mil laut sesuai UU No. 23 Tahun 
+2014 serta memiliki tutupan terumbu karang. 
+ 
+
+=== PAGE 5 ===
+ 
+   
+ 
+Gambar 3. Proses pemetaan setiap sumber data ke grid indeks: (a) DHW, (b) tutupan terumbu karang, 
+(c) kepadatan penduduk, dan (d) RWI. 
+Setiap data kemudian dipetakan ke dalam grid indeks sesu ai karakteristik spasialnya 
+(Gambar 3). Threat (T) dibentuk dari dua indikator, yaitu nilai puncak DHW dan 
+frekuensi kejadian DHW ≥ 4  sepanjang 2016–2025. Karena grid DHW (~5 km) lebih 
+kasar daripada grid indeks, nilai keduanya diambil dari sel DHW terdeka t melalui 
+pendekatan nearest-neighbor (Gambar 3a). 
+Dependence (D) dibentuk dari luas terumbu karang hasil overlay poligon terhadap grid 
+indeks (Gambar 3b) dan jumlah penduduk dalam radius 5 km dari pusat tiap grid (Gambar 
+3c). Keduanya digabung menggunakan formula 
+𝐷𝑟𝑎𝑤 = 𝑟𝑒𝑒𝑓𝑅  × log(1 + 𝑝𝑜𝑝𝑅) 
+dengan reef𝑅 luas terumbu (km²) dan pop𝑅 jumlah penduduk 5 km dari pusat  grid, serta 
+D𝑟𝑎𝑤 nilai ketergantungan sebelum normalisasi.  Transformasi logaritma pada penduduk 
+meredam kemencengan data , s edangkan perkalian memastikan ketergantungan hanya 
+tinggi bila terdapat terumbu dan penduduk sekaligus. 
+ 
+
+=== PAGE 6 ===
+ 
+   
+ 
+Vulnerability (V) diperoleh dari rata -rata RWI dalam radius 2, 5 km dari pusat grid 
+(Gambar 3d). Nilai RWI kemudian dibalik sehingga nilai yang lebih tinggi 
+merepresentasikan kerentanan sosial-ekonomi yang lebih besar.  
+Nilai mentah T, D, dan V dari ketiga kawasan selanjutnya digabung ke dalam satu basis 
+data spasial, lalu dinormalisasi dan diperingkat secara bersama -sama sehingga skala 
+antarkawasan sebanding. 
+2.1.3. Analisis Data 
+Data hasil prapemrosesan dianalisis melalui empat tahap. Pertama,  indeks Priority 
+dibentuk untuk menilai tingkat prioritas konservasi setiap grid dengan mengalikan 
+peringkat persentil komponen T, D, dan V , sehingga skor tinggi muncul jika ketiganya 
+tinggi, bukan di satu aspek saja. 
+𝑃𝑖,raw = percentile(𝑇𝑖) × percentile(𝐷𝑖) × percentile(𝑉𝑖) 
+dengan percentile(… ) peringkat persentil terhadap seluruh grid gabungan. Hasilnya 
+kemudian dinormalisasi min-max sebagai berikut. 
+𝑃𝑖 = 𝑃𝑖,raw − 𝑃raw,min
+𝑃raw,max − 𝑃raw,min
+ 
+Kedua, perbedaan distribusi Priority dan komponennya antarkawasan diuji dengan 
+Kruskal–Wallis, besar efek diukur dengan  𝜖2, sementara Dunn test dan Cliff's 𝛿 
+mengidentifikasi pasangan kawasan yang berbeda beserta arah dan besarnya. Karena 
+autokorelasi spasial membuat nilai p tidak valid, penekanan diberikan pada ukuran efek, 
+bukan signifikansi. 
+Ketiga, Priority dipetakan per kawasan agar sebarannya terbaca secara geografis. Untuk 
+perencanaan intervensi, penting mengetahui lokasi grid prioritas tinggi mengelompok, 
+maka digunakan Getis–Ord Gi* dengan pita ketetanggaan 3 km yang menggolongkan 
+grid dari konsentrasi rendah hingga sangat tinggi. Ketetanggaan hanya bermakna di dalam 
+satu wilayah, sehingga Gi* dihitung terpisah per kawasan. 
+ 
+=== PAGE 7 ===
+ 
+   
+ 
+Keempat, un tuk menjelaskan mengapa suatu kawasan termasuk prioritas, grid 
+dikelompokkan dengan K -Means berdasarkan jumlah klaster yang ditentukan 
+berdasarkan skor silhouette dan interpretasi substantif. Tipe klaster kemudian di-overlay 
+dengan hotspot Gi*, menyatukan lokasi prioritas dengan karakter yang mendominasinya. 
+2.1.4. Evaluasi Konsistensi Indeks 
+Untuk memastikan hasil tidak bergantung pada satu keputusan teknis, dilakukan analisis 
+sensitivitas terhadap metode agregasi komponen. Priority utama yang dibentuk melalui 
+perkalian peringkat persentil dibandingkan dengan indeks alternatif berbasis Principal 
+Component Analysis (PCA), yang menggabungkan T, D, dan V berdasarkan struktur 
+keragaman datanya. Kesesuaian keduanya diukur dengan korelasi Spearman antar -
+peringkat grid dan proporsi tump ang-tindih pada grid prioritas teratas. Kesesuaian yang 
+tinggi menunjukkan penentuan kawasan prioritas robust terhadap pilihan metode. 
+2.2.      Hasil Analisis 
+ 
+2.2.1. Cakupan Wilayah 
+Setelah keempat resolusi dataset disamakan menjadi grid 1 × 1 km  (Gambar 4), 
+didapatkan perairan yang diobservasi seluas 7.251 km2 di NTT, 1.598 km2 di Wakatobi, 
+dan 1.914 km2 di Spermonde (Gambar 5). 
+ 
+ 
+Gambar 4. Sebelum dan Sesudah Penyamaan Resolusi 
+ 
+ 
+ 
+ 
+
+=== PAGE 8 ===
+ 
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Gambar 5. Cakupan Wilayah Studi 
+ 
+2.2.2. Sebaran Ketiga Komponen Indeks Prioritas 
+Rata-rata a ncaman panas dan ketergantungan  masyarakat paling rendah terletak di 
+perairan Wakatobi. Di sisi lain, perairan Spermonde paling terancam panas lautan. 
+Masyarakat NTT terlihat paling miskin  dan bergantung pada terumbu karang. Variasi 
+perbedaan ini menunjukkan bahwa ketiga wilayah memiliki profil sosio-ekologi yang 
+berbeda.  
+
+=== PAGE 9 ===
+ 
+   
+ 
+Gambar 6. Distribusi Ketiga Komponen 
+ 
+Ketiga komponen tidak saling berkorelasi, menunjukkan T, D, dan V mengukur hal yang 
+benar-benar berbeda dan tidak saling menggantikan. 
+ 
+ 
+Gambar 7. Korelasi Antarkomponen 
+ 
+2.2.3. Indeks Priority 
+Sebaran Indeks Prioritas disajikan pada Gambar 8, dengan w arna lebih terang 
+menandakan kebutuhan akan urgensi atau prioritas yang lebih tinggi di wilayah tersebut. 
+
+=== PAGE 10 ===
+ 
+   
+ 
+ 
+Gambar 8. Peta Prioritas  
+ 
+Secara rata-rata, prioritas tertinggi berada di NTT (0,177), diikuti Spermonde (0,135), dan 
+terendah di Wakatobi (0,042). Pola ini konsisten dengan sebaran komponennya: NTT 
+memadukan ketergantungan tertinggi dengan ancaman panas yang cukup besar, 
+sedangkan skor ancaman panas maupun ketergantungan Wakatobi rendah. Spermonde 
+berada di tengah  karena terumbu karangnya sangat terancam panas, tetapi rendahnya 
+kerentanan dan ketergantungan masyarakatnya terhadap terumbu menurunkan prioritas . 
+Diperhatikan bahwa k arena tiap grid berukuran 1 km, pola sulit terlihat pada  gambar 
+statis. Versi interaktif yang dapat diperbesar dan ditelusuri per grid tersedia pada 
+dashboard (bagian 2.3). 
+ 
+2.2.4. Uji Perbedaan Antarwilayah  
+ 
+ 
+Gambar 9. Distribusi Indeks Prioritas 
+
+=== PAGE 11 ===
+ 
+   
+ 
+ 
+Hasil uji Kruskal-Wallis disajikan pada Lampiran 1 dan Lampiran 2. Nilai p-value seluruh 
+uji sangat kecil (hingga 10-279), tetapi tidak dijadikan dasar kesimpulan karena grid saling 
+berkorelasi spasial, melanggar asumsi independensi observasi uji ini.  Karena itu , 
+penekanan diberikan pada ukuran efek melalui 𝜖2 dan Cliff's 𝛿. 
+Keempat komponen berbeda antarwilayah dengan ukuran efek yang sebanding ( 𝜖2 ≈ 
+0,10–0,13), menunjukkan bahwa perbedaan wilayah tercermin baik pada indeks 
+gabungan maupun setiap komponen penyusunnya. Nilai 𝑧 ketiga pasangan menegaskan 
+urutan prioritas NTT > Spermonde > Wakatobi. Perbedaan NTT terhadap kedua wilayah 
+lain tergolong sedang hingga besar (𝛿 = 0,40 dan 0,52), sedangkan perbedaan Spermonde 
+dan Wakatobi kecil (𝛿 = 0,14). 
+ 
+2.2.5. Konsentrasi Spasial 
+Gambar 10. Konsentrasi Hotspot Berdasarkan Getis-Ord Gi* 
+ 
+Lokasi berprioritas tinggi membentuk klaster (merah) yang terpisah dari kawasan 
+berkonsentrasi rendah (biru). Di NTT, klaster konsentrasi tinggi terbentang di beberapa 
+ruas pantai terutama di ujung barat dan gugusan pulau selatan. Wakatobi dan Spermonde 
+juga menunjukkan klaster yang terlokalisasi pada pulau atau ruas pantai tertentu. Klaster-
+klaster ini layak dijadikan sasaran prioritas konservasi karena menandai kawasan prioritas 
+tinggi yang konsisten.  
+ 
+2.2.6. Tipologi Wilayah 
+
+=== PAGE 12 ===
+ 
+   
+ 
+Jumlah klaster dengan skor silhouette tertinggi adalah 𝑘 = 3 sebesar 0,341. Meskipun 
+demikian, digunakan ￼ = 4𝑘dengan skor 0,332 karena dapat memisahkan wilayah kaya 
+dari miskin sehingga menghasilkan tipologi yang lebih bermakna. 
+ 
+ 
+Gambar 11. Pemilihan Jumlah Klaster 
+ 
+Keempat klaster yang terbentuk memiliki profil dan komposisi wilayah yang berbeda 
+(Tabel 2). Tipe "terancam, miskin, sangat bergantung" adalah p rofil paling mend esak 
+untuk intervensi, dan Tabel 3 menunjukkan bahwa hampir seluruhnya berasal dari NTT 
+(2.330 dari 2.562 sel) , tanpa ada satu pun grid Wakatobi. Sebaliknya, Wakatobi justru 
+aman dari panas. Hal ini  memperkuat urutan prioritas antarwilayah dari analisis 
+sebelumnya. 
+ 
+Tabel 2. Profil Klaster 
+Profil Peak DHW Dependence RWI 𝒏 
+terancam, miskin, 
+sangat bergantung 
+11,730 8,991  -0,299 2562 
+terancam, mampu, 
+sangat bergantung 
+7,895 37,253 -0,142 1598 
+aman, mampu, sangat 
+bergantung 
+5,380 10,949 0,206 1909 
+aman, miskin, kurang 
+bergantung 
+5,140 3,860 -0,250 3994 
+ 
+
+=== PAGE 13 ===
+ 
+   
+ 
+Tabel 3. Sebaran Wilayah (%) per Klaster 
+Profil NTT Spermonde Wakatobi 
+terancam, miskin, sangat bergantung 90,9 9,1  0 
+terancam, mampu, sangat bergantung 71,8 19,3 8,9 
+aman, mampu, sangat bergantung 77,1 10,4 12,5 
+aman, miskin, kurang bergantung 57,7 21,9 20,5 
+ 
+2.2.7. Overlay Hotspot dan Tipologi 
+Overlay hotspot prioritas dan klaster tipologi  menunjukkan karakteristik wilayah pada 
+tiap hotspot.  
+ 
+ 
+Gambar 12. Dominasi Tipe klaster pada daerah hotspot tiap kawasan 
+ 
+Hasil Overlay ( Gambar 12) menunjukkan adanya perbedaan karakteristik hotspot  
+antarwilayah. NTT didominasi tipe terancam, miskin dan sangat bergantung (59,1 %), 
+
+=== PAGE 14 ===
+ 
+   
+ 
+Spermonde didominasi klaster beragam (2 klaster dengan karakteristik berbanding  
+terbalik), sedangkan Wakatobi didominasi klaster  aman panas, miskin, kurang 
+bergantung (67,6%). Temuan ini menunjukkan  bahwa strategi konservasi tiap kawasan 
+perlu disesuaikan dengan karakteristik hotspot masing-masing wilayah. 
+2.2.8. Uji Sensitivitas 
+Sensitivitas indeks diuji terhadap 27 skenario pembobotan, dengan bobot dimasukkan 
+sebagai pangkat pada tiap peringkat komponen. Peringkat prioritas antar -grid terbukti 
+stabil: 19 dari 27 skenario (70%) mempertahankan korelasi Spearman ≥ 0,9 terhadap 
+indeks setara, dan bahkan pada skenario sudut ekstrem korelasi tidak turun di bawah 0,62. 
+Namun, urutan antarwilayah lebih peka: NTT tetap teratas pada 26 dari 27 skenario, tetapi 
+peringkat Spermonde dan Wakatobi dapat bertukar ketika Vulnerability atau Threat 
+sangat ditekan. Dengan demikian, prioritas NTT bersifat robust, sedangkan dua wilayah 
+lain sensitif terhadap perubahan komponen sosial, selaras dengan hasil Kruskal-Wallis. 
+ 
+Gambar 13. Hasil Uji Sensitivitas 
+2.3.Dashboard  
+Sebagai keluaran utama penelitian ini, seluruh analisis disajikan dalam sebuah dashboard 
+interaktif berjudul Coraly yang memungkinkan pengguna memperbesar wilayah tertentu, 
+menyaring berdasarkan komponen T, D, dan V, serta membaca skor prioritas tiap grid 
+secara langsung. Dashboard dapat diakses melalui tautan berikut. 
+
+=== PAGE 15 ===
+ 
+   
+ 
+ 
+ 
+https://coraly.streamlit.app 
+Gambar 14. Tautan Dashboard Coraly 
+ 
+3. Penutup 
+Prioritas konservasi terumbu karang perlu mempertimbangkan tekanan ekologis dan 
+kondisi sosial -ekonomi sekaligus. Dengan mengintegrasikan komponen Threat, 
+Dependence, dan Vulnerability ke dalam Priority Index, penelitian ini menentukan 
+wilayah prioritas bu kan hanya dari tingkat terancamnya karang, tetapi juga 
+ketergantungan dan kerentanan masyarakat pesisir. 
+Penerapan pada tiga kawasan menempatkan NTT sebagai prioritas tertinggi, diikuti 
+Spermonde dan Wakatobi. Getis -Ord Gi* menunjukkan prioritas mengumpul pada 
+kawasan tertentu, sementara K -Means clustering mengenali empat tipologi sosial -
+ekologis. Overlay keduanya memperjelas karakter tiap hotspot , dan bahwa NTT 
+didominasi tipe terancam, miskin, dan sangat bergantung pada terumbu karang, yang 
+merupakan profil paling mendesak untuk diintervensi. Dengan demikian, indeks ini tidak 
+sekadar menyusun  peringkat, tetapi menjelaskan mengapa suatu kawasan menjadi 
+prioritas.  
+Sebagai implementasi, penelitian ini mengembangkan Coraly, dashboard interaktif yang 
+menyatukan informasi "di mana" dan "mengapa"  hingga tingkat grid  untuk membantu 
+pengambil kebijakan mengarahkan sumber daya konservasi yang terbatas.  Untuk ke 
+depannya, integrasi dengan data prakiraan pemutihan karang dapat mengembangkan  
+dashboard menjadi sistem peringatan dini yang proaktif. 
+ 
+ 
+ 
+ 
+
+=== PAGE 16 ===
+ 
+   
+ 
+Daftar Pustaka 
+Allen Coral Atlas. (2023, August 15). How much coral reef is out there to save?  
+https://allencoralatlas.org/blog/coral-reef-area-to-save/ 
+Cliff, N. (1993). Dominance statistics: Ordinal analyses to answer ordinal questions. 
+Psychological Bulletin, 114 (3), 4 94–509. https://doi.org/10.1037/0033-
+2909.114.3.494 
+Dunn, O. J. (1964). Multiple comparisons using rank sums. Technometrics, 6(3), 241–
+252. https://doi.org/10.1080/00401706.1964.10490181 
+Getis, A., & Ord, J. K. (1992). The analysis of spatial association by use of distance 
+statistics. Geographical Analysis, 24 (3), 189–206. https://doi.org/10.1111/j.1538-
+4632.1992.tb00261.x 
+Holm, S. (1979). A simple sequentially rejective multiple test procedure. Scandinavian 
+Journal of Statistics, 6(2), 65–70. 
+Jaccard, P. (1901). Étude comparative de la distribution florale dans une portion des Alpes 
+et du Jura. Bulletin de la Société Vaudoise des Sciences Naturelles, 37, 547–579. 
+Kementerian Kelautan dan Perikanan Republik Indonesia. (2025, June 11). Indonesia 
+Coral Reef Bond. https://kkp.go.id/coralreefbond.html 
+Kruskal, W. H., & Wallis, W. A. (1952). Use of ranks in one-criterion variance analysis. 
+Journal of the American Statistical Association, 47 (260), 583 –621. 
+https://doi.org/10.1080/01621459.1952.10483441 
+MacQueen, J. (1967). Some methods for classification and analysis of multivariate 
+observations. In Proceedings of the Fifth Berkeley Symposium on  Mathematical 
+Statistics and Probability (Vol. 1, pp. 281–297). University of California Press. 
+Makino, A., Beger, M., Klein, C. J., Jupiter, S. D., & Possingham, H. P. (2013). Integrated 
+planning for land –sea ecosystem connectivity to protect coral reefs. Biological 
+Conservation, 165, 35–42. https://doi.org/10.1016/j.biocon.2013.05.027 
+National Oceanic and Atmospheric Administration. (2024, April 15). NOAA confirms 4th 
+global coral bleaching ev ent. https://www.noaa.gov/news-release/noaa-confirms-
+4th-global-coral-bleaching-event 
+NOAA Coral Reef Watch. (2026). Current global bleaching: Status update & data 
+submission. National Oceanic and Atmospheric Administration. 
+https://coralreefwatch.noaa.gov/satellite/research/coral_bleaching_report.php 
+Rousseeuw, P. J. (1987). Silhouettes: A graphical aid to the interpretation and validation 
+of cluster analysis. Journal of Computational and Applied Mathematics, 20, 53–65. 
+https://doi.org/10.1016/0377-0427(87)90125-7 
+=== PAGE 17 ===
+ 
+   
+ 
+Spearman, C. (1904). The proof and measurement of association between two things. The 
+American Journal of Psychology, 15(1), 72–101. https://doi.org/10.2307/1412159 
+World Bank. (2023). Oceans for Prosperity Project . International Bank for 
+Reconstruction and Development. 
+https://documents1.worldbank.org/curated/en/099222003062339066/pdf/BOSIB-
+1ca4ea0f-934c-4bb5-b508-401a49db9dd2.pdf 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+=== PAGE 18 ===
+ 
+   
+ 
+LAMPIRAN 
+ 
+Lampiran 1. Tabel Uji Kruskal-Wallis per Komponen 
+Variabel H  
+Prioritas 1284,4 0,127 
+Threat (T) 1025,6 0,102 
+Dependence (D) 981,0 0,097 
+Vulnerability (V) 1072,3 0,106 
+ 
+Keempat komponen berbeda antarwilayah dengan ukuran efek yang sebanding ( 0,10 –
+0,13), menunjukkan bahwa perbedaan wilayah tercermin baik pada indeks gabungan 
+maupun setiap komponen penyusunnya. 
+ 
+Lampiran 2. Tabel Uji Lanjut Dunn 
+Pasangan z p Arah Cliff’s δ Besar Efek 
+NTT – 
+Spermonde 
+25,22 < 0,001 NTT > Spermonde 0,403 Sedang 
+NTT –
+Wakatobi 
+29,19 < 0,001 NTT > Wakatobi 0,523 Besar 
+Spermonde 
+– Wakatobi 
+5,67 < 0,001 Spermonde > Wakatobi 0,136 Kecil 
+ 
+ 
+ 
+=== PAGE 19 ===
+ 
+   
+ 
+Lampiran 3. Hasil Uji Turnitin 
+ 
+ 
