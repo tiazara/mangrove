@@ -1,0 +1,260 @@
+kawasan_id,wilayah,rekomendasi,transek,pop,P5_median,RFI_median,hotspot,ancaman_konversi,panjang_km
+CIR_K001,CIR,Restorasi hidrologis + penangkap sedimen,5,474.1,0.0,0.569,0,0.0,1.25
+CIR_K002,CIR,ORANGE · managed realignment,9,191.3,0.0,0.607,0,0.0,2.25
+CIR_K003,CIR,Restorasi hidrologis + penangkap sedimen,3,111.5,0.0,0.551,0,0.0,0.75
+CIR_K004,CIR,ORANGE · managed realignment,11,3.8,0.0,0.596,0,0.0,2.75
+CIR_K005,CIR,ORANGE · managed realignment,5,0.0,0.0,0.614,0,0.0,1.25
+CIR_K006,CIR,ORANGE · managed realignment,1,2.8,0.0,0.619,0,0.0,0.25
+CIR_K007,CIR,ORANGE · managed realignment,1,0.0,0.0,0.552,0,0.0,0.25
+CIR_K008,CIR,Restorasi hidrologis + penangkap sedimen,13,75.9,0.0,0.509,0,0.0,3.25
+CIR_K009,CIR,Penangkap sedimen + penanaman di dataran lumpur,4,0.0,,0.552,0,0.0,1.0
+CIR_K010,CIR,ORANGE · managed realignment,2,0.6,0.0,0.54,0,0.0,0.5
+CIR_K011,CIR,Restorasi hidrologis + penangkap sedimen,12,35.1,0.0,0.606,0,0.0,3.0
+CIR_K012,CIR,Penangkap sedimen + penanaman di dataran lumpur,5,1.0,0.0,0.653,0,0.0,1.25
+CIR_K013,CIR,Restorasi hidrologis + penangkap sedimen,8,11.9,0.0,0.563,0,0.0,2.0
+CIR_K014,CIR,ORANGE · managed realignment,8,19.4,0.0,0.617,0,0.0,2.0
+CIR_K015,CIR,Restorasi hidrologis + penangkap sedimen,20,53.8,0.0,0.59,0,0.0,5.0
+CIR_K016,CIR,Penangkap sedimen + penanaman di dataran lumpur,2,58.9,,0.626,0,0.0,0.5
+CIR_K017,CIR,RED · rekayasa hibrida,1,80.3,0.027,0.609,0,0.0,0.25
+CIR_K018,CIR,Restorasi hidrologis + penangkap sedimen,3,18.2,0.0,0.669,0,0.0,0.75
+CIR_K019,CIR,ORANGE · managed realignment,4,0.0,0.0,0.632,0,0.0,1.0
+CIR_K020,CIR,Restorasi hidrologis + penangkap sedimen,10,1628.9,,0.56,0,0.0,2.5
+CIR_K021,CIR,Penangkap sedimen + penanaman di dataran lumpur,4,712.8,0.0,0.579,0,0.0,1.0
+CIR_K022,CIR,Restorasi hidrologis + penangkap sedimen,7,28.5,0.0,0.589,0,0.0,1.75
+CIR_K023,CIR,ORANGE · managed realignment,2,0.0,0.0,0.639,0,0.0,0.5
+CIR_K024,CIR,Penangkap sedimen + penanaman di dataran lumpur,4,0.0,0.0,0.608,0,0.0,1.0
+CIR_K025,CIR,ORANGE · managed realignment,9,0.0,0.0,0.61,0,0.0,2.25
+CIR_K026,CIR,Restorasi hidrologis + penangkap sedimen,14,106.4,,0.613,0,0.071,3.5
+CIR_K027,CIR,ORANGE · managed realignment,6,717.3,0.0,0.47,0,0.333,1.5
+CIR_K028,CIR,Restorasi hidrologis + penangkap sedimen,2,3807.4,,0.504,0,0.0,0.5
+CIR_K029,CIR,RED · rekayasa hibrida,3,6708.1,0.102,0.071,0,0.0,0.75
+CIR_K030,CIR,ORANGE · managed realignment,37,59481.2,0.0,0.465,0,0.081,9.25
+CIR_K031,CIR,Silvofishery pada tambak aktif,3,1309.0,,0.4,0,0.0,0.75
+CIR_K032,CIR,ORANGE · managed realignment,8,564.6,0.0,0.591,0,0.0,2.0
+CIR_K033,CIR,Restorasi hidrologis + penangkap sedimen,2,24.9,,0.603,0,0.0,0.5
+CIR_K034,CIR,ORANGE · managed realignment,8,895.1,0.0,0.588,0,0.125,2.0
+CIR_K035,CIR,ORANGE · managed realignment,4,3650.5,0.0,0.18,0,0.0,1.0
+CIR_K036,CIR,Restorasi alami di dataran lumpur,5,18760.3,0.02,0.125,0,0.4,1.25
+CIR_K037,CIR,GREEN · konservasi ketat,2,11549.0,0.06,0.247,0,0.0,0.5
+CIR_K038,CIR,YELLOW · pengayaan sabuk hijau,6,52643.7,0.247,0.125,3,0.333,1.5
+CIR_K039,CIR,RED · rekayasa hibrida,2,19048.3,0.164,0.114,1,0.0,0.5
+CIR_K040,CIR,Perlindungan pantai terbangun,30,312024.4,0.069,0.281,0,0.133,7.5
+CIR_K041,CIR,YELLOW · pengayaan sabuk hijau,6,33255.2,0.05,0.532,0,0.333,1.5
+CIR_K042,CIR,GREEN · konservasi ketat,5,1957.2,0.0,0.589,0,0.0,1.25
+CIR_K043,CIR,Restorasi alami di dataran lumpur,16,813.2,0.0,0.579,0,0.0,4.0
+CIR_K044,CIR,Penangkap sedimen + penanaman di dataran lumpur,4,46.0,0.0,0.556,0,0.0,1.0
+CIR_K045,CIR,Restorasi alami di dataran lumpur,32,528.8,0.0,0.574,0,0.0,8.0
+CIR_K046,CIR,GREEN · konservasi ketat,5,71.4,0.0,0.574,0,0.0,1.25
+CIR_K047,CIR,Restorasi alami di dataran lumpur,4,66.4,,0.655,0,0.0,1.0
+CIR_K048,CIR,Silvofishery pada tambak aktif,17,1476.8,,0.578,0,0.0,4.25
+CIR_K049,CIR,Restorasi alami di dataran lumpur,31,27039.7,0.0,0.553,0,0.194,7.75
+JPR_K050,JPR,Restorasi alami di dataran lumpur,39,2627.5,,0.467,0,0.0,9.75
+JPR_K051,JPR,Perlindungan pantai terbangun,9,23324.5,,0.319,0,0.222,2.25
+JPR_K052,JPR,Restorasi alami di dataran lumpur,47,21431.9,,0.5,0,0.064,11.75
+JPR_K053,JPR,GREEN · konservasi ketat,7,692.0,0.0,0.689,0,0.0,1.75
+JPR_K054,JPR,Restorasi alami di dataran lumpur,11,3622.5,,0.414,0,0.0,2.75
+JPR_K055,JPR,Restorasi alami di dataran lumpur,18,20794.0,,0.416,0,0.111,4.5
+JPR_K056,JPR,Perlindungan pantai terbangun,12,73020.0,,0.401,0,0.25,3.0
+JPR_K057,JPR,Perlindungan pantai terbangun,16,108320.2,,0.263,0,0.188,4.0
+JPR_K058,JPR,YELLOW · pengayaan sabuk hijau,2,2530.1,0.158,0.265,0,0.5,0.5
+JPR_K059,JPR,Restorasi alami di dataran lumpur,4,7989.1,,0.268,0,0.25,1.0
+JPR_K060,JPR,Perlindungan pantai terbangun,7,20439.2,,0.263,0,0.143,1.75
+JPR_K061,JPR,Restorasi alami di dataran lumpur,18,8812.3,0.308,0.377,0,0.056,4.5
+PKL_K062,PKL,"Lahan darat, tidak prioritas",13,461.3,0.065,0.447,0,0.0,3.25
+PKL_K063,PKL,YELLOW · pengayaan sabuk hijau,3,1726.1,0.03,0.527,0,0.333,0.75
+PKL_K064,PKL,"Lahan darat, tidak prioritas",16,6378.4,,0.5,0,0.062,4.0
+PKL_K065,PKL,Restorasi alami di dataran lumpur,4,6719.8,,0.529,0,0.0,1.0
+PKL_K066,PKL,"Lahan darat, tidak prioritas",22,11313.5,0.0,0.398,0,0.182,5.5
+PKL_K067,PKL,Perlindungan pantai terbangun,2,8677.8,,0.336,0,0.0,0.5
+PKL_K068,PKL,"Lahan darat, tidak prioritas",9,15403.9,,0.325,0,0.111,2.25
+PKL_K069,PKL,ORANGE · managed realignment,2,146.4,0.0,0.613,0,0.0,0.5
+PKL_K070,PKL,Restorasi hidrologis + penangkap sedimen,8,1528.8,0.0,0.588,0,0.125,2.0
+PKL_K071,PKL,Perlindungan pantai terbangun,4,4448.9,0.0,0.266,0,0.25,1.0
+PKL_K072,PKL,RED · rekayasa hibrida,1,1207.7,0.101,0.458,0,0.0,0.25
+PKL_K073,PKL,Perlindungan pantai terbangun,9,59050.0,0.058,0.177,0,0.111,2.25
+PKL_K074,PKL,Restorasi hidrologis + penangkap sedimen,42,15460.6,0.0,0.514,0,0.024,10.5
+PKL_K075,PKL,ORANGE · managed realignment,7,462.0,0.0,0.418,0,0.0,1.75
+PKL_K076,PKL,Restorasi hidrologis + penangkap sedimen,6,380.7,,0.525,0,0.0,1.5
+PKL_K077,PKL,RED · rekayasa hibrida,3,7.1,0.14,0.395,0,0.0,0.75
+PKL_K078,PKL,Restorasi hidrologis + penangkap sedimen,17,5.3,0.0,0.486,0,0.0,4.25
+PKL_K079,PKL,Penangkap sedimen + penanaman di dataran lumpur,3,0.3,0.0,0.521,0,0.0,0.75
+PKL_K080,PKL,ORANGE · managed realignment,6,0.0,0.0,0.59,0,0.0,1.5
+PKL_K081,PKL,ORANGE · managed realignment,10,2.0,0.0,0.552,0,0.0,2.5
+PKL_K082,PKL,Restorasi hidrologis + penangkap sedimen,2,15.8,0.0,0.469,0,0.0,0.5
+PKL_K083,PKL,ORANGE · managed realignment,7,219.4,0.0,0.361,0,0.0,1.75
+PKL_K084,PKL,"Lahan darat, tidak prioritas",29,43320.6,,0.483,0,0.069,7.25
+PKL_K085,PKL,Perlindungan pantai terbangun,8,39687.1,,0.442,0,0.25,2.0
+PKL_K086,PKL,"Lahan darat, tidak prioritas",11,24975.8,,0.533,0,0.0,2.75
+PKL_K087,PKL,Perlindungan pantai terbangun,10,82959.2,,0.247,0,0.3,2.5
+PKL_K088,PKL,Silvofishery pada tambak aktif,13,21263.7,,0.543,0,0.385,3.25
+PKL_K089,PKL,"Lahan darat, tidak prioritas",19,100627.7,,0.529,0,0.158,4.75
+PKL_K090,PKL,Perlindungan pantai terbangun,4,40968.3,,0.138,0,0.0,1.0
+SBY_K091,SBY,GREEN · konservasi ketat,5,41.5,0.0,0.579,0,0.0,1.25
+SBY_K092,SBY,GREEN · konservasi ketat,2,1.8,0.0,0.678,0,0.0,0.5
+SBY_K093,SBY,GREEN · konservasi ketat,4,19.6,0.0,0.569,0,0.0,1.0
+SBY_K094,SBY,Restorasi alami di dataran lumpur,3,33.9,0.0,0.562,0,0.0,0.75
+SBY_K095,SBY,GREEN · konservasi ketat,59,62.9,0.0,0.659,0,0.034,14.75
+SBY_K096,SBY,ORANGE · managed realignment,6,10.9,0.0,0.531,0,0.0,1.5
+SBY_K097,SBY,GREEN · konservasi ketat,2,3.2,0.0,0.499,0,0.0,0.5
+SBY_K098,SBY,GREEN · konservasi ketat,45,1733.8,0.0,0.618,0,0.0,11.25
+SBY_K099,SBY,YELLOW · pengayaan sabuk hijau,2,10694.6,0.021,0.216,0,0.0,0.5
+SBY_K100,SBY,Perlindungan pantai terbangun,14,167613.5,0.454,0.256,0,0.143,3.5
+SBY_K101,SBY,Restorasi alami di dataran lumpur,4,30843.5,,0.45,0,0.0,1.0
+SBY_K102,SBY,YELLOW · pengayaan sabuk hijau,4,38520.0,0.194,0.201,0,0.25,1.0
+SBY_K103,SBY,GREEN · konservasi ketat,14,18372.8,0.0,0.765,0,0.071,3.5
+SBY_K104,SBY,Perlindungan pantai terbangun,6,26931.1,,0.274,0,0.167,1.5
+SBY_K105,SBY,Restorasi alami di dataran lumpur,6,18673.8,,0.267,0,0.167,1.5
+SBY_K106,SBY,YELLOW · pengayaan sabuk hijau,8,34654.9,0.012,0.268,0,0.0,2.0
+SBY_K107,SBY,Perlindungan pantai terbangun,6,42468.4,0.082,0.27,0,0.333,1.5
+SBY_K108,SBY,YELLOW · pengayaan sabuk hijau,9,35949.5,0.108,0.165,0,0.333,2.25
+SBY_K109,SBY,Restorasi alami di dataran lumpur,4,1146.3,0.0,0.711,0,0.0,1.0
+SBY_K110,SBY,YELLOW · pengayaan sabuk hijau,5,4537.4,0.0,0.239,0,0.2,1.25
+SBY_K111,SBY,YELLOW · pengayaan sabuk hijau,4,2639.3,0.0,0.631,0,0.0,1.0
+SBY_K112,SBY,YELLOW · pengayaan sabuk hijau,2,1154.2,0.0,0.575,0,0.0,0.5
+SBY_K113,SBY,Restorasi alami di dataran lumpur,3,2681.9,0.0,0.715,0,0.0,0.75
+SBY_K114,SBY,GREEN · konservasi ketat,3,8689.0,0.0,0.466,1,0.0,0.75
+SBY_K115,SBY,Perlindungan pantai terbangun,3,19241.8,,0.555,0,0.333,0.75
+SBY_K116,SBY,Perlindungan pantai terbangun,24,171705.3,0.0,0.431,0,0.167,6.0
+SBY_K117,SBY,Restorasi alami di dataran lumpur,6,5294.7,,0.478,0,0.0,1.5
+SBY_K118,SBY,Restorasi alami di dataran lumpur,7,789.6,,0.682,0,0.571,1.75
+SBY_K119,SBY,Restorasi alami di dataran lumpur,1,6.9,,0.703,0,0.0,0.25
+SBY_K120,SBY,Perlindungan pantai terbangun,1,2420.7,,0.116,0,0.0,0.25
+SBY_K121,SBY,Restorasi alami di dataran lumpur,1,22.3,,0.59,0,0.0,0.25
+SBY_K122,SBY,Restorasi alami di dataran lumpur,2,207.2,,0.609,0,0.0,0.5
+SBY_K123,SBY,GREEN · konservasi ketat,4,363.6,0.0,0.573,0,0.0,1.0
+SBY_K124,SBY,Restorasi alami di dataran lumpur,4,915.7,,0.571,0,0.5,1.0
+SBY_K125,SBY,Restorasi alami di dataran lumpur,1,978.6,,0.398,0,1.0,0.25
+SBY_K126,SBY,Restorasi alami di dataran lumpur,3,567.1,0.0,0.614,0,0.333,0.75
+SBY_K127,SBY,Restorasi alami di dataran lumpur,4,3760.8,,0.611,0,0.25,1.0
+SBY_K128,SBY,GREEN · konservasi ketat,3,347.8,0.0,0.696,0,0.0,0.75
+SBY_K129,SBY,Restorasi alami di dataran lumpur,10,6807.0,,0.69,0,0.2,2.5
+SBY_K130,SBY,YELLOW · pengayaan sabuk hijau,4,7763.9,0.044,0.5,0,0.25,1.0
+SBY_K131,SBY,Restorasi alami di dataran lumpur,3,5294.9,,0.74,0,0.0,0.75
+SBY_K132,SBY,GREEN · konservasi ketat,9,282.2,0.0,0.811,0,0.0,2.25
+SBY_K133,SBY,Restorasi alami di dataran lumpur,4,9.5,0.0,0.762,0,0.0,1.0
+SBY_K134,SBY,GREEN · konservasi ketat,42,180.7,0.0,0.668,0,0.0,10.5
+SBY_K135,SBY,GREEN · konservasi ketat,16,43.8,0.0,0.677,0,0.0,4.0
+SBY_K136,SBY,GREEN · konservasi ketat,11,7.2,0.0,0.675,0,0.0,2.75
+SBY_K137,SBY,GREEN · konservasi ketat,33,65.5,0.0,0.647,0,0.0,8.25
+SBY_K138,SBY,GREEN · konservasi ketat,8,0.0,0.0,0.675,0,0.0,2.0
+SBY_K139,SBY,GREEN · konservasi ketat,9,360.8,0.0,0.596,0,0.0,2.25
+SBY_K140,SBY,Restorasi alami di dataran lumpur,5,9070.1,,0.319,0,0.0,1.25
+SBY_K141,SBY,Perlindungan pantai terbangun,8,19092.8,,0.19,0,0.0,2.0
+SBY_K142,SBY,Restorasi alami di dataran lumpur,5,12445.3,0.0,0.339,0,0.0,1.25
+SBY_K143,SBY,Perlindungan pantai terbangun,3,7930.6,,0.658,0,0.0,0.75
+SBY_K144,SBY,Restorasi alami di dataran lumpur,5,9576.1,,0.309,0,0.2,1.25
+SBY_K145,SBY,Perlindungan pantai terbangun,4,13079.2,,0.14,0,0.0,1.0
+SBY_K146,SBY,Perlindungan pantai terbangun,10,11701.8,,0.437,0,0.4,2.5
+SBY_K147,SBY,Restorasi alami di dataran lumpur,15,15895.1,,0.315,0,0.133,3.75
+SBY_K148,SBY,Perlindungan pantai terbangun,12,43467.7,,0.314,0,0.167,3.0
+SBY_K149,SBY,Restorasi alami di dataran lumpur,21,29596.5,,0.443,0,0.333,5.25
+SBY_K150,SBY,Perlindungan pantai terbangun,4,12600.7,,0.151,0,0.25,1.0
+SBY_K151,SBY,Restorasi alami di dataran lumpur,5,13726.8,,0.441,0,0.2,1.25
+SBY_K152,SBY,Perlindungan pantai terbangun,12,39489.0,,0.319,0,0.25,3.0
+SBY_K153,SBY,YELLOW · pengayaan sabuk hijau,2,3479.4,0.144,0.389,0,0.5,0.5
+SBY_K154,SBY,Perlindungan pantai terbangun,11,46237.7,0.073,0.149,0,0.091,2.75
+SBY_K155,SBY,Restorasi alami di dataran lumpur,6,11496.1,0.004,0.244,0,0.333,1.5
+SBY_K156,SBY,Perlindungan pantai terbangun,11,18557.7,0.0,0.36,0,0.0,2.75
+SBY_K157,SBY,Restorasi alami di dataran lumpur,6,13641.1,,0.312,0,0.167,1.5
+SBY_K158,SBY,Perlindungan pantai terbangun,22,87576.2,0.199,0.311,0,0.136,5.5
+SBY_K159,SBY,GREEN · konservasi ketat,4,5936.6,0.0,0.547,0,0.0,1.0
+SBY_K160,SBY,Perlindungan pantai terbangun,4,9682.5,,0.333,0,0.0,1.0
+SBY_K161,SBY,Restorasi alami di dataran lumpur,2,2354.6,,0.301,0,0.0,0.5
+SBY_K162,SBY,GREEN · konservasi ketat,12,5559.2,0.0,0.56,0,0.0,3.0
+SBY_K163,SBY,Perlindungan pantai terbangun,3,2920.5,,0.152,0,0.0,0.75
+SBY_K164,SBY,Restorasi alami di dataran lumpur,6,5868.3,0.093,0.618,0,0.0,1.5
+SBY_K165,SBY,Perlindungan pantai terbangun,9,34251.2,0.0,0.136,0,0.111,2.25
+SBY_K166,SBY,Restorasi alami di dataran lumpur,2,2236.0,0.0,0.362,0,0.0,0.5
+SBY_K167,SBY,GREEN · konservasi ketat,4,5082.9,0.0,0.156,0,0.25,1.0
+SBY_K168,SBY,YELLOW · pengayaan sabuk hijau,3,5477.6,0.017,0.163,0,0.0,0.75
+SBY_K169,SBY,Perlindungan pantai terbangun,14,53417.0,0.006,0.162,0,0.0,3.5
+SBY_K170,SBY,YELLOW · pengayaan sabuk hijau,5,9729.5,0.002,0.229,0,0.4,1.25
+SBY_K171,SBY,GREEN · konservasi ketat,10,11350.1,0.0,0.169,0,0.2,2.5
+SBY_K172,SBY,Restorasi alami di dataran lumpur,3,365.3,,0.476,0,0.0,0.75
+SBY_K173,SBY,GREEN · konservasi ketat,13,7405.5,0.0,0.184,0,0.0,3.25
+SBY_K174,SBY,GREEN · konservasi ketat,40,22172.7,0.0,0.327,0,0.05,10.0
+SBY_K175,SBY,YELLOW · pengayaan sabuk hijau,47,188810.9,0.017,0.211,2,0.234,11.75
+SBY_K176,SBY,GREEN · konservasi ketat,5,3794.1,0.0,0.224,0,0.2,1.25
+SBY_K177,SBY,Restorasi alami di dataran lumpur,17,17734.4,0.0,0.491,0,0.294,4.25
+SBY_K178,SBY,GREEN · konservasi ketat,2,618.5,0.0,0.662,0,0.0,0.5
+SBY_K179,SBY,Restorasi hidrologis tambak terbengkalai,2,549.5,0.0,0.502,0,0.0,0.5
+SBY_K180,SBY,Restorasi alami di dataran lumpur,5,5382.4,0.187,0.601,0,0.2,1.25
+SBY_K181,SBY,YELLOW · pengayaan sabuk hijau,9,15857.0,0.019,0.226,0,0.222,2.25
+SBY_K182,SBY,YELLOW · pengayaan sabuk hijau,4,17049.6,0.136,0.247,0,0.0,1.0
+SBY_K183,SBY,GREEN · konservasi ketat,38,23371.3,0.0,0.272,0,0.0,9.5
+SBY_K184,SBY,Perlindungan pantai terbangun,13,58775.8,,0.265,0,0.077,3.25
+SBY_K185,SBY,Restorasi alami di dataran lumpur,12,9264.1,0.0,0.562,0,0.0,3.0
+SBY_K186,SBY,Perlindungan pantai terbangun,7,20993.6,,0.268,0,0.143,1.75
+SBY_K187,SBY,Restorasi alami di dataran lumpur,3,8876.6,,0.278,0,0.333,0.75
+SBY_K188,SBY,Perlindungan pantai terbangun,8,24432.2,,0.273,0,0.0,2.0
+SBY_K189,SBY,Restorasi alami di dataran lumpur,7,9305.3,,0.27,0,0.429,1.75
+SBY_K190,SBY,Perlindungan pantai terbangun,3,3674.1,,0.268,0,1.0,0.75
+SBY_K191,SBY,Restorasi alami di dataran lumpur,4,2514.1,,0.353,0,0.5,1.0
+SBY_K192,SBY,Perlindungan pantai terbangun,11,37361.5,,0.259,0,0.091,2.75
+SBY_K193,SBY,GREEN · konservasi ketat,4,5041.2,0.012,0.217,0,0.0,1.0
+SBY_K194,SBY,Restorasi alami di dataran lumpur,5,5221.7,0.006,0.302,0,0.0,1.25
+SBY_K195,SBY,GREEN · konservasi ketat,2,1554.5,0.002,0.215,0,0.5,0.5
+SBY_K196,SBY,Perlindungan pantai terbangun,13,22005.7,0.356,0.222,0,0.0,3.25
+SBY_K197,SBY,YELLOW · pengayaan sabuk hijau,2,2564.8,0.034,0.215,0,0.0,0.5
+SBY_K198,SBY,GREEN · konservasi ketat,5,6408.1,0.0,0.204,0,0.0,1.25
+SBY_K199,SBY,YELLOW · pengayaan sabuk hijau,12,19776.8,0.033,0.215,0,0.083,3.0
+SBY_K200,SBY,GREEN · konservasi ketat,5,9186.5,0.0,0.217,0,0.0,1.25
+SBY_K201,SBY,YELLOW · pengayaan sabuk hijau,10,11585.1,0.125,0.204,0,0.1,2.5
+SBY_K202,SBY,Restorasi alami di dataran lumpur,4,3774.0,0.0,0.222,0,0.0,1.0
+SBY_K203,SBY,Perlindungan pantai terbangun,38,83807.7,0.302,0.192,0,0.132,9.5
+SBY_K204,SBY,Restorasi alami di dataran lumpur,5,8378.7,0.166,0.201,0,0.0,1.25
+SBY_K205,SBY,Perlindungan pantai terbangun,6,11839.0,,0.191,0,0.167,1.5
+SBY_K206,SBY,Restorasi alami di dataran lumpur,8,9070.7,0.077,0.173,0,0.0,2.0
+SBY_K207,SBY,Perlindungan pantai terbangun,4,3652.2,0.065,0.162,1,0.25,1.0
+SBY_K208,SBY,Restorasi alami di dataran lumpur,7,4411.1,0.0,0.167,0,0.0,1.75
+SBY_K209,SBY,GREEN · konservasi ketat,7,292.6,0.0,0.679,0,0.0,1.75
+SBY_K210,SBY,Restorasi alami di dataran lumpur,3,355.3,,0.677,0,0.0,0.75
+SBY_K211,SBY,GREEN · konservasi ketat,20,3419.2,0.0,0.627,0,0.05,5.0
+SBY_K212,SBY,YELLOW · pengayaan sabuk hijau,11,15242.4,0.023,0.563,0,0.182,2.75
+SBY_K213,SBY,Restorasi alami di dataran lumpur,4,3143.6,0.0,0.622,0,0.25,1.0
+SBY_K214,SBY,GREEN · konservasi ketat,4,826.8,0.0,0.566,0,0.0,1.0
+SBY_K215,SBY,Restorasi alami di dataran lumpur,5,610.8,0.0,0.591,0,0.0,1.25
+SBY_K216,SBY,GREEN · konservasi ketat,11,1685.1,0.0,0.467,0,0.182,2.75
+SBY_K217,SBY,YELLOW · pengayaan sabuk hijau,6,12408.4,0.222,0.2,0,0.333,1.5
+SBY_K218,SBY,Perlindungan pantai terbangun,29,77535.8,0.0,0.191,0,0.172,7.25
+SBY_K219,SBY,Perlindungan pantai terbangun,4,9152.0,,0.177,0,0.0,1.0
+SEM_K220,SEM,Restorasi alami di dataran lumpur,6,1523.8,0.036,0.516,0,0.167,1.5
+SEM_K221,SEM,GREEN · konservasi ketat,18,7872.4,0.0,0.651,0,0.056,4.5
+SEM_K222,SEM,ORANGE · managed realignment,15,0.0,0.0,0.624,0,0.0,3.75
+SEM_K223,SEM,Restorasi hidrologis + penangkap sedimen,2,0.0,,0.61,0,0.0,0.5
+SEM_K224,SEM,ORANGE · managed realignment,13,422.6,0.0,0.585,0,0.0,3.25
+SEM_K225,SEM,ORANGE · managed realignment,5,62.3,0.0,0.624,0,0.0,1.25
+SEM_K226,SEM,Restorasi hidrologis + penangkap sedimen,3,159.5,,0.543,0,0.0,0.75
+SEM_K227,SEM,ORANGE · managed realignment,56,10026.3,0.0,0.545,0,0.0,14.0
+SEM_K228,SEM,Restorasi hidrologis + penangkap sedimen,3,671.6,,0.506,0,0.0,0.75
+SEM_K229,SEM,ORANGE · managed realignment,4,56.3,0.0,0.513,0,0.0,1.0
+SEM_K230,SEM,Restorasi hidrologis + penangkap sedimen,2,489.6,,0.562,0,0.0,0.5
+SEM_K231,SEM,RED · rekayasa hibrida,4,1946.8,0.213,0.492,0,0.75,1.0
+SEM_K232,SEM,Penangkap sedimen + penanaman di dataran lumpur,2,878.9,,0.037,0,0.0,0.5
+SEM_K233,SEM,Perlindungan pantai terbangun,5,312.2,,0.443,0,0.0,1.25
+SEM_K234,SEM,RED · rekayasa hibrida,2,739.8,0.22,0.038,0,0.0,0.5
+SEM_K235,SEM,Perlindungan pantai terbangun,6,1822.0,,0.52,0,0.167,1.5
+SEM_K236,SEM,Penangkap sedimen + penanaman di dataran lumpur,2,153.0,,0.58,0,0.0,0.5
+SEM_K237,SEM,RED · rekayasa hibrida,1,329.9,0.47,0.038,0,0.0,0.25
+SEM_K238,SEM,Perlindungan pantai terbangun,12,60300.2,,0.283,0,0.25,3.0
+SEM_K239,SEM,Penangkap sedimen + penanaman di dataran lumpur,2,1804.6,,0.172,0,0.5,0.5
+SEM_K240,SEM,Perlindungan pantai terbangun,12,61734.5,,0.321,0,0.083,3.0
+SEM_K241,SEM,Penangkap sedimen + penanaman di dataran lumpur,14,12792.3,0.003,0.378,0,0.429,3.5
+SEM_K242,SEM,ORANGE · managed realignment,4,36.0,0.0,0.48,0,0.25,1.0
+SEM_K243,SEM,Penangkap sedimen + penanaman di dataran lumpur,2,27.2,,0.58,0,0.0,0.5
+SEM_K244,SEM,Restorasi alami di dataran lumpur,5,38.9,0.0,0.788,0,0.0,1.25
+SEM_K245,SEM,Restorasi hidrologis tambak terbengkalai,4,739.0,,0.747,0,0.5,1.0
+SEM_K246,SEM,Perlindungan pantai terbangun,5,2365.3,0.0,0.083,0,0.4,1.25
+SEM_K247,SEM,GREEN · konservasi ketat,6,482.3,0.0,0.685,0,0.0,1.5
+SEM_K248,SEM,Penangkap sedimen + penanaman di dataran lumpur,8,4716.1,0.0,0.591,0,0.0,2.0
+SEM_K249,SEM,Perlindungan pantai terbangun,3,6314.1,,0.358,0,0.0,0.75
+SEM_K250,SEM,Penangkap sedimen + penanaman di dataran lumpur,10,9287.6,0.001,0.531,0,0.1,2.5
+SEM_K251,SEM,RED · rekayasa hibrida,5,95.8,0.448,0.058,0,1.0,1.25
+SEM_K252,SEM,Perlindungan pantai terbangun,2,30.5,,0.491,0,1.0,0.5
+SEM_K253,SEM,Penangkap sedimen + penanaman di dataran lumpur,15,50.9,0.0,0.558,0,0.133,3.75
+SEM_K254,SEM,ORANGE · managed realignment,2,2.1,,0.625,0,0.0,0.5
+SEM_K255,SEM,Restorasi hidrologis + penangkap sedimen,7,5.8,0.0,0.661,0,0.0,1.75
+SEM_K256,SEM,ORANGE · managed realignment,4,254.3,0.0,0.676,0,0.0,1.0
+SEM_K257,SEM,Penangkap sedimen + penanaman di dataran lumpur,14,654.6,0.0,0.562,0,0.0,3.5
+SEM_K258,SEM,ORANGE · managed realignment,20,317.2,0.0,0.484,0,0.0,5.0
+SEM_K259,SEM,Penangkap sedimen + penanaman di dataran lumpur,10,35.9,,0.404,0,0.0,2.5

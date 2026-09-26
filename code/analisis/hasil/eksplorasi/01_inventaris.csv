@@ -1,0 +1,38 @@
+,berkas,lokasi,MB,sumber,periode
+0,celah_pantai.geojson,dataset/,0.18,,
+1,gmw_v4112_lebar_transek.csv,dataset/,0.29,"GMW v4.1.12, lebar sabuk per transek",1985–2025
+2,gmw_v4112_transek.csv,dataset/,6.24,"Global Mangrove Watch v4.1.12, 30 m, per titik",1985–2025
+3,gnss_laju_amblesan.csv,dataset/,0.0,"GNSS BIG, 5 stasiun (Zenodo)",2010–2021
+4,hard_barrier_dw.csv,dataset/,0.02,struktur terbangun baru dari Dynamic World,2021–2026
+5,hard_barrier_persilangan.csv,dataset/,0.14,"persilangan OSM: jalan, rel, tanggul, tol, konstruksi",OSM 2026
+6,kalibrasi_s1.json,dataset/,0.0,,
+7,koridor_CIR.geojson,dataset/,0.17,,
+8,koridor_JPR.geojson,dataset/,0.07,,
+9,koridor_PKL.geojson,dataset/,0.13,,
+10,koridor_SBY.geojson,dataset/,0.46,,
+11,koridor_SEM.geojson,dataset/,0.13,,
+12,pasut_akuisisi.csv,dataset/,0.8,,
+13,pasut_statistik.csv,dataset/,0.0,,
+14,pasut_tercile.json,dataset/,0.12,,
+15,pop_worldpop_1km.csv,dataset/,0.11,"WorldPop R2025A, penduduk radius 1 km",2021–2026
+16,s1_akuisisi_CIR.csv,dataset/,0.01,,
+17,s1_akuisisi_JPR.csv,dataset/,0.01,,
+18,s1_akuisisi_PKL.csv,dataset/,0.02,,
+19,s1_akuisisi_SBY.csv,dataset/,0.02,,
+20,s1_akuisisi_SEM.csv,dataset/,0.02,,
+21,s1_orbit_transek.csv,dataset/,0.06,orbit descending Sentinel-1 per transek (profil_s1),-
+22,subs_insar_transek.csv,dataset/,0.11,"VLM InSAR Sentinel-1 (Ohenhen dkk. 2026), 75 m",2017–2023
+23,titik_validasi.geojson,dataset/,1.9,,
+24,transek_final_wgs84.geojson,dataset/,0.99,,
+25,transek_params_final.csv,dataset/,0.28,geometri 2.365 transek (spasi 250 m) dari garis pantai OSM,-
+26,validasi_digitasi_ISI_MANUAL.csv,dataset/,0.0,,
+27,validasi_tambak_ISI_MANUAL.csv,dataset/,0.0,isian validasi visual status tambak (50 titik),citra 2021–2026
+28,validasi_tambak_titik.kml,dataset/,0.01,,
+29,validasi_transek.csv,dataset/,0.0,,
+30,worldcover_2021_transek.csv,dataset/,19.66,"ESA WorldCover v200, 10 m (kelas 95 = mangrove)",2021
+31,zona_pasut.geojson,dataset/,0.63,,
+32,zona_pasut_titik_ref.geojson,dataset/,0.01,,
+33,profil_s2_*.csv,dataset/gee/ (26 berkas),609.2,Sentinel-2 NDVI/MNDWI median bulanan,2021-01..2026-08
+34,profil_s1_*.csv,dataset/gee/ (26 berkas),540.7,"Sentinel-1 VV/VH, satu orbit descending per transek",2021-01..2026-08
+35,profil_s1m_*.csv,dataset/gee/ (50 berkas),1124.9,"Sentinel-1 VV/VH semua orbit, asc + desc terpisah",2021-01..2026-08
+36,statis_*.csv,dataset/gee/ (16 berkas),144.6,"Dynamic World tahunan, GLO-30, hidroperiode S1",2021–2026

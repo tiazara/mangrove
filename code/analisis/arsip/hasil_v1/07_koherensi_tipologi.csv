@@ -1,0 +1,5 @@
+tipe,n,P1_median,P5_median,RFI_median,MS_median,Subs_median,kriteria_panduan_RED,kriteria_panduan_ORANGE
+RED,5,0.13,0.15,0.37,320.0,4.1,0.0,0.0
+ORANGE,170,0.0,0.0,0.55,2846.71,2.21,0.0,0.0
+YELLOW,104,0.0,0.0,0.48,279.97,0.26,0.0,0.0
+GREEN,427,0.0,0.0,0.63,2489.22,0.37,0.0,0.0

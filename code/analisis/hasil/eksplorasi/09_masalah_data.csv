@@ -1,0 +1,16 @@
+kode,masalah,bukti,dampak,penanganan di notebook 02
+M1,Radar VH kosong terstruktur,SBY 27 dari 68 bulan kosong karena satu orbit per transek; citra dari orbit/lintasan lain ada (bulan tanpa citra sama sekali: SBY 0),tepi tidak terukur berbulan-bulan,paket profil_s1m (semua orbit) bila tersedia (Bag. 2); Kalman melewati bulan kosong (Bag. 5)
+M2,NDVI kosong musiman (awan),hingga 96% titik kosong pada puncak musim hujan,tepi palsu bila tegakan tertutup awan,bulan dipakai hanya bila zona pencarian cukup teramati; filter pencilan (Bag. 3.4)
+M3,Ambang VH panduan terlalu tinggi,−14 dB berada di atas median VH mangrove,separuh tegakan gagal terdeteksi,ambang dikalibrasi (Bag. 3.3)
+M4,NDVI+VH tidak membedakan mangrove dari pohon darat,sebaran mangrove dan pohon darat bertumpang tindih (Bag. 4),keberadaan mangrove dari sinyal saja terlalu tinggi,"keberadaan dari GMW/WorldCover, dikonfirmasi Sentinel (Bag. 3.1)"
+M5,WorldCover melewatkan mangrove,357 transek bermangrove menurut GMW saja; sinyal Sentinel mendukung GMW (lolos 64% vs 82%); 54 transek hanya WorldCover dengan sinyal lemah,domain berbasis WorldCover 2021 terlalu sempit,domain dari GMW ∪ WorldCover dengan konfirmasi Sentinel (Bag. 3.1)
+M6,Mangrove berubah besar 2021–2025,"10,523 titik baru vs 1,842 hilang; perubahan dikonfirmasi lintasan NDVI/VH",domain satu tahun (2021) melewatkan ekspansi dan kehilangan,"domain dan batas pencarian dinamis (Bag. 3.1–3.2), layer dinamika (Bag. 4.1)"
+M7,Resolusi dan kualitas GMW,30 m (3 titik transek per piksel); sebelum 2000 sebagian diisi dari tahun lain,laju tepi GMW kasar; tren pra-2000 tidak andal,laju jangka panjang GMW 2015–2025 dengan penduga Theil–Sen (Bag. 4.2)
+M8,Amblesan kosong atau diisi,"10% transek kosong; 11% diisi tetangga, 22% memakai titik darat",galat ukur pada kovariat utama → koefisien mengecil,galat per sumber (Bag. 6.1 notebook ini) dipakai di uji galat ukur SIMEX (Bag. 6.3)
+M9,Periode InSAR 2017–2023,hanya beririsan 2021–2023 dengan data tepi,amblesan dianggap laju persisten,dinyatakan sebagai asumsi
+M10,"Penghalang > 3,5 km tidak teramati",transek hanya 3 km ke darat,ruang gerak tersensor kanan (batas bawah),P(Closed) dilaporkan sebagai batas atas (Bag. 7.2)
+M11,Kedipan kelas terbangun Dynamic World,6% titik yang pernah terbangun berkedip,bangunan baru dan penghalang berlebih,syarat tetap dua tahun (Bag. 3.6–3.7)
+M12,Status tambak dari median bulanan,pengeringan singkat (1–2 minggu) bisa terlewat; 'tergenang terus' ambigu,tambak aktif bisa terbaca terbengkalai,label disebut 'indikasi' (Bag. 3.7); belum divalidasi lapangan (Bag. 7.3 bila validasi dilakukan)
+M13,Transek multi-persilangan pantai,8% transek,tepi bisa melompat antar garis pantai,uji ulang tanpa transek ini (Bag. 10.3)
+M14,Jangkauan laut transek 500 m,mangrove yang hilang ke laut lebih jauh (mis. Sayung) di luar transek,kehilangan historis di pantai yang sudah mundur tidak terukur,dinyatakan sebagai keterbatasan
+M15,Penduduk 2025–2026 proyeksi WorldPop,bukan sensus,PERI memakai proyeksi,dinyatakan sebagai asumsi

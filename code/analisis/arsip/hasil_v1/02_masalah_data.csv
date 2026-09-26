@@ -1,0 +1,11 @@
+kode,masalah,bukti,dampak,penanganan
+M1,VH kosong terstruktur,"SBY 27 bulan, wilayah lain 4–8 bulan tanpa lintasan descending","Y_i,t tidak terukur pada bulan itu; deret berlubang",Bag. 4: Kalman memprediksi melewati celah; varians membesar di bulan kosong
+M2,NDVI kosong musiman (awan),hingga 96% titik kosong pada puncak musim hujan,tepi palsu ke darat bila mangrove tertutup awan,Bag. 3: bulan dipakai hanya bila >= 80% titik valid; filter pencilan Hampel
+M3,Ambang VH panduan terlalu tinggi,median VH mangrove ≈ −14 dB = ambang panduan,separuh tegakan mangrove hilang dari deteksi,Bag. 3.1: τ_SAR dikalibrasi terhadap WorldCover
+M4,NDVI+VH tidak membedakan mangrove dari pohon/sawah pesisir,"pohon darat: NDVI 0,70, VH −14,6 dB (mirip mangrove)","keberadaan mangrove terlalu tinggi (presisi ≤ 0,46)",Bag. 3.2: domain mangrove dari WorldCover 2021
+M5,Mangrove langka di wilayah kontrol,JPR: 2% transek bermangrove,Jepara lemah sebagai kontrol untuk laju tepi,"Bag. 5: kontrol memakai kovariat kontinu, bukan label wilayah"
+M6,Subs_i kosong,10% transek tanpa titik InSAR (koherensi rendah di tambak),transek terbuang dari regresi dan RFI,"Bag. 5: imputasi median tetangga ≤ 1 km, ditandai"
+M7,Periode InSAR 2017–2023,hanya beririsan 2021–2023 dengan periode studi,Subs_i dianggap laju persisten,dinyatakan sebagai asumsi (Bag. 9)
+M8,Penghalang di ujung transek tidak teramati,"transek 3,5 km; penghalang > 3.500 m tidak terlihat",MS_i tersensor kanan (batas bawah),Bag. 3.4: ditandai B_tersensor; P(Closed) konservatif (terlalu kecil)
+M9,Transek multi-persilangan pantai,8% transek,"Y_i,t bisa melompat antar garis pantai",Bag. 8: analisis ulang tanpa transek ini
+M10,Belum ada digitasi validasi manual,langkah 9 akuisisi belum dikerjakan,"akurasi Y_i,t hanya diuji terhadap WorldCover 2021",Bag. 3.1 (validasi otomatis); dinyatakan di Bag. 9

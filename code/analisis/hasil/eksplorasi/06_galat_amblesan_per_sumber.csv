@@ -1,0 +1,7 @@
+,,n,median_abs,sd_robust,galat_relatif_median
+darat sebagai pengganti pantai,semua,1485.0,0.03,0.044,0.097
+darat sebagai pengganti pantai,amblesan < 1 cm/th,1216.0,0.02,0.03,0.1
+darat sebagai pengganti pantai,amblesan >= 1 cm/th,269.0,0.19,0.282,0.057
+tetangga (leave-one-out ≤ 1 km),semua,1855.0,0.035,0.052,0.082
+tetangga (leave-one-out ≤ 1 km),amblesan < 1 cm/th,1362.0,0.02,0.03,0.1
+tetangga (leave-one-out ≤ 1 km),amblesan >= 1 cm/th,493.0,0.175,0.259,0.05

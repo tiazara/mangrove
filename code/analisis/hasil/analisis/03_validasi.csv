@@ -1,0 +1,4 @@
+pembanding,n,selisih_median_m,bias_m,dalam_30m,spearman
+2021 vs GMW 2021 (non-acuan),414,20.0,10.0,0.64,0.78
+2021 vs WorldCover 2021 (non-acuan),199,70.0,-20.0,0.38,0.39
+2025 vs GMW 2025 (semua domain),877,20.0,20.0,0.74,0.88

@@ -1,0 +1,4 @@
+,γ Huber,CI95 bawah,CI95 atas,P(γ > 0) bootstrap
+Subs,1.111,-0.044,3.268,0.968
+Inund,0.025,-1.139,1.152,0.531
+BuiltDensity,-0.154,-1.438,2.21,0.478

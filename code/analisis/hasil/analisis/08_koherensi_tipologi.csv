@@ -1,0 +1,5 @@
+tipe,n,yakin_median,yakin_lt_07,MS_median,P5_median,P5_func_median,P_def_median,P_tgl_median,RFI_median,kriteria_panduan_RED,kriteria_panduan_ORANGE
+RED,15,1.0,0.067,310.004,0.153,0.252,1.0,1.0,0.07,0.0,0.0
+ORANGE,242,0.999,0.083,2729.997,0.0,0.203,1.0,0.999,0.553,0.0,0.0
+YELLOW,153,1.0,0.052,270.247,0.04,0.125,0.716,0.0,0.213,0.0,0.0
+GREEN,510,1.0,0.029,2408.957,0.0,0.001,0.86,0.0,0.617,0.0,0.0

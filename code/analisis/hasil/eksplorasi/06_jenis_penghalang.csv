@@ -1,0 +1,14 @@
+jenis,PKL,SEM,CIR,SBY,JPR
+highway=trunk,108,159,239,568,10
+railway=rail,205,73,245,104,0
+dw_built_baru,38,106,64,183,23
+highway=primary,12,26,9,118,84
+highway=motorway,75,8,0,62,0
+man_made=embankment,0,100,0,0,0
+barrier=wall,0,0,50,3,0
+highway=construction:motorway,0,46,0,0,0
+man_made=breakwater,1,1,4,2,0
+highway=construction:primary,0,0,0,2,0
+highway=living_street,0,1,0,0,0
+highway=track,0,0,0,1,0
+highway=path,0,1,0,0,0

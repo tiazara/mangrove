@@ -1,0 +1,11 @@
+bermangrove,wilayah,transek,modal_elevasi_cm,tahun_tenggelam_median,P_sebelum_2050_gt_05,tenggelam_sebelum_2100
+bermangrove,CIR,145,46.1,2049.26,0.56,0.77
+bermangrove,JPR,8,57.55,inf,0.0,0.0
+bermangrove,PKL,45,47.9,2040.21,0.8,0.91
+bermangrove,SBY,602,123.45,2466.89,0.0,0.0
+bermangrove,SEM,120,54.8,2060.54,0.42,0.82
+tanpa mangrove,CIR,260,45.85,2067.13,0.44,0.55
+tanpa mangrove,JPR,182,57.55,inf,0.0,0.0
+tanpa mangrove,PKL,245,47.9,inf,0.34,0.4
+tanpa mangrove,SBY,563,123.45,2513.45,0.0,0.0
+tanpa mangrove,SEM,195,54.8,2046.01,0.59,0.89

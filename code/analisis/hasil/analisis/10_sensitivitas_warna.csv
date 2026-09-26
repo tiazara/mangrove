@@ -1,0 +1,13 @@
+skenario,RED,ORANGE,YELLOW,GREEN,tipologi_sama,jaccard_RED_ORANGE,rekomendasi_sama (semua transek),penangkap sedimen (tanpa mangrove)
+"akresi 0,2",23,261,144,492,0.97,0.905,0.97,354
+"akresi 0,5 (dasar)",15,242,153,510,1.0,1.0,1.0,312
+"akresi 1,0",13,195,155,557,0.947,0.809,0.965,279
+"akresi 1,5",13,177,155,575,0.927,0.739,0.949,259
+tanpa kenaikan muka laut,13,212,155,540,0.965,0.875,0.975,284
+"kenaikan muka laut 0,5",21,252,147,500,0.983,0.941,0.986,329
+horizon tenggelam 2050,13,155,155,597,0.903,0.654,0.932,241
+aturan lama: defisit > 0,149,696,19,56,0.361,0.304,0.639,577
+penghalang dekat 250 m,9,248,87,576,0.922,1.0,0.97,312
+penghalang dekat 1.000 m,34,223,265,398,0.858,1.0,0.945,312
+jendela atas P90,15,242,153,510,1.0,1.0,1.0,312
+jendela atas P99,15,242,153,510,1.0,1.0,1.0,312

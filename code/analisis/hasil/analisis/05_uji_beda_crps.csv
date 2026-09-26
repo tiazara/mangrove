@@ -1,0 +1,11 @@
+h,model,beda_CRPS,CI95_bawah,CI95_atas
+6,Gradient boosting,-4.22,-5.13,-2.92
+6,M1 LLT,-3.42,-4.29,-2.21
+6,M2 tren + AR(1),-3.73,-4.54,-2.55
+6,M3 tren tetap + AR(1),-0.72,-2.21,1.14
+6,OLS drift,8.29,6.5,10.77
+12,Gradient boosting,-6.58,-8.63,-3.49
+12,M1 LLT,-3.98,-5.43,-2.08
+12,M2 tren + AR(1),-4.43,-5.65,-2.74
+12,M3 tren tetap + AR(1),3.4,0.71,7.18
+12,OLS drift,17.77,14.61,21.47

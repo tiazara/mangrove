@@ -1,0 +1,7 @@
+,amblesan,genangan 0–200 m darat,P(terbangun) 0–1 km darat 2026,penduduk 2026,lebar mangrove GMW 2025,persilangan pantai
+amblesan,1.0,0.39,-0.39,-0.39,0.22,0.03
+genangan 0–200 m darat,0.39,1.0,-0.5,-0.45,0.02,0.1
+P(terbangun) 0–1 km darat 2026,-0.39,-0.5,1.0,0.86,-0.45,-0.03
+penduduk 2026,-0.39,-0.45,0.86,1.0,-0.46,-0.05
+lebar mangrove GMW 2025,0.22,0.02,-0.45,-0.46,1.0,0.04
+persilangan pantai,0.03,0.1,-0.03,-0.05,0.04,1.0

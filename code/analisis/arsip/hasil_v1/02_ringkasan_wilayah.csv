@@ -1,0 +1,6 @@
+region_code,transek,subs_median,subs_p90,subs_kosong,pop_median,transek_mangrove_WC,multi_silang
+PKL,290,0.77,6.8,0.05,480.0,0.06,0.01
+SEM,315,2.58,7.9,0.08,56.9,0.34,0.14
+CIR,405,2.0,3.26,0.09,25.8,0.1,0.06
+SBY,1165,0.37,0.64,0.14,1110.7,0.46,0.08
+JPR,190,0.08,0.09,0.03,466.5,0.02,0.09

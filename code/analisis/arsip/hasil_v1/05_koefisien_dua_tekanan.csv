@@ -1,0 +1,5 @@
+,Huber (utama),Huber (utama),Regresi median,Regresi median,OLS cluster,OLS cluster,OLS cluster + FE wilayah,OLS cluster + FE wilayah,kolinearitas
+,γ,p,γ,p,γ,p,γ,p,VIF
+Subs,1.111,0.005,0.565,0.047,2.892,0.105,6.771,0.038,1.07
+Inund,0.025,0.949,0.295,0.292,0.023,0.992,-0.015,0.994,1.041
+BuiltDensity,-0.154,0.701,-0.096,0.74,1.294,0.3,1.639,0.215,1.112

@@ -1,0 +1,17 @@
+respons,model,kovariat,WLS γ,WLS p (klaster),Huber γ,Huber CI95 bawah,Huber CI95 atas,P(γ>0) bootstrap,WLS+FE γ,WLS+FE p
+tepi laut GMW (+ = mundur),efek total,Subs,0.952,0.008,1.876,0.11,4.084,0.983,0.823,0.008
+tepi laut GMW (+ = mundur),efek total,Built,0.063,0.851,0.226,-0.324,2.056,0.675,0.106,0.759
+tepi laut GMW (+ = mundur),efek langsung,Subs,0.94,0.009,1.855,-0.008,3.95,0.971,0.811,0.009
+tepi laut GMW (+ = mundur),efek langsung,Inund,0.064,0.651,0.432,0.017,1.351,0.977,0.123,0.491
+tepi laut GMW (+ = mundur),efek langsung,Built,0.076,0.825,0.336,-0.294,2.285,0.78,0.132,0.712
+tepi laut GMW (+ = mundur),kontrol sedimen,Subs,0.955,0.012,2.119,0.061,6.19,0.978,0.813,0.007
+tepi laut GMW (+ = mundur),kontrol sedimen,Built,0.063,0.85,0.241,-0.324,2.313,0.725,0.108,0.756
+tepi laut GMW (+ = mundur),kontrol sedimen,Lumpur,0.008,0.981,0.853,-0.484,10.038,0.809,0.063,0.862
+lebar sabuk GMW (− = menyempit),efek total,Subs,-0.187,0.652,-0.78,-2.74,1.436,0.2,-0.204,0.715
+lebar sabuk GMW (− = menyempit),efek total,Built,-1.376,0.018,-2.892,-5.328,-1.165,0.0,-1.402,0.022
+lebar sabuk GMW (− = menyempit),efek langsung,Subs,0.317,0.411,0.022,-1.935,3.046,0.546,0.191,0.74
+lebar sabuk GMW (− = menyempit),efek langsung,Inund,-2.115,0.0,-3.289,-4.911,-1.941,0.0,-2.304,0.0
+lebar sabuk GMW (− = menyempit),efek langsung,Built,-1.906,0.002,-3.424,-5.748,-1.7,0.0,-1.979,0.002
+lebar sabuk GMW (− = menyempit),kontrol sedimen,Subs,-1.094,0.055,-1.776,-4.422,1.067,0.067,-0.29,0.517
+lebar sabuk GMW (− = menyempit),kontrol sedimen,Built,-1.353,0.021,-2.711,-4.966,-0.762,0.001,-1.437,0.024
+lebar sabuk GMW (− = menyempit),kontrol sedimen,Lumpur,-2.217,0.032,-2.749,-7.493,0.751,0.056,-2.936,0.027

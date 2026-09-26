@@ -1,0 +1,38 @@
+layer,label,warna,arti,dasar_data,rekomendasi
+1 dinamika,stabil,#1a9850,bermangrove GMW 2021 dan 2025,GMW v4.1.12,"pertahankan, pantau nowcast"
+1 dinamika,ekspansi,#66bd63,mangrove baru 2021→2025 (terkonfirmasi NDVI/VH naik),GMW + Sentinel,lindungi tegakan muda; jadikan contoh keberhasilan
+1 dinamika,hilang,#d73027,mangrove 2021 yang hilang di 2025 (terkonfirmasi NDVI/VH turun),GMW + Sentinel,"selidiki penyebab: tenggelam, abrasi, atau konversi"
+1 dinamika,hilang sebelum 2021,#f46d43,"bermangrove 2000–2020, tidak lagi sejak 2021",GMW,kandidat pemulihan bila tekanan memungkinkan
+2 lahan,mangrove,#1a9850,tegakan mangrove GMW 2025,GMW,-
+2 lahan,dataran lumpur,#c7eae5,lumpur/air dangkal yang mengikuti pasang di depan pantai,S1 genangan + tide coupling,kolonisasi alami / penanaman
+2 lahan,tambak terhubung pasang,#2c7fb8,air tambak mengikuti pasang: pematang terbuka/jebol (indikasi),S1 tide coupling,restorasi hidrologis
+2 lahan,tambak mulai bervegetasi,#41b6c4,tambak tertutup yang mulai ditumbuhi vegetasi (indikasi),S2 NDVI,percepat suksesi alami
+2 lahan,tambak tergenang,#a6bddb,tambak jarang dikuras dan tertutup pematang (indikasi tidak dikelola),S2 MNDWI bulanan,verifikasi status; restorasi hidrologis bila terbengkalai
+2 lahan,tambak aktif,#8c6bb1,"tambak dikuras berkala, tertutup pematang",S2 MNDWI bulanan,silvofishery / wanamina
+2 lahan,sawah,#e49635,pertanian,Dynamic World 2026,-
+2 lahan,vegetasi darat,#397d49,pohon/semak non-mangrove,Dynamic World 2026,-
+2 lahan,lahan terbuka,#a59b8f,tanah terbuka,Dynamic World 2026,-
+2 lahan,terbangun,#636363,terbangun 2025 dan 2026,Dynamic World,-
+2 lahan,terbangun baru,#e31a1c,"terbangun 2025–2026, tidak 2021–2022 (pembukaan lahan)",Dynamic World,pengendalian tata ruang
+2 lahan,perairan,#419bdf,"laut, sungai, air lain",Dynamic World,-
+2 peluang,siap,#7fcdbb,lahan peluang dengan genangan dalam jendela hidroperiode,S1 genangan,bisa ditanami/dibuka segera
+2 peluang,perlu pengaturan air,#2c7fb8,tambak non-aktif dengan genangan di luar jendela,S1 genangan,atur ulang tata air sebelum penanaman
+2 peluang,silvofishery,#8c6bb1,tambak aktif,S2 MNDWI,wanamina tanpa menghentikan produksi
+3 tekanan,defisit vertikal,-,"amblesan + kenaikan muka laut − akresi (cm/th); kelas ≤0, 0–1, 1–3, >3",InSAR 2017–2023 + altimetri,-
+3 tekanan,tahun tenggelam,-,setengah tunggang pasut / defisit vertikal (median Monte Carlo); 2200 = tidak tenggelam sebelum 2200,InSAR + EOT20,-
+3 tekanan,jarak penghalang,-,jarak penghalang keras di belakang tepi/garis pantai,OSM + Dynamic World,-
+4 rekomendasi,RED · rekayasa hibrida,#b2182b,bermangrove; terancam tenggelam sebelum 2100 dan penghalang dekat,tipologi Monte Carlo,struktur penangkap sedimen permeabel sebelum revegetasi
+4 rekomendasi,ORANGE · managed realignment,#fc8d59,"bermangrove; terancam tenggelam sebelum 2100, ruang darat lapang",tipologi Monte Carlo,buka pematang tambak di belakang tegakan
+4 rekomendasi,YELLOW · pengayaan sabuk hijau,#fee08b,"bermangrove; penghalang dekat, tidak terancam tenggelam sebelum 2100",tipologi Monte Carlo,penanaman pengayaan jenis berakar kokoh
+4 rekomendasi,GREEN · konservasi ketat,#1a9850,bermangrove; tekanan rendah,tipologi Monte Carlo,perlindungan kawasan inti + pemantauan
+4 rekomendasi,Penangkap sedimen + penanaman di dataran lumpur,#e7298a,"tanpa mangrove; dataran lumpur, terancam tenggelam sebelum 2100",aturan 8.3,"penangkap sedimen permeabel dulu, penanaman kemudian"
+4 rekomendasi,Restorasi hidrologis + penangkap sedimen,#6a51a3,"tanpa mangrove; tambak terbengkalai, terancam tenggelam sebelum 2100",aturan 8.3,buka pematang bertahap + perangkap sedimen
+4 rekomendasi,Restorasi alami di dataran lumpur,#7fcdbb,"tanpa mangrove; dataran lumpur, tidak terancam tenggelam",aturan 8.3,kolonisasi alami / penanaman di lumpur
+4 rekomendasi,Restorasi hidrologis tambak terbengkalai,#2c7fb8,"tanpa mangrove; tambak mayoritas tidak dikelola, tidak terancam tenggelam",aturan 8.3,"buka pematang, pulihkan pasang-surut"
+4 rekomendasi,Silvofishery pada tambak aktif,#bcbddc,tanpa mangrove; tambak aktif,aturan 8.3,wanamina
+4 rekomendasi,Perlindungan pantai terbangun,#636363,tanpa mangrove; pantai terbangun,aturan 8.3,"perlindungan pantai, bukan restorasi"
+4 rekomendasi,"Lahan darat, tidak prioritas",#d9d9d9,tanpa mangrove; sawah/kebun/permukiman,aturan 8.3,-
+overlay,hotspot PERI,#969696,"klaster keterpaparan ruang tertutup (Gi*, FDR 5%; indikatif, tidak kokoh)",Bagian 9.1,-
+overlay,hotspot tenggelam,#000000,"klaster penduduk terpapar mangrove yang mungkin tenggelam sebelum 2050 (Gi*, FDR 5%)",Bagian 9.1,prioritas anggaran
+overlay,ancaman konversi,#e31a1c,bangunan baru atau mangrove menjadi bangunan dalam 1 km,Dynamic World + GMW,pengawasan tata ruang
+overlay,kemungkinan hilang,#d73027,6 bulan teramati terakhir mayoritas tanpa mangrove,nowcast Sentinel,cek lapangan segera

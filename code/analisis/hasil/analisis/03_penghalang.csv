@@ -1,0 +1,11 @@
+domain,wilayah,transek,jarak_median_m,tersensor,penghalang_maju_2021_2026
+False,CIR,260,3000.0,0.52,0.2
+False,JPR,182,990.0,0.2,0.26
+False,PKL,245,660.0,0.11,0.25
+False,SBY,563,180.0,0.09,0.28
+False,SEM,195,1520.0,0.35,0.3
+True,CIR,145,2550.0,0.44,0.25
+True,JPR,8,2855.0,0.62,0.0
+True,PKL,45,2380.0,0.38,0.18
+True,SBY,602,1490.0,0.35,0.22
+True,SEM,120,2690.0,0.57,0.12

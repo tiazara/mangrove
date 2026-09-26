@@ -1,0 +1,9 @@
+respons,uji,n,WLS γ,WLS p (klaster),Huber γ,P(γ>0) bootstrap,WLS+FE γ,WLS+FE p
+v_gmw,semua,796,0.952,0.008,1.876,0.992,0.823,0.008
+w_gmw,semua,920,-0.187,0.652,-0.78,0.242,-0.204,0.715
+v_gmw,tanpa multi-persilangan,734,0.906,0.013,1.618,0.988,0.807,0.016
+w_gmw,tanpa multi-persilangan,845,-0.171,0.688,-0.429,0.232,-0.032,0.952
+v_gmw,tanpa PKL,771,1.082,0.003,2.028,0.966,1.031,0.001
+w_gmw,tanpa PKL,875,-0.135,0.798,-0.877,0.238,-0.417,0.55
+v_gmw,hanya amblesan terukur langsung (pantai),356,0.332,0.0,0.755,0.972,0.476,0.054
+w_gmw,hanya amblesan terukur langsung (pantai),416,-0.005,0.993,0.211,0.551,-1.228,0.01

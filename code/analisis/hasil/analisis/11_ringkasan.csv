@@ -1,0 +1,17 @@
+,nilai
+transek total / domain analisis tepi,2365 / 920 (versi WorldCover 2021 saja: 702)
+validasi tepi 2025 vs GMW 2025,"median |ΔY| 20 m, 74% dalam 30 m, ρ = 0.88"
+dinamika transek (ekspansi / kehilangan / stabil),424 / 84 / 412
+model nowcast terpilih,M2 tren + AR(1)
+CRPS t+12 model terpilih vs persistensi (m),32.6 vs 36.9
+"efek total amblesan pada laju tepi laut (m/th per SD, + = mundur)",WLS +0.95 (p klaster 0.008); Huber P(γ>0) 0.98; dalam wilayah +0.82 (p 0.008)
+efek total amblesan pada laju lebar sabuk (m/th per SD),WLS -0.19 (p klaster 0.652); Huber P(γ>0) 0.20; dalam wilayah -0.20
+"transek domain dengan P(Closed₅) > 0,7 (penghalang keras / fungsional)",0.0% / 0.7%
+"transek dengan defisit vertikal P(D > 0) > 0,5 (semua / domain)",77% / 92%
+tipologi RED / ORANGE / YELLOW / GREEN,15 / 242 / 153 / 510
+"transek domain dengan P(tenggelam sebelum 2050 / 2100) > 0,5",18% / 28%
+efek amblesan pada tepi laut setelah kontrol dataran lumpur,WLS +0.95 (p klaster 0.012); dalam wilayah +0.81
+hotspot PERI (FDR 5%),8 transek
+hotspot PERI vertikal (FDR 5%),46 transek
+rekomendasi pantai tanpa mangrove,"Penangkap sedimen + penanaman di dataran lumpur: 125; Restorasi hidrologis + penangkap sedimen: 187; Restorasi alami di dataran lumpur: 460; Restorasi hidrologis tambak terbengkalai: 10; Silvofishery pada tambak aktif: 45; Perlindungan pantai terbangun: 486; Lahan darat, tidak prioritas: 132"
+overlay ancaman konversi,221 transek

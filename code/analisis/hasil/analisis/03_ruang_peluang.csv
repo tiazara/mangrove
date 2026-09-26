@@ -1,0 +1,11 @@
+domain,wilayah,peluang_siap_m,perlu_pengaturan_air_m,silvofishery_m,lumpur_depan_m,tambak_nonaktif
+False,CIR,290.0,100.0,295.0,90.0,0.58
+False,JPR,0.0,10.0,10.0,405.0,0.39
+False,PKL,10.0,30.0,70.0,30.0,0.57
+False,SBY,0.0,10.0,10.0,410.0,0.25
+False,SEM,120.0,150.0,100.0,210.0,0.78
+True,CIR,290.0,130.0,230.0,70.0,0.67
+True,JPR,90.0,675.0,40.0,435.0,0.9
+True,PKL,190.0,300.0,120.0,20.0,0.81
+True,SBY,85.0,45.0,50.0,390.0,0.65
+True,SEM,220.0,335.0,110.0,130.0,0.87

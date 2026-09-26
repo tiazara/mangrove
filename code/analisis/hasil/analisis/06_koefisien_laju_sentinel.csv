@@ -1,0 +1,3 @@
+kovariat,WLS γ,WLS p (klaster),Huber γ,Huber CI95 bawah,Huber CI95 atas,P(γ>0) bootstrap,WLS+FE γ,WLS+FE p
+Subs,4.609,0.144,3.398,0.501,5.823,0.994,5.451,0.179
+Built,2.17,0.078,0.065,-0.845,2.131,0.53,2.342,0.063
