@@ -51,40 +51,39 @@ TOOLTIP = {
 
 def color_action(rek: str, is_domain: bool = True, focus_4k: bool = False) -> list[int]:
     """
-    Pemetaan warna komprehensif untuk seluruh kelas rekomendasi.
-    Menghilangkan garis abu-abu misterius dengan memberi identitas kartografis yang jelas.
+    Pemetaan warna komprehensif untuk 10 kelas rekomendasi kanonik.
     """
     r = str(rek).upper()
     
     # 1. Empat Kuadran Utama Mangrove (Warna Menyala Berkarakter)
     if "RED" in r or "REKAYASA HIBRIDA" in r:
-        return [178, 24, 43, 245]         # Merah Tua Pekat (Kritis)
+        return [178, 24, 43, 245]         # Merah Tua Pekat (RED · Rekayasa Hibrida)
     elif "ORANGE" in r or "MANAGED REALIGNMENT" in r:
-        return [234, 88, 12, 240]        # Oranye Menyala (Mundur)
+        return [234, 88, 12, 240]        # Oranye Menyala (ORANGE · Managed Realignment)
     elif "YELLOW" in r or "PENGAYAAN" in r:
-        return [234, 179, 8, 240]        # Kuning Emas (Pengayaan)
+        return [234, 179, 8, 240]        # Kuning Emas (YELLOW · Pengayaan Sabuk Hijau)
     elif "GREEN" in r or "KONSERVASI" in r:
-        return [22, 163, 74, 240]         # Hijau Emerald (Lindung)
+        return [22, 163, 74, 240]         # Hijau Emerald (GREEN · Konservasi Ketat)
         
     # Jika mode adalah Fokus 4 Kuadran Mangrove murni, garis non-domain dibuat abu-abu lembut
     if focus_4k and not is_domain:
         return [203, 213, 225, 90]
         
-    # 2. Rekomendasi Lapangan Pesisir Lengkap (Untuk seluruh 2.365 transek)
-    if "PENANGKAP SEDIMEN" in r and "DATARAN LUMPUR" in r:
-        return [2, 132, 199, 230]        # Biru Laut (Sediment trap di mudflat)
+    # 2. Rekomendasi Lapangan Pesisir Lengkap (11 Aksi)
+    if "PENANGKAP SEDIMEN" in r and "LUMPUR" in r:
+        return [2, 132, 199, 230]        # Biru Laut (Penangkap Sedimen + Lumpur)
     elif "RESTORASI HIDROLOGIS" in r and "SEDIMEN" in r:
-        return [14, 165, 233, 230]       # Biru Langit (Breakwater + kanal)
+        return [14, 165, 233, 230]       # Biru Langit (Restorasi Hidrologis + Sedimen)
+    elif "RESTORASI HIDROLOGIS" in r or "TAMBAK TERBENGKALAI" in r:
+        return [99, 102, 241, 230]       # Indigo (Restorasi Hidrologis Tambak)
     elif "RESTORASI ALAMI" in r:
-        return [20, 184, 166, 230]       # Pirus / Teal (Kolonisasi lumpur)
+        return [20, 184, 166, 230]       # Pirus / Teal (Restorasi Alami Lumpur)
     elif "SILVOFISHERY" in r:
-        return [139, 92, 246, 230]       # Ungu (Tambak wanamina)
+        return [139, 92, 246, 230]       # Ungu (Silvofishery Tambak Aktif)
     elif "PERLINDUNGAN PANTAI" in r:
-        return [71, 85, 105, 230]        # Slate / Abu-abu Gelap (Tanggul/Revetment beton)
-    elif "LAHAN DARAT" in r:
-        return [148, 163, 184, 160]      # Abu-abu Netral (Non-prioritas daratan)
-    elif "TAMBAK TERBENGKALAI" in r:
-        return [217, 70, 239, 230]       # Magenta (Buka pematang tambak mati)
+        return [71, 85, 105, 230]        # Slate / Abu-abu Gelap (Perlindungan Pantai Terbangun)
+    elif "LAHAN DARAT" in r or "NON-PRIORITAS" in r:
+        return [148, 163, 184, 160]      # Abu-abu Netral (Lahan Darat (Non-Prioritas))
     else:
         return [100, 116, 139, 180]
 

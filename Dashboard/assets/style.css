@@ -35,11 +35,11 @@ html, body, [data-testid="stAppViewContainer"] {
 [data-testid="stAppViewContainer"] { background: var(--canvas) !important; }
 [data-testid="stMain"] { background: var(--canvas) !important; }
 
-/* Lebarkan kontainer utama agar tampil gagah, full-width (95%), hampir seluruh layar terpakai */
+/* Kontainer utama terpusat persis seperti Coraly dengan margin samping lega */
 .block-container {
-  max-width: 95% !important;
-  width: 95% !important;
-  padding: 1.2rem 1.5rem 3rem 1.5rem !important;
+  max-width: 1180px !important;
+  padding: 1.1rem 2rem 3rem 2rem !important;
+  margin: 0 auto !important;
 }
 
 /* ---- Tipografi institusional: Bersih, tegas, tanpa serif ----------------- */
@@ -143,31 +143,96 @@ p, span, div, label, li { font-size: {{BODY}}; line-height: 1.6; }
 .tdv-card .tc-def  { color: var(--text-2); font-size: 14px; line-height: 1.55; }
 
 /* ============================================================================
-   KPI CARDS & METRICS
+   KPI CARDS & METRICS (Uniform Equal Height)
    ========================================================================== */
+[data-testid="column"]:has(.kpi-card),
+[data-testid="column"]:has(.kpi) {
+  display: flex !important;
+  flex-direction: column !important;
+}
+[data-testid="column"]:has(.kpi-card) > div,
+[data-testid="column"]:has(.kpi) > div {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: 100% !important;
+}
+
 .kpi, .kpi-card {
   background: var(--card);
   border: 0.5px solid var(--card-border);
   border-radius: 12px;
-  padding: 1.15rem 1.3rem;
+  padding: 1.1rem 1.25rem !important;
   box-shadow: 0 1px 3px rgba(4,52,44,0.04);
-  min-height: 105px;
-  display: flex; flex-direction: column; justify-content: center;
+  height: 118px !important;
+  min-height: 118px !important;
+  max-height: 118px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  transition: border-color .15s ease, box-shadow .15s ease;
 }
-.kpi .val, .kpi-card .val { font-size: 32px; font-weight: 600; color: var(--text); line-height: 1.15; }
-.kpi .val.sm, .kpi-card .val.sm { font-size: 22px; }
-.kpi .unit, .kpi-card .unit { font-size: 13.5px; color: var(--text-2); margin-top: 4px; }
+.kpi:hover, .kpi-card:hover {
+  border-color: #bce1d8;
+  box-shadow: 0 3px 8px rgba(4,52,44,0.06);
+}
+.kpi .val, .kpi-card .val {
+  font-size: 28px !important;
+  font-weight: 600 !important;
+  color: var(--text) !important;
+  line-height: 1.15 !important;
+  margin: 0 !important;
+}
+.kpi .val.sm, .kpi-card .val.sm {
+  font-size: 20px !important;
+}
+.kpi .unit, .kpi-card .unit {
+  font-size: 13px !important;
+  color: var(--text-2) !important;
+  line-height: 1.38 !important;
+  margin-top: 4px !important;
+}
 
-/* Module Titles */
-.mod-title { font-size: {{H3}}; font-weight: 500; color: var(--text); margin: 0 0 6px 0; }
-.mod-sub { font-size: 13px; color: var(--text-2); margin: -2px 0 10px 0; }
-.mod-title-lg {
-  font-size: 19px; font-weight: 500; color: var(--text);
-  padding-left: 11px; border-left: 3px solid var(--brand);
-  margin: 2px 0 3px 0; line-height: 1.3;
+/* Section Titles (Judul Pengantar Tab Teratas) */
+.section-title {
+  font-size: 21px !important;
+  font-weight: 600 !important;
+  color: var(--text) !important;
+  line-height: 1.35 !important;
+  margin: 2px 0 4px 0 !important;
+  letter-spacing: -0.01em !important;
 }
-.mod-title-lg b { font-weight: 500; color: var(--brand-dark); }
-.mod-title-lg + .mod-sub { padding-left: 14px; }
+.section-sub {
+  font-size: 14.5px !important;
+  color: var(--text-2) !important;
+  line-height: 1.55 !important;
+  margin: 0 0 14px 0 !important;
+}
+
+/* Module Titles (Header modul ber-aksen garis hijau Coraly) */
+.mod-title { font-size: {{H3}}; font-weight: 500; color: var(--text); margin: 0 0 6px 0; }
+.mod-sub {
+  font-size: 13.5px !important;
+  color: var(--text-2) !important;
+  line-height: 1.5 !important;
+  margin: 3px 0 12px 0 !important;
+}
+.mod-title-lg {
+  font-size: 18.5px !important;
+  font-weight: 600 !important;
+  color: var(--text) !important;
+  padding-left: 12px !important;
+  border-left: 3.5px solid var(--brand) !important;
+  margin: 6px 0 4px 0 !important;
+  line-height: 1.35 !important;
+}
+.mod-title-lg b { font-weight: 600; color: var(--brand-dark); }
+.mod-title-lg + .mod-sub {
+  padding-left: 15px !important;
+  margin-top: 3px !important;
+  margin-bottom: 12px !important;
+}
 
 /* Narrative boxes */
 .nbox, .sabuk-nbox {
@@ -180,6 +245,23 @@ p, span, div, label, li { font-size: {{BODY}}; line-height: 1.6; }
 }
 .nbox .nt, .sabuk-nbox .nt { font-weight: 500; color: var(--text); margin-bottom: 4px; font-size: {{H3}}; }
 .nbox .nb, .sabuk-nbox .nb { color: var(--text-2); font-size: 14px; line-height: 1.55; }
+
+/* Note Callout (Kotak Kesimpulan Skenario tanpa emotikon) */
+.note-callout {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3.5px solid var(--brand);
+  border-radius: 8px;
+  padding: 11px 16px;
+  font-size: 13.5px;
+  color: var(--text-2);
+  line-height: 1.55;
+  margin-top: 12px;
+}
+.note-callout b {
+  color: var(--text);
+  font-weight: 600;
+}
 
 /* Legends */
 .legend-row { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 8px; margin-bottom: 8px; }
@@ -275,4 +357,13 @@ label[data-testid="stWidgetLabel"] p { color: var(--text-2) !important; font-wei
   overflow: hidden;
   border: 0.5px solid var(--card-border);
   box-shadow: 0 1px 3px rgba(4,52,44,0.04);
+}
+
+/* Sembunyikan atribusi Mapbox / CARTO / OpenStreetMap di pojok kanan bawah peta */
+[data-testid="stDeckGlJsonChart"] .mapboxgl-ctrl-attrib,
+[data-testid="stDeckGlJsonChart"] .maplibregl-ctrl-attrib,
+[data-testid="stDeckGlJsonChart"] [class*="-ctrl-attrib"],
+[data-testid="stDeckGlJsonChart"] .mapboxgl-ctrl-bottom-right,
+[data-testid="stDeckGlJsonChart"] .maplibregl-ctrl-bottom-right {
+  display: none !important;
 }

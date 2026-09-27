@@ -25,11 +25,46 @@ DIR_ANALISIS = BASE_DIR / "code" / "analisis" / "hasil" / "analisis"
 if not DIR_ANALISIS.exists():
     DIR_ANALISIS = BASE_DIR / "Deret_Waktu"
 
+def clean_rekomendasi(val) -> str:
+    """Menstandarkan string rekomendasi ke 11 label kanonik resmi dashboard."""
+    if pd.isna(val):
+        return "-"
+    s = str(val).strip()
+    s_upper = s.upper()
+    if "RED" in s_upper or "REKAYASA HIBRIDA" in s_upper:
+        return "RED · Rekayasa Hibrida"
+    if "ORANGE" in s_upper or "MANAGED REALIGNMENT" in s_upper:
+        return "ORANGE · Managed Realignment"
+    if "YELLOW" in s_upper or "PENGAYAAN" in s_upper:
+        return "YELLOW · Pengayaan Sabuk Hijau"
+    if "GREEN" in s_upper or "KONSERVASI" in s_upper:
+        return "GREEN · Konservasi Ketat"
+    if "PENANGKAP SEDIMEN" in s_upper and ("LUMPUR" in s_upper or "DATARAN" in s_upper):
+        return "Penangkap Sedimen + Lumpur"
+    if "TAMBAK TERBENGKALAI" in s_upper:
+        return "Restorasi Hidrologis Tambak"
+    if "RESTORASI HIDROLOGIS" in s_upper and "SEDIMEN" in s_upper:
+        return "Restorasi Hidrologis + Sedimen"
+    if "RESTORASI HIDROLOGIS" in s_upper:
+        return "Restorasi Hidrologis Tambak"
+    if "RESTORASI ALAMI" in s_upper:
+        return "Restorasi Alami Lumpur"
+    if "SILVOFISHERY" in s_upper:
+        return "Silvofishery Tambak Aktif"
+    if "PERLINDUNGAN PANTAI" in s_upper:
+        return "Perlindungan Pantai Terbangun"
+    if "LAHAN DARAT" in s_upper or "TIDAK PRIORITAS" in s_upper or "NON-PRIORITAS" in s_upper:
+        return "Lahan Darat (Non-Prioritas)"
+    return s
+
 @st.cache_data(show_spinner=False)
 def master_df() -> pd.DataFrame:
-    """Memuat master data 2.365 transek Pantura."""
+    """Memuat master data 2.365 transek Pantura dengan rekomendasi kanonik."""
     fp = DIR_DASHBOARD_DATA / "master_transek_pantura.csv"
-    return pd.read_csv(fp)
+    df = pd.read_csv(fp)
+    if "rekomendasi" in df.columns:
+        df["rekomendasi"] = df["rekomendasi"].apply(clean_rekomendasi)
+    return df
 
 @st.cache_data(show_spinner=False)
 def kamus_df() -> pd.DataFrame:
@@ -52,6 +87,8 @@ def transek_gdf(wilayah: str = "SEMUA") -> gpd.GeoDataFrame:
     """Memuat garis transek analitis."""
     fp = DIR_DASHBOARD_DATA / "transek.geojson"
     gdf = gpd.read_file(fp)
+    if "rekomendasi" in gdf.columns:
+        gdf["rekomendasi"] = gdf["rekomendasi"].apply(clean_rekomendasi)
     if wilayah != "SEMUA" and "wilayah" in gdf.columns:
         gdf = gdf[gdf["wilayah"] == wilayah].copy()
     return gdf
@@ -97,6 +134,8 @@ def kawasan_gdf(wilayah: str = "SEMUA") -> gpd.GeoDataFrame:
     """Memuat batas ruas kawasan prioritas intervensi."""
     fp = DIR_DASHBOARD_DATA / "kawasan.geojson"
     gdf = gpd.read_file(fp)
+    if "rekomendasi" in gdf.columns:
+        gdf["rekomendasi"] = gdf["rekomendasi"].apply(clean_rekomendasi)
     if wilayah != "SEMUA" and "wilayah" in gdf.columns:
         gdf = gdf[gdf["wilayah"] == wilayah].copy()
     return gdf
@@ -121,10 +160,15 @@ def load_coast_geojson() -> dict:
 
 @st.cache_data(show_spinner=False)
 def load_transek_geojson() -> dict:
-    """Memuat GeoJSON garis transek analitis untuk Pydeck."""
+    """Memuat GeoJSON garis transek analitis untuk Pydeck dengan rekomendasi kanonik."""
     fp = DIR_DASHBOARD_DATA / "transek.geojson"
     if fp.exists():
         import json
-        return json.loads(fp.read_text(encoding="utf-8"))
+        gj = json.loads(fp.read_text(encoding="utf-8"))
+        for f in gj.get("features", []):
+            props = f.get("properties", {})
+            if "rekomendasi" in props:
+                props["rekomendasi"] = clean_rekomendasi(props["rekomendasi"])
+        return gj
     return None
 

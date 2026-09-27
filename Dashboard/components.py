@@ -22,7 +22,6 @@ def header_band(tagline_html: str, logo: str = "🌿"):
           <div class="wordmark">
             <span class="sabuk-logo">{logo}</span>
             <span class="brand">SABUK HIJAU</span>
-            <span class="badge-edition">ASEC 2026</span>
           </div>
           <div class="tagline">{tagline_html}</div>
         </div>
@@ -66,8 +65,10 @@ def tdv_card(color: str, name: str, definition: str):
 
 def component_explainer():
     """Tiga kartu penjelas pilar Coastal Squeeze (Sumbu Laut, Sumbu Darat, Tipologi)."""
-    html('<div class="mod-title"><b>Bagaimana "Coastal Squeeze" Dievaluasi?</b></div>')
-    html('<div class="mod-sub">Indeks kerentanan dan alokasi mitigasi ditentukan oleh interaksi defisit vertikal laut dan restriksi lateral darat.</div>')
+    section_title(
+        'Bagaimana "Coastal Squeeze" Dievaluasi?',
+        "Indeks kerentanan dan alokasi mitigasi ditentukan oleh interaksi defisit vertikal laut dan restriksi lateral darat."
+    )
     
     c1, c2, c3 = st.columns(3)
     with c1:
@@ -86,7 +87,7 @@ def component_explainer():
         tdv_card(
             "#0f6e56",
             "Tipologi 4 Kuadran: Keputusan Mitigasi Presisi",
-            "Klasifikasi spasial 2.365 transek menjadi 4 aksi prioritas: RED (Rekayasa Hibrida), ORANGE (Managed Realignment), YELLOW (Pengayaan), & GREEN (Konservasi Inti)."
+            "Klasifikasi spasial transek menjadi 4 aksi prioritas: RED · Rekayasa Hibrida, ORANGE · Managed Realignment, YELLOW · Pengayaan Sabuk Hijau, & GREEN · Konservasi Ketat."
         )
 
 def kpi(value: str, unit: str, small: bool = False):
@@ -115,7 +116,7 @@ def nbox(title: str, body: str, accent: str = None):
 
 def note(body: str):
     """Callout ringkas satu baris untuk batasan ilmiah atau petunjuk operasional."""
-    html(f'<div class="note-callout"><span class="note-ic">ℹ️</span><span class="note-body">{body}</span></div>')
+    html(f'<div class="note-callout"><span class="note-body">{body}</span></div>')
 
 def section_title(title: str, sub: str = ""):
     """Judul bagian level-2 dengan subjudul penjelas."""

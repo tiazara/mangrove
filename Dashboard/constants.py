@@ -90,6 +90,26 @@ TIPOLOGI_KM = {
     "GREEN": 124.5
 }
 
+# --- 11 Rekomendasi Aksi Lapangan Pesisir (Kanonik) ----------------------- #
+REKOMENDASI_11 = [
+    "RED · Rekayasa Hibrida",
+    "ORANGE · Managed Realignment",
+    "YELLOW · Pengayaan Sabuk Hijau",
+    "GREEN · Konservasi Ketat",
+    "Penangkap Sedimen + Lumpur",
+    "Restorasi Hidrologis + Sedimen",
+    "Restorasi Hidrologis Tambak",
+    "Restorasi Alami Lumpur",
+    "Silvofishery Tambak Aktif",
+    "Perlindungan Pantai Terbangun",
+    "Lahan Darat (Non-Prioritas)"
+]
+
+HOTSPOT_LABELS = {
+    "kritis": "Hotspot Kritis Tenggelam (< 2050)",
+    "non_kritis": "Transek Pesisir Non-Kritis"
+}
+
 # --- Temuan Regresi Kausalitas Penggerak (Esai Bagian 6) -------------------- #
 REGRESI_FINDINGS = [
     {

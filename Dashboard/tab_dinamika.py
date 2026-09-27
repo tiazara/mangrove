@@ -20,7 +20,8 @@ def render():
     segmen_gdf = data.segmen_lahan_gdf()
 
     # --- Temuan Regresi Kausalitas Esai (Tabel Kotak Terpadu) -------------- #
-    st.markdown("##### Temuan Kausalitas Penggerak (Model Ekonometrika Spasial)")
+    ui.mod_title_lg("Temuan Kausalitas Penggerak (Model Ekonometrika Spasial)",
+                    "Hubungan empiris antara defisit vertikal laut dan restriksi darat terhadap pergerakan tepi mangrove.")
     r_cols = st.columns(3)
     for i, col in enumerate(r_cols):
         item = C.REGRESI_FINDINGS[i]
@@ -34,7 +35,8 @@ def render():
     st.write("")
 
     # --- Inspektur Mikro per Transek --------------------------------------- #
-    st.markdown("##### Inspektur Mikro Profil Ruang & Deret Waktu Transek")
+    ui.mod_title_lg("Inspektur Mikro Profil Ruang & Deret Waktu Transek",
+                    "Pemeriksaan detail profil tutupan lahan dan dinamika garis tepi per unit transek.")
     
     col_sel1, col_sel2 = st.columns([1.2, 2.8])
     with col_sel1:
@@ -66,16 +68,23 @@ def render():
         )
 
     # 1. Grafik Deret Waktu Tepi Bulanan
+    v_rate = t_row.get("v_edge_m_yr", None)
+    v_rate_str = f"Laju pergerakan tepi: <b>{v_rate:+.1f} m/th</b>" if pd.notnull(v_rate) else "Laju tidak tersedia"
+    ui.mod_title_lg(
+        f"Deret Waktu Posisi Tepi Laut — Transek {sel_tid}",
+        f"{v_rate_str} &bull; Hasil ekstraksi satelit Sentinel-1/2 bulanan (2021–2026)."
+    )
     fig_ts = charts.plot_timeseries(sel_tid, y_df, t_row)
-    st.plotly_chart(fig_ts, use_container_width=True)
-
-    # 2. Penampang Melintang Tutupan Lahan
-    fig_cross = charts.plot_cross_section(sel_tid, segmen_gdf)
-    st.plotly_chart(fig_cross, use_container_width=True)
+    st.plotly_chart(fig_ts, use_container_width=True, config={"displayModeBar": False, "responsive": True})
 
     st.write("")
 
-    # --- Distribusi Tipologi Rekomendasi ----------------------------------- #
-    st.markdown("##### Sebaran Rekomendasi Intervensi pada Wilayah Ini")
-    fig_bar = charts.plot_typology_breakdown(master, w_code)
-    st.plotly_chart(fig_bar, use_container_width=True)
+    # 2. Penampang Melintang Tutupan Lahan
+    ui.mod_title_lg(
+        f"Penampang Melintang Lahan — Transek {sel_tid}",
+        "Profil gradien lahan dari 0 m (laut lepas), 500 m (garis pantai), hingga 3.500 m (pedalaman darat)."
+    )
+    fig_cross = charts.plot_cross_section(sel_tid, segmen_gdf)
+    st.plotly_chart(fig_cross, use_container_width=True, config={"displayModeBar": False, "responsive": True})
+
+

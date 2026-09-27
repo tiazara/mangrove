@@ -11,6 +11,7 @@ import components as ui
 import constants as C
 import data as data
 import maps as maps
+import charts as charts
 
 MODE_LABELS = {
     "tipologi": "Tipologi 4 Kuadran Mangrove (RED, ORANGE, YELLOW, GREEN)",
@@ -70,7 +71,7 @@ def render():
     with k3:
         ui.kpi(f"{subs_val:.1f} cm/th", "median laju amblesan InSAR")
     with k4:
-        ui.kpi(f"{sink_val}", "median estimasi tahun tenggelam", small=True)
+        ui.kpi(f"{sink_val}", "median estimasi tahun tenggelam", small=(len(str(sink_val)) > 8))
 
     st.write("")
 
@@ -101,10 +102,10 @@ def render():
     # --- 5. Legenda Kartografis Responsif Sesuai Mode Peta ----------------- #
     if sel_mode == "tipologi":
         ui.legend([
-            ("#b2182b", "RED: Rekayasa Hibrida (Permeable Dam)"),
-            ("#ea580c", "ORANGE: Managed Realignment (Buka Tambak)"),
-            ("#eab308", "YELLOW: Pengayaan Sabuk Hijau (Akar Kokoh)"),
-            ("#16a34a", "GREEN: Konservasi Ketat (Zona Lindung Inti)"),
+            ("#b2182b", "RED · Rekayasa Hibrida"),
+            ("#ea580c", "ORANGE · Managed Realignment"),
+            ("#eab308", "YELLOW · Pengayaan Sabuk Hijau"),
+            ("#16a34a", "GREEN · Konservasi Ketat"),
             ("#cbd5e1", "Pesisir Non-Domain Mangrove (1.445 transek)")
         ])
     elif sel_mode == "aksi_lengkap":
@@ -115,6 +116,7 @@ def render():
             ("#16a34a", "GREEN · Konservasi Ketat"),
             ("#0284c7", "Penangkap Sedimen + Lumpur"),
             ("#0ea5e9", "Restorasi Hidrologis + Sedimen"),
+            ("#6366f1", "Restorasi Hidrologis Tambak"),
             ("#14b8a6", "Restorasi Alami Lumpur"),
             ("#8b5cf6", "Silvofishery Tambak Aktif"),
             ("#475569", "Perlindungan Pantai Terbangun"),
@@ -127,6 +129,34 @@ def render():
         ])
     elif sel_mode == "subsidence":
         ui.ramp_legend("Rendah (< 1.0 cm/th)", "Kritis (> 4.0 cm/th)")
+
+    # --- 5. Sebaran Analitis Sesuai Mode Peta Tematik (Otomatis Sinkron) ---- #
+    st.markdown("<hr>", unsafe_allow_html=True)
+
+    titles_map = {
+        "tipologi": (
+            "Sebaran Tipologi Mitigasi 4 Kuadran Mangrove",
+            f"Distribusi kuantitatif 920 transek mangrove berdasarkan matriks defisit vertikal laut dan restriksi darat di {sel_wilayah_name}."
+        ),
+        "aksi_lengkap": (
+            "Sebaran 11 Rekomendasi Aksi Lapangan Pesisir",
+            f"Komposisi tindakan mitigasi fisik komprehensif untuk seluruh 2.365 transek pesisir di {sel_wilayah_name}."
+        ),
+        "hotspot": (
+            "Sebaran Status Kerentanan Tenggelam",
+            f"Perbandingan proporsi transek hotspot kritis tenggelam (< 2050) vs transek pesisir non-kritis di {sel_wilayah_name}."
+        ),
+        "subsidence": (
+            "Distribusi Tingkat Laju Penurunan Tanah (InSAR)",
+            f"Sebaran transek berdasarkan kelas ambang batas amblesan tanah (kuning < 1 cm/th hingga merah pekat > 4 cm/th) di {sel_wilayah_name}."
+        )
+    }
+
+    t_title, t_sub = titles_map[sel_mode]
+    ui.mod_title_lg(t_title, t_sub)
+
+    fig_breakdown = charts.plot_theme_breakdown(master, wilayah_code, mode=sel_mode)
+    st.plotly_chart(fig_breakdown, use_container_width=True, config={"displayModeBar": False, "responsive": True})
 
     st.write("")
 
