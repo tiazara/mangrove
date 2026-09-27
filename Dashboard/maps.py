@@ -105,6 +105,7 @@ def build_deck_map(
     mode: str,
     basemap: str,
     df_master: pd.DataFrame,
+    gj_coast: dict = None,
     gj_transek: dict = None
 ) -> pdk.Deck:
     """Membangun objek pdk.Deck berkinerja tinggi GPU-accelerated."""
@@ -118,7 +119,41 @@ def build_deck_map(
 
     layers = []
 
-    # Layer Tematik Utama
+    # 1. Layer Garis Pantai OSM via PathLayer murni (Bebas 100% dari bug triangulasi poligon)
+    if gj_coast is not None:
+        coast_col = [15, 23, 42, 210] if basemap != "Citra Satelit" else [255, 255, 255, 240]
+        coast_paths = []
+        for f in gj_coast.get("features", []):
+            geom = f.get("geometry", {})
+            gtype = geom.get("type")
+            coords = geom.get("coordinates", [])
+            if gtype == "LineString":
+                if len(coords) >= 2:
+                    coast_paths.append({"path": coords})
+            elif gtype == "Polygon":
+                for ring in coords:
+                    if len(ring) >= 2:
+                        coast_paths.append({"path": ring})
+            elif gtype == "MultiLineString":
+                for line in coords:
+                    if len(line) >= 2:
+                        coast_paths.append({"path": line})
+        
+        if coast_paths:
+            layers.append(
+                pdk.Layer(
+                    "PathLayer",
+                    data=coast_paths,
+                    get_path="path",
+                    get_color=coast_col,
+                    width_scale=1,
+                    width_min_pixels=2,
+                    width_max_pixels=4,
+                    pickable=False,
+                )
+            )
+
+    # 2. Layer Tematik Utama
     if mode in ["tipologi", "aksi_lengkap"]:
         focus_4k = (mode == "tipologi")
         

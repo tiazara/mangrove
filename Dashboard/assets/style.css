@@ -7,7 +7,8 @@
 /* ---- Google Font (Inter), dengan fallback sistem modern ----------------- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-:root {
+:root, html {
+  color-scheme: light !important;
   --canvas: {{CANVAS}};
   --card: {{CARD}};
   --card-border: {{CARD_BORDER}};
@@ -343,13 +344,65 @@ label[data-testid="stWidgetLabel"] p { color: var(--text-2) !important; font-wei
   background: #f1f5f9 !important;
 }
 
-/* Streamlit Expander & Dataframe */
+/* Streamlit Expander, Dataframe, dan Download Button — Bersih, Terang, & Kontras */
 [data-testid="stExpander"] {
-  border: 0.5px solid var(--card-border) !important;
+  border: 1px solid var(--card-border) !important;
   border-radius: 12px !important;
-  background: var(--card) !important;
+  background: #ffffff !important;
+  overflow: hidden !important;
 }
-[data-testid="stDataFrame"] { border-radius: 10px; overflow: hidden; }
+[data-testid="stExpander"] summary {
+  background: #ffffff !important;
+  color: var(--text) !important;
+  padding: 12px 18px !important;
+  border-radius: 12px !important;
+}
+[data-testid="stExpander"] summary:hover {
+  background: #f8fafc !important;
+}
+[data-testid="stExpander"] summary p,
+[data-testid="stExpander"] summary span,
+[data-testid="stExpander"] summary svg {
+  color: var(--text) !important;
+  fill: var(--text) !important;
+  font-weight: 500 !important;
+}
+[data-testid="stExpander"] div[role="region"] {
+  background: #ffffff !important;
+  padding: 10px 18px 18px 18px !important;
+}
+
+[data-testid="stDataFrame"] {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--card-border) !important;
+  background: #ffffff !important;
+}
+
+/* Download Button — Hijau Emerald Resmi */
+[data-testid="stDownloadButton"] button,
+.stDownloadButton button {
+  background: var(--brand) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 8px 20px !important;
+  font-weight: 600 !important;
+  font-size: 13.5px !important;
+  box-shadow: 0 1px 3px rgba(0, 122, 94, 0.25) !important;
+  transition: all 0.15s ease !important;
+}
+[data-testid="stDownloadButton"] button:hover,
+.stDownloadButton button:hover {
+  background: var(--brand-dark) !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 8px rgba(0, 122, 94, 0.35) !important;
+}
+[data-testid="stDownloadButton"] button p,
+.stDownloadButton button p {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
 
 /* Deck.GL Pydeck canvas container full width */
 [data-testid="stDeckGlJsonChart"] {
