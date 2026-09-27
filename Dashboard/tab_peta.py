@@ -84,8 +84,7 @@ def render():
     }
     ui.mod_title_lg("Peta Spasial Interaktif & Tipologi Mitigasi", sub_texts[sel_mode])
 
-    # Muat geometri garis pantai & transek via cached JSON loader
-    gj_coast = data.load_coast_geojson()
+    # Muat geometri garis transek via cached JSON loader
     gj_transek = data.load_transek_geojson()
 
     deck = maps.build_deck_map(
@@ -93,7 +92,6 @@ def render():
         mode=sel_mode,
         basemap=sel_basemap,
         df_master=master,
-        gj_coast=gj_coast,
         gj_transek=gj_transek
     )
 

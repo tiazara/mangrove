@@ -105,7 +105,6 @@ def build_deck_map(
     mode: str,
     basemap: str,
     df_master: pd.DataFrame,
-    gj_coast: dict = None,
     gj_transek: dict = None
 ) -> pdk.Deck:
     """Membangun objek pdk.Deck berkinerja tinggi GPU-accelerated."""
@@ -119,63 +118,46 @@ def build_deck_map(
 
     layers = []
 
-    # 1. Layer Garis Pantai OSM (Jangkar kartografis presisi tinggi)
-    if gj_coast is not None:
-        coast_col = [15, 23, 42, 230] if basemap != "Citra Satelit" else [255, 255, 255, 240]
-        layers.append(
-            pdk.Layer(
-                "GeoJsonLayer",
-                data=gj_coast,
-                stroked=True,
-                filled=False,
-                get_line_color=coast_col,
-                line_width_units="pixels",
-                get_line_width=2.5,
-                line_width_min_pixels=2,
-                pickable=False,
-            )
-        )
-
-    # 3. Layer Tematik Utama
+    # Layer Tematik Utama
     if mode in ["tipologi", "aksi_lengkap"]:
         focus_4k = (mode == "tipologi")
         
-        # a. Garis Transek jika tersedia GeoJSON
+        # a. Garis Transek via PathLayer (Aman, cepat, dan bebas artefak WebGL)
         if gj_transek is not None:
             feats = gj_transek.get("features", [])
             if code != "SEMUA":
                 feats = [f for f in feats if f.get("properties", {}).get("wilayah") == code]
             
-            clean_feats = []
+            paths = []
             for f in feats:
                 p = f.get("properties", {})
+                coords = f.get("geometry", {}).get("coordinates", [])
+                if not coords or len(coords) < 2:
+                    continue
                 rek = p.get("rekomendasi", "")
                 is_dom = bool(p.get("domain_mangrove", False))
                 col = color_action(rek, is_domain=is_dom, focus_4k=focus_4k)
-                clean_feats.append({
-                    "type": "Feature",
-                    "geometry": f.get("geometry"),
-                    "properties": {
-                        "id": p.get("transek_id"),
-                        "wilayah": p.get("wilayah"),
-                        "rek": rek,
-                        "domain": "Ya (Aktif)" if is_dom else "Pesisir Terbuka",
-                        "subs": round(float(p.get("subs_cm_yr", 0)), 1),
-                        "th_tenggelam": str(p.get("tahun_tenggelam_median", "-")),
-                        "dist_barrier": round(float(p.get("jarak_penghalang_m", 0))),
-                        "color": col,
-                    }
+                paths.append({
+                    "path": coords,
+                    "id": str(p.get("transek_id", "")),
+                    "wilayah": str(p.get("wilayah", "")),
+                    "rek": rek,
+                    "domain": "Ya (Aktif)" if is_dom else "Pesisir Terbuka",
+                    "subs": round(float(p.get("subs_cm_yr", 0)), 1),
+                    "th_tenggelam": str(p.get("tahun_tenggelam_median", "-")),
+                    "dist_barrier": round(float(p.get("jarak_penghalang_m", 0))),
+                    "color": col,
                 })
             
             layers.append(
                 pdk.Layer(
-                    "GeoJsonLayer",
-                    data={"type": "FeatureCollection", "features": clean_feats},
-                    stroked=True,
-                    filled=False,
-                    get_line_color="properties.color",
-                    get_line_width=4,
-                    line_width_min_pixels=2,
+                    "PathLayer",
+                    data=paths,
+                    get_path="path",
+                    get_color="color",
+                    width_scale=1,
+                    width_min_pixels=3,
+                    width_max_pixels=6,
                     pickable=True,
                 )
             )
