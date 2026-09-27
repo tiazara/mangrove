@@ -37,17 +37,20 @@ Dataset/02_Ekologis_Mangrove/Arsip_Mentah_GMW_Global/
 Dataset/03_Raster_Satelit_10m_2021_2024/
 Dataset/02_Ekologis_Mangrove/GMW_v4112_Annual_1985_2025/
 
-# 3. Large Presentation Files (>100MB)
-PPT_TM 1 ASEC.pdf
-
-# Temporary scripts
-Codes/build_*.py
+# 4. Large NPZ, ZIP & Raw GEE data (>100MB, local only)
+*.npz
+*.zip
+*.tar.gz
+*.7z
+code/dataset/turunan/
+code/dataset/gee/
 
 # -------------------------------------------------------------------------
 # DRAFT, ADMINISTRATIVE, & AUXILIARY FILES (LOCAL ONLY)
 # -------------------------------------------------------------------------
 # Root text extraction files
 /*.txt
+!/requirements.txt
 
 # Competition administration & templates
 /Guidebook Penyisihan ASEC 2026.pdf
@@ -61,4 +64,4 @@ Codes/build_*.py
 /Referensi/
 /Analisis_Data/
 /Daftar/
-/Dashboard/
+/scratch/

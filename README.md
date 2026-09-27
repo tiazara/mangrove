@@ -1,93 +1,221 @@
-# CSPI Pantura Jawa Grand Synthesis (2021–2024)
-### *Coastal Squeeze Priority Index* Pantura Jawa: Integrasi Geospasial Multidimensi & Statistika Spasial
+# SABUK HIJAU: Sistem Pendukung Keputusan Berbasis Fusi Data Multi-Sumber dan Pemodelan Probabilistik untuk Prioritas Mitigasi Coastal Squeeze Mangrove Pantura
+
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.40+-FF4B4B?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Pydeck WebGL](https://img.shields.io/badge/Pydeck-GPU_WebGL-47A248?style=flat&logo=webgl&logoColor=white)](https://deckgl.readthedocs.io/)
+[![Plotly](https://img.shields.io/badge/Plotly-Modern_Theme-3F4F75?style=flat&logo=plotly&logoColor=white)](https://plotly.com/)
+[![GeoPandas](https://img.shields.io/badge/GeoPandas-Spatial_Data-139C5A?style=flat&logo=geopandas&logoColor=white)](https://geopandas.org/)
+
 **Airlangga Statistics Essay Competition (ASEC) 2026 — Arsen Universitas Airlangga**  
-**Tim Peneliti**: Mutia & Reno (Universitas Gadjah Mada)  
-**Kepatuhan Temporal**: 100% Menggunakan Data Observasi 5 Tahun Terakhir ($\ge 2021$)
+*Tim Peneliti / Pengembang: SABUK HIJAU Pantura Team*
 
 ---
 
-## 🌊 Ringkasan Proyek
-Penelitian ini mengembangkan indeks komposit terintegrasi bernama **Coastal Squeeze Priority Index (CSPI)** untuk memetakan, mengkuantifikasi, dan menyusun prioritas mitigasi fenomena *coastal squeeze* di sepanjang Pantai Utara (Pantura) Jawa. Mangrove Pantura terjepit di antara ancaman laut (*seaward hazard* berupa amblesan tanah vertikal & abrasi) dan batas keras darat (*landward barrier* berupa pemukiman padat & tambak intensif).
+## 🌊 Ringkasan Eksekutif & Latar Belakang Ilmiah
 
-Penelitian berfokus pada 5 simpul strategis pesisir Pantura:
-1. **Cirebon (Jawa Barat)**: Dominasi tambak intensif dan keterbatasan ruang mangrove.
-2. **Pekalongan (Jawa Tengah)**: **Episentrum Kritis Tertinggi** (Amblesan tanah ekstrem -9,78 cm/tahun & degradasi kanopi $\Delta\text{NDVI} = -0,119$).
-3. **Semarang - Demak (Jawa Tengah)**: Penjepitan tambak budidaya raksasa (70% wilayah pesisir) dan rob Sayung.
-4. **Surabaya (Jawa Timur)**: Sabuk muara delta terluas (1.772 Ha) dengan ketahanan kanopi alami.
-5. **Jepara (Jawa Tengah)**: Garis pantai batuan Muria stabil (+0,05 cm/tahun) sebagai **Zona Kontrol Alami (*Baseline Control*)**.
+Hutan mangrove di sepanjang Pantai Utara (Pantura) Jawa mengalami ancaman eksistensial ganda yang dikenal sebagai **coastal squeeze** (*penjepitan pesisir*):
+1. **Sumbu Laut (Tekanan Vertikal)**: Amblesan tanah (*land subsidence*) ekstrem berbasis InSAR Sentinel-1 (2017–2023) yang mencapai hingga 4,8 cm/tahun (GNSS lokal hingga 11,6 cm/tahun) dipadu kenaikan muka laut (*sea level rise* / SLR ~0,55 cm/tahun) jauh melampaui laju akresi sedimen alami (~0,50 cm/tahun). Defisit vertikal ini mengancam menenggelamkan tegakan mangrove secara permanen sebelum tahun 2050 (median tahun 2068).
+2. **Sumbu Darat (Restriksi Lateral)**: Infrastruktur keras buatan manusia (jalan tol tanggul laut Semarang-Demak, jalan arteri Pantura, pemukiman padat, serta pematang tambak beton permanen) berjarak dekat ($\le 500\text{ m}$) di belakang tegakan, mengunci ruang akomodasi alami mangrove untuk bermigrasi mundur ke arah darat.
+
+Repositori ini menyajikan rangkaian riset terintegrasi: mulai dari pengolahan data geospasial skala besar (Google Earth Engine, Sentinel-1/2, InSAR, WorldPop, OSM), pemodelan ekonometrika spasial (*state-space Kalman filter*, WLS klaster, Huber robust, SIMEX), hingga **Sistem Pendukung Keputusan (*Decision Support System* / DSS) Spasial Berbasis Web** yang interaktif.
+
+---
+
+## 🗺️ Wilayah Kajian & Unit Analisis Spasial
+
+Penelitian mencakup **5 koridor pesisir strategis Pantura** yang mewakili variasi kombinasi tekanan biofisik dan antropogenik:
+
+| Koridor Wilayah | Jumlah Transek | Karakteristik Biofisik & Justifikasi Pemilihan |
+| :--- | :---: | :--- |
+| **Pekalongan** | 290 | **Episentrum Kritis**: Amblesan tanah sangat tinggi (GNSS hingga 11,6 cm/th, InSAR hingga 4,8 cm/th) dan risiko tenggelam tercepat. |
+| **Semarang – Demak** | 315 | **Tekanan Ganda**: Amblesan tinggi dengan keberadaan tanggul laut raksasa, tol terintegrasi, dan banjir rob Sayung. |
+| **Cirebon** | 405 | **Ruang Terjepit**: Sabuk mangrove tipis di antara pematang tambak intensif dan persawahan; potensi tinggi perluasan ke darat. |
+| **Surabaya – Madura** | 1.165 | **Sabuk Resilien**: Sabuk mangrove delta terluas dengan resiliensi alami tinggi dan tekanan defisit relatif rendah. |
+| **Jepara (Kontrol)** | 190 | **Baseline Kontrol**: Pesisir batuan vulkanik Muria yang stabil dengan amblesan rendah (+0,05 cm/th). |
+| **Total Pantura** | **2.365** | **Garis pantai evaluasi sepanjang ~591 km.** |
+
+* **Unit Analisis**: Transek tegak lurus pantai sepanjang 3.500 m (500 m ke arah laut lepas dan 3.000 m ke arah pedalaman darat), dipasang setiap interval 250 m, dengan titik observasi mikro setiap 10 m di sepanjang transek.
+* **Domain Analisis**:
+  * **920 transek bermangrove aktif**: Dianalisis untuk dinamika pergerakan tepi (*edge retreat*), pemodelan nowcasting/forecasting, dan klasifikasi 4 kuadran mitigasi.
+  * **1.445 transek non-mangrove**: Dianalisis berdasarkan kondisi substrat dan tutupan lahan untuk menentukan potensi restorasi hidrologis, penangkap sedimen, atau perlindungan buatan.
+* **Agregasi 259 Ruas Kawasan Prioritas**: Peleburan spasial transek bertetangga dengan rekomendasi seragam minimal 500 m (total 591,2 km) untuk memudahkan perencanaan anggaran APBD/Bappeda.
+
+---
+
+## 🔬 Metodologi & Alur Fusi Data Multi-Sumber
+
+```
++---------------------------------------------------------------------------------------------------+
+|                                  FUSI DATA MULTI-SUMBER PANTURA                                   |
+|   Sentinel-1 SAR (VH/VV) + Sentinel-2 (NDVI) + InSAR Subsidence (Ohenhen) + EOT20 Tides + OSM     |
++---------------------------------------------------------------------------------------------------+
+                                                  │
+                                                  ▼
++---------------------------------------------------------------------------------------------------+
+|                                ASIMILASI STATE-SPACE KALMAN FILTER                                |
+|           Rekonstruksi deret waktu posisi tepi laut bulanan Jan 2021 – Agu 2026 (68 bulan)        |
++---------------------------------------------------------------------------------------------------+
+                                                  │
+                                                  ▼
++---------------------------------------------------------------------------------------------------+
+|                                  PEMODELAN EKONOMETRIKA SPASIAL                                   |
+|   1. Estimasi Tren Tepi Mangrove (v_edge) via Regresi OLS & Kalman Gain                           |
+|   2. Model Kausalitas Penggerak Mundur: WLS Klaster, Huber Robust, dan SIMEX (Koreksi Galat)      |
+|   3. Bukti Empiris: v_edge dipicu defisit vertikal (p < 0.001) dan dihambat barrier lateral       |
++---------------------------------------------------------------------------------------------------+
+                                                  │
+                                                  ▼
++---------------------------------------------------------------------------------------------------+
+|                             MATRIKS KEPUTUSAN 4 KUADRAN & 11 AKSI                                 |
+|   * RED (Rekayasa Hibrida: Permeable Dam)        * YELLOW (Pengayaan Sabuk Hijau)                 |
+|   * ORANGE (Managed Realignment: Jebol Tambak)    * GREEN (Konservasi Ketat Alami)                 |
+|   * + 7 Kategori Aksi Non-Mangrove (Restorasi Lumpur, Hidrologis Tambak, Silvofishery, dll.)      |
++---------------------------------------------------------------------------------------------------+
+                                                  │
+                                                  ▼
++---------------------------------------------------------------------------------------------------+
+|                                 SISTEM PENDUKUNG KEPUTUSAN (DSS)                                  |
+|   Dashboard Interaktif Streamlit: Tab Peta WebGL + Tab Dinamika Kausalitas + Tab Simulator What-If|
++---------------------------------------------------------------------------------------------------+
+```
+
+---
+
+## 📊 Matriks 4 Kuadran & 11 Rekomendasi Aksi Lapangan
+
+### 1. Tipologi 4 Kuadran Mangrove (920 Transek Domain Mangrove)
+* 🔴 **`RED · Rekayasa Hibrida`** (15 transek | 1,6%): Tekanan laut tinggi $\times$ restriksi lateral tinggi. Membutuhkan intervensi struktur permeable dam bambu untuk memulihkan elevasi substrat.
+* 🟠 **`ORANGE · Managed Realignment`** (242 transek | 26,3%): Tekanan laut tinggi $\times$ restriksi lateral rendah. Pembukaan pematang tambak untuk memberikan ruang migrasi mundur ke darat.
+* 🟡 **`YELLOW · Pengayaan Sabuk Hijau`** (153 transek | 16,6%): Tekanan laut rendah $\times$ restriksi lateral tinggi. Pengayaan jenis akar tunjang/kokoh pelindung aset permukiman.
+* 🟢 **`GREEN · Konservasi Ketat`** (510 transek | 55,4%): Tekanan laut rendah $\times$ restriksi lateral rendah. Zona lindung mandiri berdaya lentur alami tinggi.
+
+### 2. Komposisi 11 Rekomendasi Kanonik (2.365 Transek Pesisir Pantura)
+1. `GREEN · Konservasi Ketat` (510 transek)
+2. `Perlindungan Pantai Terbangun` (486 transek)
+3. `Restorasi Alami Lumpur` (460 transek)
+4. `ORANGE · Managed Realignment` (242 transek)
+5. `Restorasi Hidrologis + Sedimen` (187 transek)
+6. `YELLOW · Pengayaan Sabuk Hijau` (153 transek)
+7. `Lahan Darat (Non-Prioritas)` (132 transek)
+8. `Penangkap Sedimen + Lumpur` (125 transek)
+9. `Silvofishery Tambak Aktif` (45 transek)
+10. `RED · Rekayasa Hibrida` (15 transek)
+11. `Restorasi Hidrologis Tambak` (10 transek)
 
 ---
 
 ## 📁 Struktur Repositori
 
 ```text
-├── Codes/
-│   ├── GEE_Script_CSPI_Harmonized_2021_2024.js   # Skrip Google Earth Engine komposit 16-band 10m
-│   ├── notebooks/                                # 4 Notebook Modular Ter-Render Penuh
-│   │   ├── 01_Ekstraksi_Dataset_Fisik_dan_Hazard.ipynb
-│   │   ├── 02_Ekstraksi_Dataset_Ekologis_Mangrove.ipynb
-│   │   ├── 03_Ekstraksi_Dataset_Antropogenik_Penduduk.ipynb
-│   │   └── 04_Sintesis_Grand_CSPI_dan_Analisis_Statistik.ipynb
-│   └── Outputs/
-│       ├── Visualisasi/                          # 10 Gambar Publikasi Ilmiah 300 DPI
-│       └── Statistik/                            # 7 Tabel Uji Statistik & Metrik (CSV)
+mangrove/
+├── code/                                # Modul Analisis Ilmiah & Pemodelan
+│   ├── analisis/
+│   │   ├── 01_Eksplorasi_Data.ipynb     # Audit data, kekosongan Sentinel-1/2, harmonisasi
+│   │   ├── 02_Analisis_Coastal_Squeeze.ipynb # Kalman filter, regresi WLS, Huber, SIMEX
+│   │   ├── muat_data.py                 # Pipeline loader data geospasial & deret waktu
+│   │   └── hasil/
+│   │       ├── analisis/                # Matriks estimasi, parameter model, Y_bulanan.parquet
+│   │       └── dashboard/               # GeoJSON transek, kawasan prioritas, layer_tambahan/
+│   └── dataset/                         # Tabel kovariat transek, laju InSAR, barrier, WorldPop
 │
-├── Dataset/
-│   ├── 01_Fisik_Hazard/                          # Data GNSS CORS Clean & GeoJSON Garis Pantai
-│   ├── 02_Ekologis_Mangrove/                     # Metadata & Vektor Mangrove
-│   ├── 04_Tabel_Ekstraksi_CSV_Excel/             # 5 Master Tabel Ekstraksi CSV
-│   ├── Penduduk/                                 # Data Kependudukan Resmi BPS (2021-2024)
-│   └── README_STRUKTUR_DATASET.md                # Dokumentasi Detail Dataset
+├── Dashboard/                           # Aplikasi Web Decision Support System (DSS)
+│   ├── app.py                           # Entrypoint Streamlit (Header band & Pill Navigation)
+│   ├── theme.py                         # Desain token, palet Coraly-Dark, Google Font Inter
+│   ├── components.py                    # Komponen UI modular (Header, KPI Cards, Title Modules)
+│   ├── constants.py                     # Nomenklatur kanonik, batas koordinat, angka headline
+│   ├── data.py                          # Data loader dengan st.cache_data & GeoPandas
+│   ├── maps.py                          # Generator peta Pydeck WebGL GPU-accelerated 50 ms
+│   ├── charts.py                        # Generator visualisasi analitis Plotly
+│   ├── tab_peta.py                      # Tab 1: Peta Spasial & Tipologi Intervensi
+│   ├── tab_dinamika.py                  # Tab 2: Dinamika Tepi Laut & Kausalitas Penggerak
+│   ├── tab_kebijakan.py                 # Tab 3: Rencana Aksi Presisi & Simulator What-If
+│   ├── assets/
+│   │   └── style.css                    # CSS kustom terintegrasi
+│   ├── requirements.txt                 # Dependensi pustaka Dashboard
+│   └── README.md                        # Dokumentasi teknis Dashboard
 │
-├── .gitignore                                    # Pengecualian file raster besar (>100MB)
-└── README.md
+├── esai_sabuk_hijau.md                  # Naskah lengkap esai ilmiah ASEC 2026
+├── requirements.txt                     # Dependensi tingkat root untuk Streamlit Cloud
+├── .gitignore                           # Filter file raster/biner besar
+└── README.md                            # Dokumentasi utama repositori
 ```
 
 ---
 
-## 🔬 Metodologi & Tiga Pilar Operasional
+## 💻 Panduan Menjalankan Secara Lokal
 
-### 1. Pilar 1: Fisik & Hazard Pesisir
-- **Data**: Pengamatan harian 365 hari stasiun GNSS CORS Badan Informasi Geospasial (BIG) tahun 2021.
-- **Hasil**: Regresi OLS membuktikan amblesan Pekalongan mencapai **-9,78 cm/tahun** ($R^2 = 0,90$, $p = 3,38 \times 10^{-182}$).
+### 1. Prasyarat
+* Python 3.10 atau versi yang lebih baru.
+* Git.
 
-### 2. Pilar 2: Ekologis Mangrove (*Dual-Dataset Validation*)
-- **Data**: *Global Mangrove Watch* (GMW v4.1.12) tahun 2021–2024 dan ESA WorldCover 10m.
-- **Hasil**: Sensor 10m mendeteksi 126,36 Ha mangrove Pekalongan terfragmentasi menjadi 168 rumpun kecil (< 0,75 Ha) dengan klorofil tajuk anjlok drastis ($\Delta\text{NDVI} = -0,119$).
+### 2. Instalasi Lingkungan Virtual
+```bash
+# Kloning repositori
+git clone https://github.com/username/mangrove.git
+cd mangrove
 
-### 3. Pilar 3: Antropogenik & Kependudukan
-- **Data**: Data resmi kependudukan BPS Kabupaten/Kota (2021–2024) dan klasifikasi lahan ESA WorldCover 10m (Class 50: Terbangun, Class 80: Tambak).
-- **Hasil**: Semarang-Demak terkunci 70,00% tambak budidaya; Surabaya memiliki konsentrasi terbangun tertinggi (23,50% atau 21.861 Ha).
+# Buat virtual environment
+python -m venv venv
+
+# Aktivasi virtual environment
+# Windows (PowerShell):
+.\venv\Scripts\Activate.ps1
+# Linux / macOS:
+source venv/bin/activate
+
+# Instal dependensi
+pip install -r requirements.txt
+```
+
+### 3. Menjalankan Dashboard DSS
+```bash
+# Dari root repositori
+streamlit run Dashboard/app.py
+
+# Atau masuk ke dalam folder Dashboard
+cd Dashboard
+streamlit run app.py
+```
+Aplikasi akan otomatis terbuka pada browser di `http://localhost:8501`.
 
 ---
 
-## 🏆 Hasil Peringkat CSPI & Uji Hipotesis Inferensial
+## ☁️ Panduan Deploy ke Streamlit Community Cloud
 
-- **Analytical Hierarchy Process (AHP)**:
-  - Bobot: Amblesan (36,83%), Degradasi NDVI (20,64%), Fragmentasi (20,64%), Terbangun (10,94%), Tambak (10,94%).
-  - **Consistency Ratio ($CR$) = 0,0030 (0,30% $\ll$ 10%)** $\to$ Terbukti konsisten.
+Aplikasi ini sudah **100% siap dideploy** ke [Streamlit Community Cloud](https://share.streamlit.io/) secara gratis:
 
-| Peringkat | Wilayah | Skor CSPI | Kategori Prioritas |
-| :---: | :--- | :---: | :--- |
-| **1** | **Pekalongan (Jateng)** | **0,8388** | **Prioritas Sangat Tinggi (Episentrum Kritis)** |
-| **2** | **Cirebon (Jabar)** | **0,2783** | Prioritas Menengah (Terjepit Parsial) |
-| **3** | **Semarang - Demak (Jateng)** | **0,2680** | Prioritas Menengah (Terjepit Parsial) |
-| **4** | **Surabaya (Jatim)** | **0,1954** | Prioritas Rendah (Sabuk Kontrol Resilien) |
-| **5** | **Jepara Kontrol (Jateng)** | **0,0831** | Prioritas Rendah (Zona Kontrol Stabil) |
-
-- **Uji Kruskal-Wallis ($N = 69.567$)**:
-  - $H = 26.667,61$, $p < 0,0001$ (Signifikan Sangat Nyata).
-  - Post-Hoc Dunn's Test membuktikan Pekalongan berbeda signifikan terhadap seluruh wilayah ($p < 0,0001$).
-
----
-
-## 💻 Cara Menjalankan Notebook
-1. Pastikan Python 3.9+ telah terinstal beserta dependencies:
+1. **Pastikan Seluruh Berkas Telah Ter-push ke GitHub**:
    ```bash
-   pip install numpy pandas scipy matplotlib tifffile
+   git add .
+   git commit -m "feat: perbarui arsitektur dashboard sabuk hijau dan bersihkan berkas lama"
+   git push origin main
    ```
-2. Buka folder proyek di Jupyter Lab / VS Code dan jalankan notebook secara berurutan:
-   - `Codes/notebooks/01_Ekstraksi_Dataset_Fisik_dan_Hazard.ipynb`
-   - `Codes/notebooks/02_Ekstraksi_Dataset_Ekologis_Mangrove.ipynb`
-   - `Codes/notebooks/03_Ekstraksi_Dataset_Antropogenik_Penduduk.ipynb`
-   - `Codes/notebooks/04_Sintesis_Grand_CSPI_dan_Analisis_Statistik.ipynb`
+2. **Buka Streamlit Cloud**:
+   * Kunjungi [share.streamlit.io](https://share.streamlit.io/) dan login menggunakan akun GitHub Anda.
+3. **Buat Aplikasi Baru (*Create App*)**:
+   * Klik tombol **"Create app"** (atau **"New app"**).
+   * Pilih opsi **"I already have an app"**.
+4. **Isi Konfigurasi Deployment**:
+   * **Repository**: Pilih repositori Anda (contoh: `username/mangrove`).
+   * **Branch**: `main`.
+   * **Main file path**: Ketik `Dashboard/app.py`.
+   * **App URL (opsional)**: Tentukan custom subdomain (contoh: `sabuk-hijau-pantura.streamlit.app`).
+5. **Klik "Deploy!"**:
+   * Streamlit Cloud akan membaca `requirements.txt`, menginstal dependensi (`geopandas`, `pydeck`, `pyogrio`, dll.), dan menyajikan dashboard dalam waktu 1–2 menit.
+
+---
+
+## 📚 Sitasi & Sumber Data Terbuka
+
+1. **Global Mangrove Watch (GMW v4.0)**: Bunting et al. (2022). *Global Mangrove Extent 1996–2020*.
+2. **Laju Amblesan Tanah InSAR**: Ohenhen et al. (2024), dikalibrasi stasiun GNSS Badan Informasi Geospasial (BIG; Susilo et al., 2023).
+3. **Kenaikan Muka Air Laut (SLR)**: Kismawardhani et al. (2018) & Altimetri Satelit AVISO.
+4. **Laju Akresi Sedimen Pb-210**: Murdiyarso et al. (2018) & Lovelock et al. (2015).
+5. **Infrastruktur & Garis Pantai**: OpenStreetMap (OSM) via Overpass API.
+6. **Tutupan Lahan Dinamis**: Google Dynamic World & ESA WorldCover 10m.
+7. **Model Pasang Surut Global**: Empirical Ocean Tide model (EOT20; Hart-Davis et al., 2021).
+8. **Kepadatan Penduduk Pesisir**: WorldPop High Resolution 100m (Proyeksi 2026).
+
+---
+
+*Dikembangkan untuk Airlangga Statistics Essay Competition (ASEC) 2026 — Arsen Universitas Airlangga.*
