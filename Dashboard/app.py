@@ -10,9 +10,16 @@ import tab_peta as tab_peta
 import tab_dinamika as tab_dinamika
 import tab_kebijakan as tab_kebijakan
 
+from pathlib import Path
+from PIL import Image
+
 # Konfigurasi Halaman & Injeksi Desain Kustom
+LOGO_PATH = Path(__file__).resolve().parent / "assets" / "logo.png"
+logo_icon = Image.open(LOGO_PATH) if LOGO_PATH.exists() else "🌿"
+
 st.set_page_config(
     page_title="SABUK HIJAU — Pantura Mangrove DSS",
+    page_icon=logo_icon,
     layout="wide",
     initial_sidebar_state="collapsed"
 )

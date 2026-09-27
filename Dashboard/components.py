@@ -4,6 +4,8 @@ Mengacu verbatim pada pola desain modern Coraly (Daffa Elgo & Mutia).
 """
 
 import streamlit as st
+import base64
+from pathlib import Path
 import theme as theme
 
 def inject_css():
@@ -14,13 +16,29 @@ def html(s: str):
     """Shorthand penulisan HTML."""
     st.markdown(s, unsafe_allow_html=True)
 
-def header_band(tagline_html: str, logo: str = "🌿"):
-    """Header terpusat: wordmark SABUK HIJAU + badge edisi + tagline resmi esai."""
+def _get_logo_b64() -> str:
+    """Mengambil string base64 logo SABUK HIJAU agar dapat disematkan langsung di HTML."""
+    fp = Path(__file__).resolve().parent / "assets" / "logo.png"
+    if fp.exists():
+        encoded = base64.b64encode(fp.read_bytes()).decode("utf-8")
+        return f"data:image/png;base64,{encoded}"
+    return ""
+
+def header_band(tagline_html: str, logo: str = None):
+    """Header terpusat: wordmark SABUK HIJAU + logo resmi + tagline resmi esai."""
+    logo_b64 = _get_logo_b64()
+    if logo_b64 and logo is None:
+        logo_markup = f'<img src="{logo_b64}" class="sabuk-logo-img" alt="Logo SABUK HIJAU" />'
+    elif logo:
+        logo_markup = f'<span class="sabuk-logo">{logo}</span>'
+    else:
+        logo_markup = '<span class="sabuk-logo">🌿</span>'
+
     html(
         f"""
         <div class="sabuk-header">
           <div class="wordmark">
-            <span class="sabuk-logo">{logo}</span>
+            {logo_markup}
             <span class="brand">SABUK HIJAU</span>
           </div>
           <div class="tagline">{tagline_html}</div>

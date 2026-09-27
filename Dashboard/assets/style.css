@@ -62,6 +62,7 @@ p, span, div, label, li { font-size: {{BODY}}; line-height: 1.6; }
   margin-bottom: 8px;
 }
 .sabuk-logo, .coraly-logo { font-size: 40px; line-height: 1; }
+.sabuk-logo-img { height: 46px; width: auto; object-fit: contain; vertical-align: middle; }
 .sabuk-header .brand, .coraly-header .brand {
   font-size: 44px; font-weight: 700; color: var(--text);
   letter-spacing: -0.02em; line-height: 1.1;
