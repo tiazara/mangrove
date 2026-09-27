@@ -36,7 +36,7 @@ WILAYAH_INFO = {
         "lat": -6.720,
         "lon": 108.620,
         "zoom": 11,
-        "deskripsi": "Lanskap tambak pesisir luas dengan ruang peluang managed realignment."
+        "deskripsi": "Lanskap tambak pesisir luas dengan ruang peluang pembukaan ruang mundur mangrove."
     },
     "SBY": {
         "nama": "Surabaya – Madura Barat",
@@ -74,7 +74,7 @@ COLOR_PALETTE = {
 
     # Tipologi Rekomendasi 4 Kuadran
     "RED": "#b2182b",            # Merah gelap (Rekayasa Hibrida)
-    "ORANGE": "#f39c12",         # Oranye terang (Managed Realignment)
+    "ORANGE": "#f39c12",         # Oranye terang (Pembukaan Ruang Mundur Mangrove)
     "YELLOW": "#f1c40f",         # Kuning (Pengayaan Sabuk Hijau)
     "GREEN": "#27ae60",          # Hijau konservasi (Konservasi Ketat)
 

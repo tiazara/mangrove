@@ -74,7 +74,7 @@ Dashboard/
   * Dilengkapi filter ganda (*Wilayah Koridor* & *Rekomendasi Kebijakan*) serta 3 kartu KPI (Total Ruas, Panjang Pantai, Penduduk Terlindungi).
   * Tombol ekspor rencana aksi tabular CSV untuk pelaporan dinas/Bappeda.
 * **Simulator Kebijakan Interaktif "What-If"**:
-  * Pengujian sensitivitas laju akresi sedimen penangkap lumpur ($A = 0{,}2 - 2{,}0\text{ cm/th}$), horizon target waktu (2050 vs 2100), dan opsi pembukaan pematang tambak (*Managed Realignment*).
+  * Pengujian sensitivitas laju akresi sedimen penangkap lumpur ($A = 0{,}2 - 2{,}0\text{ cm/th}$), horizon target waktu (2050 vs 2100), dan opsi pembukaan pematang tambak (*Pembukaan Ruang Mundur Mangrove*).
   * Dilengkapi **Dropdown Wilayah Mandiri** untuk simulasi skala makro Pantura maupun koridor lokal.
   * **Grafik Batang Komparatif (*Grouped Bar Chart*)**: Membandingkan secara langsung kondisi Baseline Eksisting vs Hasil Skenario Simulasi, didukung kartu metrik delta pergeseran risiko.
 
@@ -86,7 +86,7 @@ Sistem menggunakan penamaan resmi yang seragam di seluruh peta, grafik, legenda,
 
 ### A. Tipologi 4 Kuadran Mangrove (920 Transek Domain Mangrove)
 * **`RED · Rekayasa Hibrida`** (`#b2182b`): Tekanan laut tinggi $\times$ tekanan darat tinggi. Butuh struktur permeable dam bambu.
-* **`ORANGE · Managed Realignment`** (`#ea580c`): Tekanan laut tinggi $\times$ tekanan darat rendah. Pembukaan pematang tambak untuk ruang migrasi darat.
+* **`ORANGE · Pembukaan Ruang Mundur Mangrove`** (`#ea580c`): Tekanan laut tinggi $\times$ tekanan darat rendah. Pembukaan pematang tambak untuk ruang migrasi darat.
 * **`YELLOW · Pengayaan Sabuk Hijau`** (`#eab308`): Tekanan laut rendah $\times$ tekanan darat tinggi. Pengayaan jenis akar tunjang/kokoh pelindung aset.
 * **`GREEN · Konservasi Ketat`** (`#16a34a`): Tekanan laut rendah $\times$ tekanan darat rendah. Zona lindung mandiri berdaya lentur alami tinggi.
 
@@ -94,7 +94,7 @@ Sistem menggunakan penamaan resmi yang seragam di seluruh peta, grafik, legenda,
 1. `GREEN · Konservasi Ketat` (510 transek)
 2. `Perlindungan Pantai Terbangun` (486 transek)
 3. `Restorasi Alami Lumpur` (460 transek)
-4. `ORANGE · Managed Realignment` (242 transek)
+4. `ORANGE · Pembukaan Ruang Mundur Mangrove` (242 transek)
 5. `Restorasi Hidrologis + Sedimen` (187 transek)
 6. `YELLOW · Pengayaan Sabuk Hijau` (153 transek)
 7. `Lahan Darat (Non-Prioritas)` (132 transek)

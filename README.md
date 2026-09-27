@@ -68,7 +68,7 @@ Penelitian mencakup **5 koridor pesisir strategis Pantura** yang mewakili varias
 +---------------------------------------------------------------------------------------------------+
 |                             MATRIKS KEPUTUSAN 4 KUADRAN & 11 AKSI                                 |
 |   * RED (Rekayasa Hibrida: Permeable Dam)        * YELLOW (Pengayaan Sabuk Hijau)                 |
-|   * ORANGE (Managed Realignment: Jebol Tambak)    * GREEN (Konservasi Ketat Alami)                 |
+|   * ORANGE (Pembukaan Ruang Mundur Mangrove: Jebol Tambak) * GREEN (Konservasi Ketat Alami)        |
 |   * + 7 Kategori Aksi Non-Mangrove (Restorasi Lumpur, Hidrologis Tambak, Silvofishery, dll.)      |
 +---------------------------------------------------------------------------------------------------+
                                                   │
@@ -85,7 +85,7 @@ Penelitian mencakup **5 koridor pesisir strategis Pantura** yang mewakili varias
 
 ### 1. Tipologi 4 Kuadran Mangrove (920 Transek Domain Mangrove)
 * 🔴 **`RED · Rekayasa Hibrida`** (15 transek | 1,6%): Tekanan laut tinggi $\times$ restriksi lateral tinggi. Membutuhkan intervensi struktur permeable dam bambu untuk memulihkan elevasi substrat.
-* 🟠 **`ORANGE · Managed Realignment`** (242 transek | 26,3%): Tekanan laut tinggi $\times$ restriksi lateral rendah. Pembukaan pematang tambak untuk memberikan ruang migrasi mundur ke darat.
+* 🟠 **`ORANGE · Pembukaan Ruang Mundur Mangrove`** (242 transek | 26,3%): Tekanan laut tinggi $\times$ restriksi lateral rendah. Pembukaan pematang tambak untuk memberikan ruang migrasi mundur ke darat.
 * 🟡 **`YELLOW · Pengayaan Sabuk Hijau`** (153 transek | 16,6%): Tekanan laut rendah $\times$ restriksi lateral tinggi. Pengayaan jenis akar tunjang/kokoh pelindung aset permukiman.
 * 🟢 **`GREEN · Konservasi Ketat`** (510 transek | 55,4%): Tekanan laut rendah $\times$ restriksi lateral rendah. Zona lindung mandiri berdaya lentur alami tinggi.
 
@@ -93,7 +93,7 @@ Penelitian mencakup **5 koridor pesisir strategis Pantura** yang mewakili varias
 1. `GREEN · Konservasi Ketat` (510 transek)
 2. `Perlindungan Pantai Terbangun` (486 transek)
 3. `Restorasi Alami Lumpur` (460 transek)
-4. `ORANGE · Managed Realignment` (242 transek)
+4. `ORANGE · Pembukaan Ruang Mundur Mangrove` (242 transek)
 5. `Restorasi Hidrologis + Sedimen` (187 transek)
 6. `YELLOW · Pengayaan Sabuk Hijau` (153 transek)
 7. `Lahan Darat (Non-Prioritas)` (132 transek)

@@ -25,7 +25,7 @@ COLOR_HISTORICAL = "#d97706"     # Oranye kecokelatan (hilang pra-2021)
 
 # Tipologi 4 Kuadran Intervensi Presisi
 COLOR_RED = "#b2182b"            # Rekayasa Hibrida (permeable dam)
-COLOR_ORANGE = "#ea580c"         # Managed Realignment (buka pematang tambak)
+COLOR_ORANGE = "#ea580c"         # Pembukaan Ruang Mundur Mangrove (buka pematang tambak)
 COLOR_YELLOW = "#eab308"         # Pengayaan Sabuk Hijau (spesies akar kokoh)
 COLOR_GREEN = "#16a34a"          # Konservasi Ketat (zona lindung inti)
 

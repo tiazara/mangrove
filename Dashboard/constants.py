@@ -64,7 +64,7 @@ TIPOLOGI_ORDER = ["RED", "ORANGE", "YELLOW", "GREEN"]
 
 TIPOLOGI_LABEL = {
     "RED": "RED · Rekayasa Hibrida",
-    "ORANGE": "ORANGE · Managed Realignment",
+    "ORANGE": "ORANGE · Pembukaan Ruang Mundur Mangrove",
     "YELLOW": "YELLOW · Pengayaan Sabuk Hijau",
     "GREEN": "GREEN · Konservasi Ketat"
 }
@@ -93,7 +93,7 @@ TIPOLOGI_KM = {
 # --- 11 Rekomendasi Aksi Lapangan Pesisir (Kanonik) ----------------------- #
 REKOMENDASI_11 = [
     "RED · Rekayasa Hibrida",
-    "ORANGE · Managed Realignment",
+    "ORANGE · Pembukaan Ruang Mundur Mangrove",
     "YELLOW · Pengayaan Sabuk Hijau",
     "GREEN · Konservasi Ketat",
     "Penangkap Sedimen + Lumpur",

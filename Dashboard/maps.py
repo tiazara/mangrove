@@ -58,8 +58,8 @@ def color_action(rek: str, is_domain: bool = True, focus_4k: bool = False) -> li
     # 1. Empat Kuadran Utama Mangrove (Warna Menyala Berkarakter)
     if "RED" in r or "REKAYASA HIBRIDA" in r:
         return [178, 24, 43, 245]         # Merah Tua Pekat (RED · Rekayasa Hibrida)
-    elif "ORANGE" in r or "MANAGED REALIGNMENT" in r:
-        return [234, 88, 12, 240]        # Oranye Menyala (ORANGE · Managed Realignment)
+    elif "ORANGE" in r or "MANAGED REALIGNMENT" in r or "RUANG MUNDUR" in r:
+        return [234, 88, 12, 240]        # Oranye Menyala (ORANGE · Pembukaan Ruang Mundur Mangrove)
     elif "YELLOW" in r or "PENGAYAAN" in r:
         return [234, 179, 8, 240]        # Kuning Emas (YELLOW · Pengayaan Sabuk Hijau)
     elif "GREEN" in r or "KONSERVASI" in r:

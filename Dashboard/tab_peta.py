@@ -103,7 +103,7 @@ def render():
     if sel_mode == "tipologi":
         ui.legend([
             ("#b2182b", "RED · Rekayasa Hibrida"),
-            ("#ea580c", "ORANGE · Managed Realignment"),
+            ("#ea580c", "ORANGE · Pembukaan Ruang Mundur Mangrove"),
             ("#eab308", "YELLOW · Pengayaan Sabuk Hijau"),
             ("#16a34a", "GREEN · Konservasi Ketat"),
             ("#cbd5e1", "Pesisir Non-Domain Mangrove (1.445 transek)")
@@ -111,7 +111,7 @@ def render():
     elif sel_mode == "aksi_lengkap":
         ui.legend([
             ("#b2182b", "RED · Rekayasa Hibrida"),
-            ("#ea580c", "ORANGE · Managed Realignment"),
+            ("#ea580c", "ORANGE · Pembukaan Ruang Mundur Mangrove"),
             ("#eab308", "YELLOW · Pengayaan Sabuk Hijau"),
             ("#16a34a", "GREEN · Konservasi Ketat"),
             ("#0284c7", "Penangkap Sedimen + Lumpur"),

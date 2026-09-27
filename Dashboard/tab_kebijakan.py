@@ -158,7 +158,7 @@ def render():
         buka_tambak = st.checkbox(
             "Buka Pematang Tambak",
             value=True,
-            help="Fasilitasi pembukaan pematang tambak terbengkalai di belakang tegakan untuk memperluas ruang mundur alami (Managed Realignment)."
+            help="Fasilitasi pembukaan pematang tambak terbengkalai di belakang tegakan untuk memperluas ruang mundur alami (Pembukaan Ruang Mundur Mangrove)."
         )
 
     # Filter domain mangrove sesuai wilayah simulasi terpilih

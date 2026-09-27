@@ -33,8 +33,8 @@ def clean_rekomendasi(val) -> str:
     s_upper = s.upper()
     if "RED" in s_upper or "REKAYASA HIBRIDA" in s_upper:
         return "RED · Rekayasa Hibrida"
-    if "ORANGE" in s_upper or "MANAGED REALIGNMENT" in s_upper:
-        return "ORANGE · Managed Realignment"
+    if "ORANGE" in s_upper or "MANAGED REALIGNMENT" in s_upper or "RUANG MUNDUR" in s_upper:
+        return "ORANGE · Pembukaan Ruang Mundur Mangrove"
     if "YELLOW" in s_upper or "PENGAYAAN" in s_upper:
         return "YELLOW · Pengayaan Sabuk Hijau"
     if "GREEN" in s_upper or "KONSERVASI" in s_upper:

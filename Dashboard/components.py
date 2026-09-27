@@ -105,7 +105,7 @@ def component_explainer():
         tdv_card(
             "#0f6e56",
             "Tipologi 4 Kuadran: Keputusan Mitigasi Presisi",
-            "Klasifikasi spasial transek menjadi 4 aksi prioritas: RED · Rekayasa Hibrida, ORANGE · Managed Realignment, YELLOW · Pengayaan Sabuk Hijau, & GREEN · Konservasi Ketat."
+            "Klasifikasi spasial transek menjadi 4 aksi prioritas: RED · Rekayasa Hibrida, ORANGE · Pembukaan Ruang Mundur Mangrove, YELLOW · Pengayaan Sabuk Hijau, & GREEN · Konservasi Ketat."
         )
 
 def kpi(value: str, unit: str, small: bool = False):

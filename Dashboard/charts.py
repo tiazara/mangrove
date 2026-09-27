@@ -48,10 +48,10 @@ def plot_theme_breakdown(df: pd.DataFrame, wilayah: str = "SEMUA", mode: str = "
             },
             {
                 "code": "ORANGE",
-                "label": "ORANGE · Managed Realignment",
+                "label": "ORANGE · Pembukaan Ruang Mundur Mangrove",
                 "color": "#ea580c",
                 "matriks": "Tekanan Laut Tinggi × Tekanan Darat Rendah",
-                "pedoman": "Managed realignment (pembukaan pematang tambak)"
+                "pedoman": "Pembukaan ruang mundur (jebol pematang tambak terbengkalai)"
             },
             {
                 "code": "YELLOW",
@@ -204,7 +204,7 @@ def plot_theme_breakdown(df: pd.DataFrame, wilayah: str = "SEMUA", mode: str = "
 
         action_colors = {
             "RED · Rekayasa Hibrida": "#b2182b",
-            "ORANGE · Managed Realignment": "#ea580c",
+            "ORANGE · Pembukaan Ruang Mundur Mangrove": "#ea580c",
             "YELLOW · Pengayaan Sabuk Hijau": "#eab308",
             "GREEN · Konservasi Ketat": "#16a34a",
             "Penangkap Sedimen + Lumpur": "#0284c7",
@@ -498,14 +498,14 @@ def plot_scenario_comparison(domain_df: pd.DataFrame) -> go.Figure:
     
     Menampilkan pergeseran kuadran 920 transek mangrove secara berdampingan:
     - RED · Rekayasa Hibrida
-    - ORANGE · Managed Realignment
+    - ORANGE · Pembukaan Ruang Mundur Mangrove
     - YELLOW · Pengayaan Sabuk Hijau
     - GREEN · Konservasi Ketat
     """
     total_m = len(domain_df)
     quads = [
         ("RED", "RED · Rekayasa Hibrida", "#b2182b"),
-        ("ORANGE", "ORANGE · Managed Realignment", "#ea580c"),
+        ("ORANGE", "ORANGE · Pembukaan Ruang Mundur Mangrove", "#ea580c"),
         ("YELLOW", "YELLOW · Pengayaan Sabuk Hijau", "#eab308"),
         ("GREEN", "GREEN · Konservasi Ketat", "#16a34a"),
     ]
