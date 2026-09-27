@@ -58,16 +58,18 @@ def clean_rekomendasi(val) -> str:
     return s
 
 @st.cache_data(show_spinner=False)
-def master_df() -> pd.DataFrame:
+def master_df(cache_version: str = "20260927_v3") -> pd.DataFrame:
     """Memuat master data 2.365 transek Pantura dengan rekomendasi kanonik."""
     fp = DIR_DASHBOARD_DATA / "master_transek_pantura.csv"
     df = pd.read_csv(fp)
     if "rekomendasi" in df.columns:
         df["rekomendasi"] = df["rekomendasi"].apply(clean_rekomendasi)
+    if "typ_kawasan" in df.columns:
+        df["typ_kawasan"] = df["typ_kawasan"].apply(clean_rekomendasi)
     return df
 
 @st.cache_data(show_spinner=False)
-def kamus_df() -> pd.DataFrame:
+def kamus_df(cache_version: str = "20260927_v3") -> pd.DataFrame:
     """Memuat kamus label kartografis dan definisi peubah."""
     fp = DIR_DASHBOARD_DATA / "kamus_label.csv"
     return pd.read_csv(fp)
@@ -83,12 +85,14 @@ def y_bulanan_df() -> pd.DataFrame:
     return pd.read_parquet(fp)
 
 @st.cache_data(show_spinner=False)
-def transek_gdf(wilayah: str = "SEMUA") -> gpd.GeoDataFrame:
+def transek_gdf(wilayah: str = "SEMUA", cache_version: str = "20260927_v3") -> gpd.GeoDataFrame:
     """Memuat garis transek analitis."""
     fp = DIR_DASHBOARD_DATA / "transek.geojson"
     gdf = gpd.read_file(fp)
     if "rekomendasi" in gdf.columns:
         gdf["rekomendasi"] = gdf["rekomendasi"].apply(clean_rekomendasi)
+    if "typ_kawasan" in gdf.columns:
+        gdf["typ_kawasan"] = gdf["typ_kawasan"].apply(clean_rekomendasi)
     if wilayah != "SEMUA" and "wilayah" in gdf.columns:
         gdf = gdf[gdf["wilayah"] == wilayah].copy()
     return gdf
@@ -130,12 +134,14 @@ def penghalang_gdf(wilayah: str = "SEMUA") -> gpd.GeoDataFrame:
     return gdf
 
 @st.cache_data(show_spinner=False)
-def kawasan_gdf(wilayah: str = "SEMUA") -> gpd.GeoDataFrame:
+def kawasan_gdf(wilayah: str = "SEMUA", cache_version: str = "20260927_v3") -> gpd.GeoDataFrame:
     """Memuat batas ruas kawasan prioritas intervensi."""
     fp = DIR_DASHBOARD_DATA / "kawasan.geojson"
     gdf = gpd.read_file(fp)
     if "rekomendasi" in gdf.columns:
         gdf["rekomendasi"] = gdf["rekomendasi"].apply(clean_rekomendasi)
+    if "typ_kawasan" in gdf.columns:
+        gdf["typ_kawasan"] = gdf["typ_kawasan"].apply(clean_rekomendasi)
     if wilayah != "SEMUA" and "wilayah" in gdf.columns:
         gdf = gdf[gdf["wilayah"] == wilayah].copy()
     return gdf

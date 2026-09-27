@@ -22,7 +22,7 @@ layer,label,warna,arti,dasar_data,rekomendasi
 3 tekanan,tahun tenggelam,-,setengah tunggang pasut / defisit vertikal (median Monte Carlo); 2200 = tidak tenggelam sebelum 2200,InSAR + EOT20,-
 3 tekanan,jarak penghalang,-,jarak penghalang keras di belakang tepi/garis pantai,OSM + Dynamic World,-
 4 rekomendasi,RED · rekayasa hibrida,#b2182b,bermangrove; terancam tenggelam sebelum 2100 dan penghalang dekat,tipologi Monte Carlo,struktur penangkap sedimen permeabel sebelum revegetasi
-4 rekomendasi,ORANGE · managed realignment,#fc8d59,"bermangrove; terancam tenggelam sebelum 2100, ruang darat lapang",tipologi Monte Carlo,buka pematang tambak di belakang tegakan
+4 rekomendasi,ORANGE · Pembukaan Ruang Mundur Mangrove,#fc8d59,"bermangrove; terancam tenggelam sebelum 2100, ruang darat lapang",tipologi Monte Carlo,buka pematang tambak di belakang tegakan
 4 rekomendasi,YELLOW · pengayaan sabuk hijau,#fee08b,"bermangrove; penghalang dekat, tidak terancam tenggelam sebelum 2100",tipologi Monte Carlo,penanaman pengayaan jenis berakar kokoh
 4 rekomendasi,GREEN · konservasi ketat,#1a9850,bermangrove; tekanan rendah,tipologi Monte Carlo,perlindungan kawasan inti + pemantauan
 4 rekomendasi,Penangkap sedimen + penanaman di dataran lumpur,#e7298a,"tanpa mangrove; dataran lumpur, terancam tenggelam sebelum 2100",aturan 8.3,"penangkap sedimen permeabel dulu, penanaman kemudian"
