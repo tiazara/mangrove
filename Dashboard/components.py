@@ -16,6 +16,19 @@ def html(s: str):
     """Shorthand penulisan HTML."""
     st.markdown(s, unsafe_allow_html=True)
 
+def angka(x, dec: int = 0) -> str:
+    """Format angka gaya Indonesia: titik pemisah ribuan, koma desimal."""
+    if x is None or x != x:
+        return "–"
+    s = f"{x:,.{dec}f}"
+    return s.replace(",", "§").replace(".", ",").replace("§", ".")
+
+def tahun_tenggelam(y, horizon: int = 2100) -> str:
+    """Tahun tenggelam median; di luar horizon analisis ditulis '> 2100'."""
+    if y is None or y != y or y > horizon:
+        return f"> {horizon}"
+    return f"{int(round(y))}"
+
 def _get_logo_b64() -> str:
     """Mengambil string base64 logo SABUK HIJAU agar dapat disematkan langsung di HTML."""
     fp = Path(__file__).resolve().parent / "assets" / "logo.png"
@@ -42,6 +55,7 @@ def header_band(tagline_html: str, logo: str = None):
             <span class="brand">SABUK HIJAU</span>
           </div>
           <div class="tagline">{tagline_html}</div>
+          <div class="tagline" style="font-size:12.5px;opacity:.75;margin-top:4px">Data Sentinel-1/2 hingga Agustus 2026 · 2.365 transek · 5 kawasan Pantura</div>
         </div>
         """
     )
@@ -85,27 +99,32 @@ def component_explainer():
     """Tiga kartu penjelas pilar Coastal Squeeze (Sumbu Laut, Sumbu Darat, Tipologi)."""
     section_title(
         'Bagaimana "Coastal Squeeze" Dievaluasi?',
-        "Indeks kerentanan dan alokasi mitigasi ditentukan oleh interaksi defisit vertikal laut dan restriksi lateral darat."
+        "Setiap ruas pantai 250 m dinilai dari dua tekanan sekaligus, lalu diberi satu dari empat jenis aksi."
     )
     
     c1, c2, c3 = st.columns(3)
     with c1:
         tdv_card(
             "#d85a30",
-            "Sumbu Laut: Amblesan & Kenaikan Muka Air Laut",
-            "Laju penurunan tanah (InSAR hingga 4,8 cm/th) & kenaikan muka laut memicu defisit elevasi vertikal dan risiko tenggelam permanen sebelum 2050 (median th 2068)."
+            "Tekanan Laut: Amblesan & Kenaikan Muka Laut",
+            "Amblesan (InSAR 1–15 cm/th di Pantura) ditambah kenaikan muka laut 0,39 cm/th melampaui akresi 0,5 cm/th. "
+            "Tekanan tinggi bila peluang tenggelam sebelum 2100 &gt; 0,5. Median tahun tenggelam: Pekalongan 2040, Cirebon 2049, Semarang–Demak 2061."
         )
     with c2:
         tdv_card(
             "#1d9e75",
-            "Sumbu Darat: Penghalang Keras & Ruang Mundur",
-            "Jarak ke infrastruktur keras buatan manusia (tanggul laut, jalan arteri Pantura, pematang tambak) membatasi ruang akomodasi alami (buffer kritis 500 m)."
+            "Tekanan Darat: Penghalang Keras & Ruang Mundur",
+            "Bangunan, jalan, rel, dan tanggul yang menutup ruang mangrove bermigrasi ke darat. "
+            "Tekanan tinggi bila penghalang keras ≤ 500 m di belakang tepi atau transek memotong tol/tanggul laut PSN."
         )
     with c3:
         tdv_card(
             "#0f6e56",
-            "Tipologi 4 Kuadran: Keputusan Mitigasi Presisi",
-            "Klasifikasi spasial transek menjadi 4 aksi prioritas: RED · Rekayasa Hibrida, ORANGE · Pembukaan Ruang Mundur Mangrove, YELLOW · Pengayaan Sabuk Hijau, & GREEN · Konservasi Ketat."
+            "Rekomendasi: Laut × Darat",
+            "<b>Pantai bermangrove</b> (920 transek): RED rekayasa hibrida · ORANGE buka ruang mundur · "
+            "YELLOW pengayaan sabuk hijau · GREEN konservasi ketat (2.000 simulasi Monte Carlo). "
+            "<b>Pantai tanpa mangrove</b> (1.445 transek): jenis lahan × ancaman tenggelam → 7 rekomendasi, "
+            "mis. penangkap sedimen, restorasi tambak, atau perlindungan pantai terbangun."
         )
 
 def kpi(value: str, unit: str, small: bool = False):
@@ -164,3 +183,14 @@ def ramp_legend(low="rendah (< 1.0 cm/th)", high="sangat tinggi (> 4.0 cm/th)"):
         <span class="ramp-bar"></span>
         <span class="ramp-end">{high}</span></div>"""
     )
+
+def tabel_html(header: list[str], rows: list[list[str]], align: list[str] = None, note: str = ""):
+    """Tabel ringkas bergaya kartu (rata kanan untuk angka)."""
+    align = align or ["left"] * len(header)
+    th = "".join(f'<th style="text-align:{a}">{h}</th>' for h, a in zip(header, align))
+    tr = "".join(
+        "<tr>" + "".join(f'<td style="text-align:{a}">{c}</td>' for c, a in zip(r, align)) + "</tr>"
+        for r in rows
+    )
+    foot = f'<div class="ringkas-note">{note}</div>' if note else ""
+    html(f'<div class="ringkas-wrap"><table class="ringkas-tbl"><thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table>{foot}</div>')

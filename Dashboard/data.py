@@ -178,3 +178,123 @@ def load_transek_geojson() -> dict:
         return gj
     return None
 
+
+# --- Penduduk Terpapar Tanpa Hitung Ganda --------------------------------- #
+# pop_2026 per transek adalah jumlah penduduk radius 1 km; transek berjarak 250 m
+# sehingga radiusnya saling tumpang tindih. Penjumlahan langsung menghitung orang
+# yang sama berkali-kali. Fungsi di bawah menggabungkan (union) seluruh radius
+# lebih dulu, lalu memotongnya dengan grid WorldPop 1 km secara proporsional luas.
+CRS_METER = 32749  # UTM 49S, mencakup seluruh Pantura (108–114° BT)
+RADIUS_POP_M = 1000
+
+@st.cache_resource(show_spinner=False)
+def _grid_penduduk() -> gpd.GeoDataFrame:
+    fp = DIR_SPATIAL_LAYERS / "penduduk_worldpop2026_grid1km.geojson"
+    g = gpd.read_file(fp).to_crs(CRS_METER)
+    g["luas_sel"] = g.area
+    return g[["penduduk", "luas_sel", "geometry"]]
+
+@st.cache_resource(show_spinner=False)
+def _titik_transek() -> gpd.GeoSeries:
+    m = master_df()
+    pts = gpd.GeoSeries(gpd.points_from_xy(m["lon"], m["lat"]), index=m["transek_id"], crs=4326)
+    return pts.to_crs(CRS_METER)
+
+def _penduduk_dalam(geom) -> float:
+    grid = _grid_penduduk()
+    area = gpd.GeoDataFrame(geometry=[geom], crs=CRS_METER)
+    x = gpd.overlay(grid, area, how="intersection", keep_geom_type=True)
+    return float((x["penduduk"] * x.area / x["luas_sel"]).sum())
+
+@st.cache_data(show_spinner=False)
+def penduduk_unik(transek_ids: tuple) -> float:
+    """Jumlah penduduk unik dalam radius 1 km dari sekumpulan transek (tanpa hitung ganda)."""
+    if not transek_ids:
+        return 0.0
+    pts = _titik_transek().loc[list(transek_ids)]
+    return _penduduk_dalam(pts.buffer(RADIUS_POP_M).union_all())
+
+@st.cache_data(show_spinner=False)
+def penduduk_unik_per_kawasan(cache_version: str = "v1") -> pd.Series:
+    """Penduduk unik radius 1 km per kawasan program (indeks kawasan_id)."""
+    m = master_df()
+    pts = _titik_transek()
+    buf = gpd.GeoDataFrame(
+        {"kawasan_id": m["kawasan_id"].to_numpy()},
+        geometry=pts.loc[m["transek_id"]].buffer(RADIUS_POP_M).to_numpy(), crs=CRS_METER
+    ).dissolve(by="kawasan_id").reset_index()
+    x = gpd.overlay(_grid_penduduk(), buf, how="intersection", keep_geom_type=True)
+    x["jiwa"] = x["penduduk"] * x.area / x["luas_sel"]
+    return x.groupby("kawasan_id")["jiwa"].sum()
+
+# --- Simulasi Monte Carlo Tipologi (Replikasi Persis Notebook Bagian 8.2) --- #
+# Draw acak memakai seed dan urutan yang sama dengan notebook analisis, sehingga
+# parameter dasar (akresi 0,5; SLR 0,39; horizon 2100; penghalang 500 m)
+# menghasilkan tipologi yang identik dengan esai (15 / 242 / 153 / 510).
+N_SIM = 2000
+SLR_SD = 0.04
+SIGMA_B = 10.0
+URUT_TIPE = ["RED", "ORANGE", "YELLOW", "GREEN"]
+
+@st.cache_resource(show_spinner=False)
+def _draw_monte_carlo():
+    import numpy as np
+    d = master_df()
+    d = d[d["domain_mangrove"] == True].reset_index(drop=True)
+    nd = len(d)
+    rng = np.random.default_rng(8)
+    sig_d = np.sqrt(d["subs_sigma"].to_numpy() ** 2 + SLR_SD ** 2)
+    sub_s = d["subs_cm_yr"].to_numpy()[:, None] + sig_d[:, None] * rng.standard_normal((nd, N_SIM))
+    sd_ms = np.sqrt(d["MS_uncertainty"].to_numpy() ** 2 + SIGMA_B ** 2)
+    ms_s = d["MS_current_m"].to_numpy()[:, None] + sd_ms[:, None] * rng.standard_normal((nd, N_SIM))
+    return d, sub_s.astype("float32"), ms_s.astype("float32")
+
+@st.cache_data(show_spinner=False)
+def simulasi_tipologi(akresi: float, slr: float, horizon: int, ms_dekat: float) -> pd.DataFrame:
+    """Tipologi Monte Carlo seluruh transek bermangrove untuk satu skenario parameter."""
+    import numpy as np
+    d, sub_s, ms_s = _draw_monte_carlo()
+    ambang = np.nan_to_num(d["modal_elevasi_cm"].to_numpy() / (horizon - 2026), nan=0.0)[:, None]
+    laut = (sub_s + slr - akresi) >= ambang
+    darat = ((ms_s <= ms_dekat) & ~d["B_hard_tersensor"].to_numpy()[:, None]) | d["PSN_overlap"].to_numpy()[:, None]
+    pk = np.stack([(laut & darat).mean(1), (laut & ~darat).mean(1),
+                   (~laut & darat).mean(1), (~laut & ~darat).mean(1)], 1)
+    out = d[["transek_id", "wilayah", "Intervention_Type"]].copy()
+    out["sim_type"] = np.array(URUT_TIPE)[pk.argmax(1)]
+    out["sim_yakin"] = pk.max(1)
+    return out
+
+# --- Jejak Analisis Transek (Koridor ±150 m) ------------------------------ #
+# Amblesan per transek = median titik InSAR dalam koridor ±150 m di sepanjang transek
+# 3.500 m (0 m = laut, 500 m = garis pantai, 3.500 m = darat). Transek berjarak 250 m,
+# sehingga koridor yang bersebelahan saling tumpang tindih 50 m.
+KORIDOR_M = 150
+PANJANG_TRANSEK_M = 3500
+GARIS_PANTAI_M = 500
+
+@st.cache_resource(show_spinner=False)
+def _garis_transek_meter() -> gpd.GeoSeries:
+    g = transek_gdf()
+    return gpd.GeoSeries(g.geometry.to_numpy(), index=g["transek_id"].to_numpy(), crs=4326).to_crs(CRS_METER)
+
+@st.cache_data(show_spinner=False)
+def koridor_transek(cache_version: str = "v1") -> dict:
+    """Poligon koridor ±150 m per transek (lon/lat) untuk PolygonLayer."""
+    garis = _garis_transek_meter()
+    poli = garis.buffer(KORIDOR_M, cap_style="flat").to_crs(4326)
+    return {tid: [list(map(list, p.exterior.coords))] for tid, p in poli.items()}
+
+def titik_pada_transek(transek_id: str, jarak_m: float) -> list:
+    """Koordinat [lon, lat] titik pada jarak tertentu dari ujung laut transek."""
+    garis = _garis_transek_meter().loc[transek_id]
+    p = garis.interpolate(min(max(jarak_m, 0), PANJANG_TRANSEK_M))
+    q = gpd.GeoSeries([p], crs=CRS_METER).to_crs(4326).iloc[0]
+    return [q.x, q.y]
+
+def ruas_pada_transek(transek_id: str, dari_m: float, sampai_m: float) -> list:
+    return [titik_pada_transek(transek_id, dari_m), titik_pada_transek(transek_id, sampai_m)]
+
+def lingkaran(lon: float, lat: float, radius_m: float) -> list:
+    """Poligon lingkaran (lon/lat) berjari-jari tertentu di sekitar satu titik."""
+    c = gpd.GeoSeries(gpd.points_from_xy([lon], [lat]), crs=4326).to_crs(CRS_METER).buffer(radius_m, 48)
+    return [list(map(list, c.to_crs(4326).iloc[0].exterior.coords))]

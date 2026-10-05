@@ -8,6 +8,9 @@ dan opsi foto satelit resolusi tinggi bebas galat JS.
 import pydeck as pdk
 import pandas as pd
 import json
+import math
+import components as ui
+import data as data
 import theme as theme
 import constants as C
 
@@ -17,25 +20,25 @@ CARTO_POSITRON = "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
 # Basemap Citra Satelit Resolusi Tinggi (Esri World Imagery via MapLibre Style JSON)
 SATELLITE_STYLE = "https://raw.githubusercontent.com/roblabs/xyz-raster-sources/master/styles/arcgis-world-imagery.json"
 
-# Sudut pandang (ViewState) per wilayah koridor
-REGION_VIEWS = {
-    "SEMUA": pdk.ViewState(latitude=-6.92, longitude=110.4, zoom=7.8, pitch=0, bearing=0),
-    "SEM": pdk.ViewState(latitude=-6.93, longitude=110.48, zoom=11.2, pitch=0, bearing=0),
-    "PKL": pdk.ViewState(latitude=-6.88, longitude=109.68, zoom=11.8, pitch=0, bearing=0),
-    "CIR": pdk.ViewState(latitude=-6.71, longitude=108.62, zoom=11.2, pitch=0, bearing=0),
-    "SBY": pdk.ViewState(latitude=-7.25, longitude=112.80, zoom=10.5, pitch=0, bearing=0),
-    "JPR": pdk.ViewState(latitude=-6.59, longitude=110.67, zoom=11.5, pitch=0, bearing=0),
-}
+# Sudut pandang (ViewState) per wilayah dihitung dari batas sebaran transek agar
+# seluruh kawasan masuk bingkai (lebar peta minimum diasumsikan ~900 x 500 px).
+def _view_dari_batas(bounds, w_px=900, h_px=500, pad=1.15) -> pdk.ViewState:
+    (s_, w_), (n_, e_) = bounds
+    dlon, dlat = (e_ - w_) * pad, (n_ - s_) * pad
+    zoom = min(math.log2(w_px * 360 / (512 * dlon)), math.log2(h_px * 360 / (512 * dlat)))
+    return pdk.ViewState(latitude=(s_ + n_) / 2, longitude=(w_ + e_) / 2, zoom=round(zoom, 2), pitch=0, bearing=0)
+
+REGION_VIEWS = {k: _view_dari_batas(v) for k, v in C.REGION_BOUNDS.items()}
 
 # Tooltip kartu interaktif bergaya modern Inter
 TOOLTIP = {
     "html": (
         "<b>Transek {id}</b> ({wilayah})<br/>"
         "Aksi Lapangan: <b>{rek}</b><br/>"
-        "Domain Mangrove: <b>{domain}</b><br/>"
+        "Bermangrove: <b>{domain}</b><br/>"
         "Amblesan InSAR: <b>{subs} cm/th</b><br/>"
-        "Estimasi Tenggelam: <b>{th_tenggelam}</b><br/>"
-        "Jarak ke Tanggul/Penghalang: <b>{dist_barrier} m</b>"
+        "Tahun tenggelam (median): <b>{th_tenggelam}</b><br/>"
+        "Penghalang keras di belakang tepi: <b>{dist_barrier} m</b>"
     ),
     "style": {
         "backgroundColor": "#ffffff",
@@ -48,6 +51,12 @@ TOOLTIP = {
         "boxShadow": "0 2px 4px rgba(0,0,0,0.08)",
     },
 }
+
+def _jarak_txt(jarak, tersensor) -> str:
+    """Jarak penghalang keras; tersensor berarti tidak ada penghalang dalam 3 km."""
+    if bool(tersensor) or jarak is None or jarak != jarak:
+        return "> 3.000"
+    return ui.angka(float(jarak), 0)
 
 def color_action(rek: str, is_domain: bool = True, focus_4k: bool = False) -> list[int]:
     """
@@ -100,6 +109,40 @@ def _color_subsidence(val: float) -> list[int]:
     else:
         return [254, 240, 138, 200]
 
+def _layer_garis_pantai(gj_coast: dict, basemap: str):
+    """Garis pantai OSM via PathLayer murni (bebas bug triangulasi poligon)."""
+    if gj_coast is None:
+        return None
+    coast_col = [15, 23, 42, 210] if basemap != "Citra Satelit" else [255, 255, 255, 240]
+    coast_paths = []
+    for f in gj_coast.get("features", []):
+        geom = f.get("geometry", {})
+        gtype, coords = geom.get("type"), geom.get("coordinates", [])
+        if gtype == "LineString":
+            parts = [coords]
+        elif gtype in ("Polygon", "MultiLineString"):
+            parts = coords
+        else:
+            parts = []
+        coast_paths += [{"path": p} for p in parts if len(p) >= 2]
+    if not coast_paths:
+        return None
+    return pdk.Layer("PathLayer", data=coast_paths, get_path="path", get_color=coast_col,
+                     width_scale=1, width_min_pixels=1.5, width_max_pixels=3, pickable=False)
+
+def _warna_transek(row, mode: str) -> list[int]:
+    is_dom = bool(row.get("domain_mangrove", False))
+    if mode == "hotspot":
+        return [220, 38, 38, 210] if bool(row.get("hotspot_tenggelam", False)) else [148, 163, 184, 70]
+    if mode == "subsidence":
+        return _color_subsidence(float(row.get("subs_cm_yr", 0) or 0))
+    return color_action(str(row.get("rekomendasi", "")), is_domain=is_dom, focus_4k=(mode == "tipologi"))
+
+def _basemap(basemap: str):
+    if basemap == "Citra Satelit":
+        return "maplibre", SATELLITE_STYLE
+    return "carto", CARTO_POSITRON
+
 def build_deck_map(
     wilayah: str,
     mode: str,
@@ -108,223 +151,154 @@ def build_deck_map(
     gj_coast: dict = None,
     gj_transek: dict = None
 ) -> pdk.Deck:
-    """Membangun objek pdk.Deck berkinerja tinggi GPU-accelerated."""
+    """Peta transek sebagai koridor analisis ±150 m × 3,5 km (laut → darat).
+
+    Koridor bersebelahan saling tumpang tindih 50 m (jarak transek 250 m), sehingga pantai
+    tampil sebagai sabuk menerus dan bagian yang dipertimbangkan dua transek tampak lebih pekat.
+    """
     code = C.NAME_TO_CODE.get(wilayah, "SEMUA")
     view = REGION_VIEWS.get(code, REGION_VIEWS["SEMUA"])
-    
-    # Filter dataframe sesuai wilayah
-    df_plot = df_master.copy()
-    if code != "SEMUA":
-        df_plot = df_plot[df_plot["wilayah"] == code]
+    df_plot = df_master if code == "SEMUA" else df_master[df_master["wilayah"] == code]
+    koridor = data.koridor_transek()
+
+    recs = []
+    for row in df_plot.to_dict("records"):
+        tid = row["transek_id"]
+        if tid not in koridor:
+            continue
+        recs.append({
+            "polygon": koridor[tid],
+            "id": tid,
+            "wilayah": C.CODE_TO_NAME.get(row.get("wilayah"), row.get("wilayah")),
+            "rek": str(row.get("rekomendasi", "")),
+            "domain": "Ya" if bool(row.get("domain_mangrove", False)) else "Tidak",
+            "subs": ui.angka(float(row.get("subs_cm_yr", 0) or 0), 1),
+            "th_tenggelam": ui.tahun_tenggelam(row.get("tahun_tenggelam_median")),
+            "dist_barrier": _jarak_txt(row.get("jarak_penghalang_m"), row.get("B_hard_tersensor")),
+            "color": (warna := _warna_transek(row, mode)),
+            "line": warna[:3] + [min(255, warna[3] + 60)],
+            "_urut": 1 if (mode == "hotspot" and row.get("hotspot_tenggelam")) or
+                          (mode == "tipologi" and row.get("domain_mangrove")) else 0,
+        })
+    # Kelas yang ditonjolkan digambar terakhir agar berada di atas
+    recs.sort(key=lambda r: r["_urut"])
 
     layers = []
+    coast = _layer_garis_pantai(gj_coast, basemap)
+    if coast is not None:
+        layers.append(coast)
+    layers.append(pdk.Layer(
+        "PolygonLayer",
+        data=recs,
+        get_polygon="polygon",
+        get_fill_color="color",
+        get_line_color="line",
+        line_width_min_pixels=1,
+        line_width_max_pixels=1.5,
+        stroked=True,
+        filled=True,
+        pickable=True,
+        auto_highlight=True,
+        highlight_color=[15, 23, 42, 120],
+    ))
 
-    # 1. Layer Garis Pantai OSM via PathLayer murni (Bebas 100% dari bug triangulasi poligon)
-    if gj_coast is not None:
-        coast_col = [15, 23, 42, 210] if basemap != "Citra Satelit" else [255, 255, 255, 240]
-        coast_paths = []
-        for f in gj_coast.get("features", []):
-            geom = f.get("geometry", {})
-            gtype = geom.get("type")
-            coords = geom.get("coordinates", [])
-            if gtype == "LineString":
-                if len(coords) >= 2:
-                    coast_paths.append({"path": coords})
-            elif gtype == "Polygon":
-                for ring in coords:
-                    if len(ring) >= 2:
-                        coast_paths.append({"path": ring})
-            elif gtype == "MultiLineString":
-                for line in coords:
-                    if len(line) >= 2:
-                        coast_paths.append({"path": line})
-        
-        if coast_paths:
-            layers.append(
-                pdk.Layer(
-                    "PathLayer",
-                    data=coast_paths,
-                    get_path="path",
-                    get_color=coast_col,
-                    width_scale=1,
-                    width_min_pixels=2,
-                    width_max_pixels=4,
-                    pickable=False,
-                )
-            )
-
-    # 2. Layer Tematik Utama
-    if mode in ["tipologi", "aksi_lengkap"]:
-        focus_4k = (mode == "tipologi")
-        
-        # a. Garis Transek via PathLayer (Aman, cepat, dan bebas artefak WebGL)
-        if gj_transek is not None:
-            feats = gj_transek.get("features", [])
-            if code != "SEMUA":
-                feats = [f for f in feats if f.get("properties", {}).get("wilayah") == code]
-            
-            paths = []
-            for f in feats:
-                p = f.get("properties", {})
-                coords = f.get("geometry", {}).get("coordinates", [])
-                if not coords or len(coords) < 2:
-                    continue
-                rek = p.get("rekomendasi", "")
-                is_dom = bool(p.get("domain_mangrove", False))
-                col = color_action(rek, is_domain=is_dom, focus_4k=focus_4k)
-                paths.append({
-                    "path": coords,
-                    "id": str(p.get("transek_id", "")),
-                    "wilayah": str(p.get("wilayah", "")),
-                    "rek": rek,
-                    "domain": "Ya (Aktif)" if is_dom else "Pesisir Terbuka",
-                    "subs": round(float(p.get("subs_cm_yr", 0)), 1),
-                    "th_tenggelam": str(p.get("tahun_tenggelam_median", "-")),
-                    "dist_barrier": round(float(p.get("jarak_penghalang_m", 0))),
-                    "color": col,
-                })
-            
-            layers.append(
-                pdk.Layer(
-                    "PathLayer",
-                    data=paths,
-                    get_path="path",
-                    get_color="color",
-                    width_scale=1,
-                    width_min_pixels=3,
-                    width_max_pixels=6,
-                    pickable=True,
-                )
-            )
-
-        # b. Titik Transek untuk penanda yang jelas saat zoom out
-        pts = []
-        for _, row in df_plot.iterrows():
-            rek = str(row.get("rekomendasi", ""))
-            is_dom = bool(row.get("domain_mangrove", False))
-            col = color_action(rek, is_domain=is_dom, focus_4k=focus_4k)
-            pts.append({
-                "coordinates": [float(row["lon"]), float(row["lat"])],
-                "id": str(row.get("transek_id", "")),
-                "wilayah": str(row.get("wilayah", "")),
-                "rek": rek,
-                "domain": "Ya (Aktif)" if is_dom else "Pesisir Terbuka",
-                "subs": round(float(row.get("subs_cm_yr", 0)), 1),
-                "th_tenggelam": str(row.get("tahun_tenggelam_median", "-")),
-                "dist_barrier": round(float(row.get("jarak_penghalang_m", 0))),
-                "color": col,
-            })
-
-        layers.append(
-            pdk.Layer(
-                "ScatterplotLayer",
-                data=pts,
-                get_position="coordinates",
-                get_fill_color="color",
-                get_radius=180,
-                radius_min_pixels=3,
-                radius_max_pixels=14,
-                pickable=True,
-            )
-        )
-
-    elif mode == "hotspot":
-        # Mode Hotspot Kritis Tenggelam (< 2050)
-        pts_normal = []
-        pts_hotspot = []
-        for _, row in df_plot.iterrows():
-            is_hot = bool(row.get("hotspot_tenggelam", False))
-            coord = [float(row["lon"]), float(row["lat"])]
-            pdata = {
-                "coordinates": coord,
-                "id": str(row.get("transek_id", "")),
-                "wilayah": str(row.get("wilayah", "")),
-                "rek": str(row.get("rekomendasi", "")),
-                "domain": "Ya" if bool(row.get("domain_mangrove", False)) else "Tidak",
-                "subs": round(float(row.get("subs_cm_yr", 0)), 1),
-                "th_tenggelam": str(row.get("tahun_tenggelam_median", "-")),
-                "dist_barrier": round(float(row.get("jarak_penghalang_m", 0))),
-            }
-            if is_hot:
-                pdata["color"] = [220, 38, 38, 255]
-                pts_hotspot.append(pdata)
-            else:
-                pdata["color"] = [203, 213, 225, 120]
-                pts_normal.append(pdata)
-
-        # Base non-hotspot
-        layers.append(
-            pdk.Layer(
-                "ScatterplotLayer",
-                data=pts_normal,
-                get_position="coordinates",
-                get_fill_color="color",
-                get_radius=120,
-                radius_min_pixels=2,
-                radius_max_pixels=8,
-                pickable=True,
-            )
-        )
-        # Hotspot kritis menyala
-        layers.append(
-            pdk.Layer(
-                "ScatterplotLayer",
-                data=pts_hotspot,
-                get_position="coordinates",
-                get_fill_color="color",
-                get_line_color=[255, 255, 255, 255],
-                stroked=True,
-                line_width_min_pixels=2,
-                get_radius=350,
-                radius_min_pixels=6,
-                radius_max_pixels=20,
-                pickable=True,
-            )
-        )
-
-    elif mode == "subsidence":
-        # Mode Laju Penurunan Tanah InSAR
-        pts = []
-        for _, row in df_plot.iterrows():
-            s_val = float(row.get("subs_cm_yr", 0))
-            pts.append({
-                "coordinates": [float(row["lon"]), float(row["lat"])],
-                "id": str(row.get("transek_id", "")),
-                "wilayah": str(row.get("wilayah", "")),
-                "rek": str(row.get("rekomendasi", "")),
-                "domain": "Ya" if bool(row.get("domain_mangrove", False)) else "Tidak",
-                "subs": round(s_val, 1),
-                "th_tenggelam": str(row.get("tahun_tenggelam_median", "-")),
-                "dist_barrier": round(float(row.get("jarak_penghalang_m", 0))),
-                "color": _color_subsidence(s_val),
-            })
-
-        layers.append(
-            pdk.Layer(
-                "ScatterplotLayer",
-                data=pts,
-                get_position="coordinates",
-                get_fill_color="color",
-                get_radius=220,
-                radius_min_pixels=3,
-                radius_max_pixels=14,
-                pickable=True,
-            )
-        )
-
-    # Konfigurasi Basemap (Kanvas Bersih vs Citra Satelit)
-    if basemap == "Citra Satelit":
-        m_provider = "maplibre"
-        m_style = SATELLITE_STYLE
-    else:
-        m_provider = "carto"
-        m_style = CARTO_POSITRON
-
+    provider, style = _basemap(basemap)
     return pdk.Deck(
         layers=layers,
         initial_view_state=view,
-        map_provider=m_provider,
-        map_style=m_style,
+        map_provider=provider,
+        map_style=style,
         tooltip=TOOLTIP,
+        views=[pdk.View(type="MapView", controller={"dragRotate": False, "touchRotate": False})],
+    )
+
+
+# --- Peta Area Pertimbangan Satu Transek ------------------------------------ #
+AREA_WARNA = {
+    "koridor": [17, 24, 39],
+    "penduduk": [124, 58, 237],
+    "terbangun": [71, 85, 105],
+    "genangan": [14, 165, 233],
+    "tepi": [15, 118, 110],
+    "penghalang": [225, 29, 72],
+    "transek": [15, 23, 42],
+}
+
+def build_area_map(row: pd.Series, df_master: pd.DataFrame, basemap: str = "Kanvas Bersih",
+                   gj_coast: dict = None) -> pdk.Deck:
+    """Peta zona yang dipakai analisis untuk satu transek beserta transek tetangganya."""
+    tid = row["transek_id"]
+    koridor = data.koridor_transek()
+    is_dom = bool(row.get("domain_mangrove", False))
+    # Posisi acuan (m dari ujung laut): tepi mangrove terkini atau garis pantai
+    acuan = float(row["Y_now_m"]) if is_dom and pd.notnull(row.get("Y_now_m")) else data.GARIS_PANTAI_M
+    nama_acuan = "Tepi mangrove terkini (nowcast)" if is_dom else "Garis pantai acuan"
+
+    # Transek tetangga ±3 km (koridor saling tumpang tindih)
+    sekitar = df_master[(df_master["wilayah"] == row["wilayah"]) &
+                        ((df_master["lat"] - row["lat"]).abs() < 0.03) &
+                        ((df_master["lon"] - row["lon"]).abs() < 0.03)]
+    tetangga = []
+    for r in sekitar.to_dict("records"):
+        if r["transek_id"] == tid or r["transek_id"] not in koridor:
+            continue
+        col = color_action(str(r.get("rekomendasi", "")), is_domain=bool(r.get("domain_mangrove")))
+        tetangga.append({"polygon": koridor[r["transek_id"]], "color": col[:3] + [70],
+                         "nama": f"Transek tetangga {r['transek_id']}",
+                         "ket": f"{r.get('rekomendasi', '-')} · koridornya tumpang tindih 50 m dengan transek sebelahnya"})
+
+    zona_poli = [
+        {"polygon": data.lingkaran(row["lon"], row["lat"], data.RADIUS_POP_M),
+         "color": AREA_WARNA["penduduk"] + [22], "line": AREA_WARNA["penduduk"] + [230],
+         "nama": "Radius penduduk 1 km",
+         "ket": f"Penduduk WorldPop yang dihitung untuk transek ini: {ui.angka(row.get('pop_2026', 0))} jiwa"},
+        {"polygon": koridor[tid], "color": AREA_WARNA["koridor"] + [45], "line": AREA_WARNA["koridor"] + [255],
+         "nama": "Koridor transek ±150 m × 3,5 km",
+         "ket": f"Median titik InSAR di koridor ini = amblesan {ui.angka(row.get('subs_cm_yr', 0), 2)} cm/th"},
+    ]
+
+    ruas = [
+        {"path": data.ruas_pada_transek(tid, 0, data.PANJANG_TRANSEK_M), "color": AREA_WARNA["transek"] + [200], "w": 6,
+         "nama": "Garis transek", "ket": "0 m (laut) → 500 m (garis pantai) → 3.500 m (darat), titik pengamatan tiap 10 m"},
+        {"path": data.ruas_pada_transek(tid, acuan, acuan + 1000), "color": AREA_WARNA["terbangun"] + [210], "w": 46,
+         "nama": "Zona kepadatan terbangun 0–1 km",
+         "ket": "Rerata peluang terbangun Dynamic World di belakang tepi (tekanan darat)"},
+        {"path": data.ruas_pada_transek(tid, acuan, acuan + 200), "color": AREA_WARNA["genangan"] + [235], "w": 90,
+         "nama": "Zona frekuensi genangan 0–200 m",
+         "ket": "Proporsi citra radar Sentinel-1 yang tergenang di belakang tepi (tekanan laut)"},
+    ]
+
+    titik = [{"position": data.titik_pada_transek(tid, acuan), "color": AREA_WARNA["tepi"] + [255],
+              "nama": nama_acuan, "ket": f"{ui.angka(acuan, 0)} m dari ujung laut transek"}]
+    if not bool(row.get("B_hard_tersensor", False)) and pd.notnull(row.get("jarak_penghalang_m")):
+        jarak = float(row["MS_current_m"]) if is_dom and pd.notnull(row.get("MS_current_m")) else float(row["jarak_penghalang_m"])
+        titik.append({"position": data.titik_pada_transek(tid, acuan + jarak), "color": AREA_WARNA["penghalang"] + [255],
+                      "nama": "Penghalang keras terdekat",
+                      "ket": f"{ui.angka(jarak, 0)} m di belakang {nama_acuan.lower()}"})
+
+    layers = []
+    coast = _layer_garis_pantai(gj_coast, basemap)
+    if coast is not None:
+        layers.append(coast)
+    layers += [
+        pdk.Layer("PolygonLayer", data=tetangga, get_polygon="polygon", get_fill_color="color",
+                  get_line_color=[255, 255, 255, 160], line_width_min_pixels=0.6, stroked=True, pickable=True),
+        pdk.Layer("PolygonLayer", data=zona_poli, get_polygon="polygon", get_fill_color="color",
+                  get_line_color="line", line_width_min_pixels=2.5, stroked=True, pickable=True),
+        pdk.Layer("PathLayer", data=ruas, get_path="path", get_color="color", get_width="w",
+                  width_min_pixels=2, pickable=True),
+        pdk.Layer("ScatterplotLayer", data=titik, get_position="position", get_fill_color="color",
+                  get_line_color=[255, 255, 255, 255], stroked=True, line_width_min_pixels=2,
+                  get_radius=45, radius_min_pixels=6, radius_max_pixels=12, pickable=True),
+    ]
+
+    pusat = data.titik_pada_transek(tid, 1500)
+    provider, style = _basemap(basemap)
+    return pdk.Deck(
+        layers=layers,
+        initial_view_state=pdk.ViewState(longitude=pusat[0], latitude=pusat[1], zoom=13.1, pitch=0, bearing=0),
+        map_provider=provider,
+        map_style=style,
+        tooltip={"html": "<b>{nama}</b><br/>{ket}", "style": TOOLTIP["style"]},
         views=[pdk.View(type="MapView", controller={"dragRotate": False, "touchRotate": False})],
     )

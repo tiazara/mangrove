@@ -14,15 +14,17 @@ import maps as maps
 import charts as charts
 
 MODE_LABELS = {
-    "tipologi": "Tipologi 4 Kuadran Mangrove (RED, ORANGE, YELLOW, GREEN)",
-    "aksi_lengkap": "Rekomendasi Aksi Lapangan (11 Kelas Intervensi)",
-    "hotspot": "Hotspot Kritis Tenggelam (< 2050)",
+    "aksi_lengkap": "Rekomendasi Aksi Seluruh Pantai (11 kelas)",
+    "tipologi": "Tipologi Pantai Bermangrove saja (4 kelas)",
+    "hotspot": "Hotspot Tenggelam Padat Penduduk (46 transek)",
     "subsidence": "Laju Penurunan Tanah InSAR (cm/th)"
 }
 
 def render():
     # --- 1. Penjelas Komponen Ilmiah (TDV-Card Style ala Coraly) ---------- #
     ui.component_explainer()
+    st.write("")
+    ringkasan_kawasan()
     st.markdown("<hr>", unsafe_allow_html=True)
 
     # --- 2. Baris Filter & Kontrol Terpadu --------------------------------- #
@@ -42,7 +44,7 @@ def render():
             options=list(MODE_LABELS.keys()),
             format_func=lambda k: MODE_LABELS[k],
             index=0,
-            help="Pilih klasifikasi kartografis: 4 Kuadran Mangrove Inti, 11 Aksi Lengkap, Hotspot, atau InSAR."
+            help="Rekomendasi seluruh pantai (bermangrove + tanpa mangrove), tipologi bermangrove saja, hotspot, atau amblesan InSAR."
         )
 
     with f3:
@@ -59,30 +61,39 @@ def render():
     domain_scope = scope[scope["domain_mangrove"] == True]
 
     n_cells = len(scope)
-    n_hotspot = int(scope["hotspot_tenggelam"].sum()) if "hotspot_tenggelam" in scope.columns else 0
-    subs_val = C.MEDIAN_SUBSIDENCE.get(wilayah_code, 1.45)
-    sink_val = C.MEDIAN_SINK_YEAR.get(wilayah_code, "2068")
+    n_hotspot = int(scope["hotspot_tenggelam"].sum())
+    subs_med = domain_scope["subs_cm_yr"].median()
+    pct_terukur = (scope["subs_sumber"] == "pantai").mean() * 100
 
     k1, k2, k3, k4 = st.columns(4)
     with k1:
-        ui.kpi(f"{n_cells:,}".replace(",", "."), f"transek dievaluasi ({len(domain_scope)} domain mangrove)")
+        ui.kpi(ui.angka(n_cells), f"transek dievaluasi ({ui.angka(len(domain_scope))} bermangrove)")
     with k2:
-        ui.kpi(f"{n_hotspot}", "hotspot kritis tenggelam (< 2050)")
+        ui.kpi(f"{n_hotspot}", "hotspot tenggelam padat penduduk")
     with k3:
-        ui.kpi(f"{subs_val:.1f} cm/th", "median laju amblesan InSAR")
+        ui.kpi(f"{ui.angka(subs_med, 2)} cm/th",
+               f"median amblesan InSAR transek bermangrove ({ui.angka(pct_terukur)}% transek terukur langsung)")
     with k4:
-        ui.kpi(f"{sink_val}", "median estimasi tahun tenggelam", small=(len(str(sink_val)) > 8))
+        if wilayah_code == "SEMUA":
+            ui.kpi("2040–2061", "median tahun tenggelam tegakan di 3 kawasan terancam (PKL · CIR · SEM)", small=True)
+        else:
+            th = domain_scope["tahun_tenggelam_median"].median()
+            ui.kpi(ui.tahun_tenggelam(th), "median tahun tenggelam tegakan mangrove")
 
     st.write("")
 
     # --- 4. Modul Peta Pydeck (GPU-Accelerated, Instan, Full Width) ------- #
     sub_texts = {
-        "tipologi": "Fokus 920 transek domain mangrove aktif dalam 4 kuadran mitigasi: RED, ORANGE, YELLOW, GREEN (garis abu-abu = pesisir non-mangrove).",
-        "aksi_lengkap": "Visualisasi komprehensif seluruh 2.365 transek pesisir dengan 11 kelas rekomendasi aksi biofisik spesifik di lapangan.",
-        "hotspot": "Titik merah berlingkar putih menandakan 46 transek kritis yang diproyeksikan tenggelam sebelum 2050.",
+        "tipologi": "Hanya 920 transek bermangrove yang diwarnai sesuai tipologinya; abu-abu = pantai tanpa mangrove.",
+        "aksi_lengkap": "Seluruh 2.365 transek: 4 tipologi untuk pantai bermangrove dan 7 rekomendasi untuk pantai tanpa mangrove.",
+        "hotspot": f"Titik merah = {C.HOTSPOT_DEF}. Seluruhnya berada di Cirebon, Semarang–Demak, dan Pekalongan.",
         "subsidence": "Gradien warna menandakan laju penurunan tanah InSAR dari kuning (< 1 cm/th) hingga merah pekat (> 4 cm/th)."
     }
-    ui.mod_title_lg("Peta Spasial Interaktif & Tipologi Mitigasi", sub_texts[sel_mode])
+    ui.mod_title_lg(
+        "Peta Rekomendasi per Transek",
+        sub_texts[sel_mode] + " Setiap pita = koridor analisis ±150 m × 3,5 km (laut → darat); "
+        "koridor bersebelahan tumpang tindih 50 m. Arahkan kursor untuk detail, gulir untuk memperbesar."
+    )
 
     # Muat geometri garis pantai & transek via cached JSON loader
     gj_coast = data.load_coast_geojson()
@@ -106,14 +117,18 @@ def render():
             ("#ea580c", "ORANGE · Pembukaan Ruang Mundur Mangrove"),
             ("#eab308", "YELLOW · Pengayaan Sabuk Hijau"),
             ("#16a34a", "GREEN · Konservasi Ketat"),
-            ("#cbd5e1", "Pesisir Non-Domain Mangrove (1.445 transek)")
+            ("#cbd5e1", "Pantai tanpa mangrove (1.445 transek)")
         ])
     elif sel_mode == "aksi_lengkap":
+        ui.html('<div class="legend-head">Pantai bermangrove</div>')
         ui.legend([
             ("#b2182b", "RED · Rekayasa Hibrida"),
             ("#ea580c", "ORANGE · Pembukaan Ruang Mundur Mangrove"),
             ("#eab308", "YELLOW · Pengayaan Sabuk Hijau"),
             ("#16a34a", "GREEN · Konservasi Ketat"),
+        ])
+        ui.html('<div class="legend-head">Pantai tanpa mangrove</div>')
+        ui.legend([
             ("#0284c7", "Penangkap Sedimen + Lumpur"),
             ("#0ea5e9", "Restorasi Hidrologis + Sedimen"),
             ("#6366f1", "Restorasi Hidrologis Tambak"),
@@ -124,27 +139,27 @@ def render():
         ])
     elif sel_mode == "hotspot":
         ui.legend([
-            ("#dc2626", "Hotspot Kritis Tenggelam (< 2050)"),
-            ("#94a3b8", "Transek Pesisir Non-Kritis")
+            ("#dc2626", "Hotspot tenggelam padat penduduk"),
+            ("#cbd5e1", "Bukan hotspot")
         ])
     elif sel_mode == "subsidence":
-        ui.ramp_legend("Rendah (< 1.0 cm/th)", "Kritis (> 4.0 cm/th)")
+        ui.ramp_legend("Rendah (< 1,0 cm/th)", "Kritis (> 4,0 cm/th)")
 
     # --- 5. Sebaran Analitis Sesuai Mode Peta Tematik (Otomatis Sinkron) ---- #
     st.markdown("<hr>", unsafe_allow_html=True)
 
     titles_map = {
         "tipologi": (
-            "Sebaran Tipologi Mitigasi 4 Kuadran Mangrove",
-            f"Distribusi kuantitatif 920 transek mangrove berdasarkan matriks defisit vertikal laut dan restriksi darat di {sel_wilayah_name}."
+            "Sebaran Tipologi Aksi Transek Bermangrove",
+            f"Jumlah transek bermangrove per jenis aksi di {sel_wilayah_name}."
         ),
         "aksi_lengkap": (
-            "Sebaran 11 Rekomendasi Aksi Lapangan Pesisir",
-            f"Komposisi tindakan mitigasi fisik komprehensif untuk seluruh 2.365 transek pesisir di {sel_wilayah_name}."
+            "Sebaran Rekomendasi Seluruh Pantai",
+            f"Jumlah transek per rekomendasi (bermangrove dan tanpa mangrove) di {sel_wilayah_name}."
         ),
         "hotspot": (
-            "Sebaran Status Kerentanan Tenggelam",
-            f"Perbandingan proporsi transek hotspot kritis tenggelam (< 2050) vs transek pesisir non-kritis di {sel_wilayah_name}."
+            "Sebaran Hotspot Tenggelam Padat Penduduk",
+            f"Jumlah transek hotspot ({C.HOTSPOT_DEF}) dibanding transek lain di {sel_wilayah_name}."
         ),
         "subsidence": (
             "Distribusi Tingkat Laju Penurunan Tanah (InSAR)",
@@ -163,21 +178,30 @@ def render():
     # --- 6. Tabel Data Transek & Tombol Unduh CSV -------------------------- #
     with st.expander("Lihat & Unduh Data Transek pada Filter Ini", expanded=False):
         cols_show = [
-            "transek_id", "wilayah", "rekomendasi", "v_edge_m_yr",
-            "subs_cm_yr", "tahun_tenggelam_median", "jarak_penghalang_m", "pop_2026"
+            "transek_id", "wilayah", "lat", "lon", "rekomendasi", "keyakinan_tipologi", "RFI_score",
+            "P_tenggelam_2050", "P_tenggelam_2100", "tahun_tenggelam_median",
+            "subs_cm_yr", "subs_sumber", "v_edge_m_yr", "jarak_penghalang_m", "hotspot_tenggelam", "pop_2026"
         ]
         avail = [c for c in cols_show if c in scope.columns]
         df_display = scope[avail].rename(columns={
             "transek_id": "ID Transek",
             "wilayah": "Wilayah",
-            "rekomendasi": "Tipologi Rekomendasi",
-            "v_edge_m_yr": "Laju Garis Pantai (m/th)",
+            "lat": "Lintang", "lon": "Bujur",
+            "rekomendasi": "Rekomendasi",
+            "keyakinan_tipologi": "Keyakinan Kelas",
+            "RFI_score": "RFI",
+            "P_tenggelam_2050": "P(tenggelam < 2050)",
+            "P_tenggelam_2100": "P(tenggelam < 2100)",
+            "tahun_tenggelam_median": "Tahun Tenggelam (median)",
             "subs_cm_yr": "Amblesan InSAR (cm/th)",
-            "tahun_tenggelam_median": "Estimasi Th Tenggelam",
-            "jarak_penghalang_m": "Jarak Penghalang (m)",
-            "pop_2026": "Penduduk Terdampak 1km"
+            "subs_sumber": "Sumber Amblesan",
+            "v_edge_m_yr": "Laju Tepi Laut (m/th, + = mundur)",
+            "jarak_penghalang_m": "Jarak Penghalang Keras (m)",
+            "hotspot_tenggelam": "Hotspot",
+            "pop_2026": "Penduduk Radius 1 km"
         })
         st.dataframe(df_display, use_container_width=True, hide_index=True, height=350)
+        st.caption("Penduduk radius 1 km per transek saling tumpang tindih antartransek; jangan dijumlahkan.")
         
         st.download_button(
             "Unduh Data CSV",
@@ -185,3 +209,41 @@ def render():
             file_name=f"sabuk_hijau_transek_{wilayah_code.lower()}.csv",
             mime="text/csv"
         )
+
+
+def ringkasan_kawasan():
+    """Tabel perbandingan lima kawasan: risiko, tipologi, prioritas, dan catatan keandalan data."""
+    master = data.master_df()
+    kawasan = data.kawasan_gdf()
+    ui.mod_title_lg(
+        "Perbandingan Antarkawasan",
+        "Ringkasan lima kawasan studi, diurutkan dari yang paling cepat kehilangan modal elevasi."
+    )
+    warna = {"RED": "#b2182b", "ORANGE": "#ea580c", "YELLOW": "#ca8a04", "GREEN": "#16a34a"}
+    rows = []
+    for kode in ["PKL", "CIR", "SEM", "SBY", "JPR"]:
+        sub = master[master["wilayah"] == kode]
+        dom = sub[sub["domain_mangrove"] == True]
+        tipe = dom["Intervention_Type"].value_counts()
+        chips = " ".join(
+            f'<span class="chip" style="background:{warna[t]}">{int(tipe.get(t, 0))}</span>' for t in C.TIPOLOGI_ORDER
+        )
+        km_orange = kawasan[(kawasan["wilayah"] == kode) & kawasan["rekomendasi"].str.startswith("ORANGE")]["panjang_km"].sum()
+        rows.append([
+            f"<b>{C.CODE_TO_NAME[kode]}</b>",
+            f"{ui.angka(len(sub))} ({ui.angka(len(dom))})",
+            ui.angka(dom["subs_cm_yr"].median(), 2),
+            f"<b>{ui.tahun_tenggelam(dom['tahun_tenggelam_median'].median())}</b>",
+            chips,
+            ui.angka(km_orange, 1),
+            str(int(sub["hotspot_tenggelam"].sum())),
+            f'<span class="catatan">{C.CATATAN_DATA[kode]}</span>',
+        ])
+    ui.tabel_html(
+        ["Kawasan", "Transek (bermangrove)", "Amblesan median bermangrove (cm/th)", "Tahun tenggelam tegakan",
+         "RED · ORANGE · YELLOW · GREEN", "Kawasan ORANGE (km)", "Hotspot", "Catatan keandalan data"],
+        rows,
+        align=["left", "right", "right", "right", "left", "right", "right", "left"],
+        note="Amblesan dan tahun tenggelam = median transek bermangrove; tahun tenggelam dari simulasi Monte Carlo (akresi 0,5 cm/th; SLR 0,39 cm/th). "
+             "Kawasan ORANGE = panjang ruas program pembukaan ruang mundur."
+    )

@@ -28,7 +28,7 @@ def plot_theme_breakdown(df: pd.DataFrame, wilayah: str = "SEMUA", mode: str = "
     Mode:
     - 'tipologi': Fokus Tipologi 4 Kuadran Mangrove (GREEN, ORANGE, YELLOW, RED)
     - 'aksi_lengkap': 11 Rekomendasi Aksi Lapangan Pesisir Komprehensif
-    - 'hotspot': Perbandingan Hotspot Kritis (< 2050) vs Pesisir Adaptif
+    - 'hotspot': Hotspot tenggelam padat penduduk (Gi* FDR 5%) vs transek lain
     - 'subsidence': Distribusi 5 Tingkat Amblesan Tanah InSAR (<0.5 hingga >4 cm/th)
     """
     sub = df if wilayah == "SEMUA" else df[df["wilayah"] == wilayah]
@@ -107,20 +107,20 @@ def plot_theme_breakdown(df: pd.DataFrame, wilayah: str = "SEMUA", mode: str = "
 
         items = [
             {
-                "label": "Hotspot Kritis Tenggelam (< 2050)",
+                "label": "Hotspot tenggelam padat penduduk",
                 "count": n_hot,
                 "pct": pct_hot,
                 "color": "#dc2626",
-                "status": "Darurat / Amblesan Ekstrem",
-                "keterangan": "Diproyeksikan tenggelam permanen sebelum 2050 tanpa intervensi"
+                "status": "Prioritas rehabilitasi",
+                "keterangan": "Klaster Gi* (FDR 5%) peluang tenggelam < 2050 × penduduk radius 1 km"
             },
             {
-                "label": "Transek Pesisir Non-Kritis",
+                "label": "Bukan hotspot",
                 "count": n_safe,
                 "pct": pct_safe,
                 "color": "#64748b",
-                "status": "Relatif Bertahan",
-                "keterangan": "Batas ketahanan elevasi melampaui horizon perencanaan 2050"
+                "status": "Bukan klaster risiko × penduduk",
+                "keterangan": "Dapat tetap berisiko tenggelam; lihat tipologi aksi"
             }
         ]
 
@@ -155,28 +155,28 @@ def plot_theme_breakdown(df: pd.DataFrame, wilayah: str = "SEMUA", mode: str = "
                 "count": c_ekstrem,
                 "color": "#7f0000",
                 "tingkat": "Ekstrem / Darurat Amblesan",
-                "keterangan": "Defisit elevasi vertikal akut, risiko tenggelam permanen tertinggi"
+                "keterangan": "Defisit elevasi paling besar; risiko tenggelam tertinggi"
             },
             {
                 "label": "2,0 – 4,0 cm/th (Sangat Tinggi)",
                 "count": c_stinggi,
                 "color": "#dc2626",
                 "tingkat": "Sangat Tinggi",
-                "keterangan": "Penurunan tanah masif yang mengunci ruang adaptasi mangrove"
+                "keterangan": "Defisit elevasi besar; modal elevasi habis dalam beberapa dekade"
             },
             {
-                "label": "1,0 – 2,0 cm/th (Tinggi / Signifikan)",
+                "label": "1,0 – 2,0 cm/th (Tinggi)",
                 "count": c_tinggi,
                 "color": "#f97316",
                 "tingkat": "Tinggi / Signifikan",
-                "keterangan": "Laju amblesan tanah melampaui kemampuan akresi sedimen alami"
+                "keterangan": "Laju amblesan melampaui akresi sedimen alami (0,5 cm/th)"
             },
             {
                 "label": "< 1,0 cm/th (Rendah / Relatif Stabil)",
                 "count": c_rendah,
                 "color": "#eab308",
                 "tingkat": "Rendah / Relatif Stabil",
-                "keterangan": "Kondisi amblesan relatif mampu diimbangi proses akresi alami habitat"
+                "keterangan": "Sebagian masih dapat diimbangi akresi alami (0,5 cm/th)"
             }
         ]
 
@@ -322,7 +322,8 @@ def plot_cross_section(transek_id: str, segmen_df: pd.DataFrame) -> go.Figure:
         "perairan": "#2563eb"                   # Marine blue
     }
 
-    for _, row in sub.iterrows():
+    shown = set()
+    for _, row in sub.sort_values("dari_m").iterrows():
         d_from = row.get("dari_m", 0)
         d_to = row.get("sampai_m", 0)
         l_class = str(row.get("tutupan_lahan", "Lainnya")).lower()
@@ -342,8 +343,10 @@ def plot_cross_section(transek_id: str, segmen_df: pd.DataFrame) -> go.Figure:
             customdata=[[l_class.title(), d_to, width]],
             hovertemplate="<b>%{customdata[0]}</b><br>Rentang: %{base:.0f} m – %{customdata[1]:.0f} m (Lebar: %{customdata[2]:.0f} m)<extra></extra>",
             hoverlabel=HOVER_STYLE,
-            showlegend=False
+            legendgroup=l_class,
+            showlegend=l_class not in shown
         ))
+        shown.add(l_class)
 
     # Garis Pantai Basis (500 m) — Garis vertikal putus-putus
     fig.add_vline(
@@ -372,8 +375,11 @@ def plot_cross_section(transek_id: str, segmen_df: pd.DataFrame) -> go.Figure:
         barmode="stack",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        height=130,
+        height=190,
         margin=dict(l=15, r=20, t=38, b=30),
+        legend=dict(orientation="h", yanchor="top", y=-0.5, xanchor="left", x=0,
+                    bgcolor="rgba(0,0,0,0)", font=dict(family=FONT_FAMILY, size=11.5, color="#334155"),
+                    traceorder="normal", itemclick=False, itemdoubleclick=False),
         xaxis=dict(
             range=[0, 3500],
             tickvals=[0, 500, 1000, 1500, 2000, 2500, 3000, 3500],
@@ -392,103 +398,107 @@ def plot_cross_section(transek_id: str, segmen_df: pd.DataFrame) -> go.Figure:
 
 
 def plot_timeseries(transek_id: str, y_df: pd.DataFrame, master_row: pd.Series) -> go.Figure:
-    """Grafik deret waktu posisi tepi laut bulanan Jan 2021 - Agu 2026 ala Coraly.
-    
-    Karakteristik Coraly:
-    - Kurva garis teal halus (#0f766e) dengan area bayangan lembut (soft fill)
-    - Penghalang keras ditampilkan dengan garis putus-putus merah modern (#e11d48)
-    - Garis acuan pantai 500 m dengan garis titik-titik abu-abu
-    - Gridline horizontal super subtle (#f1f5f9), tanpa grid vertikal yang mengganggu
-    - Legenda horizontal di kanan atas, bebas dari frame kotak kaku
-    """
+    """Deret posisi tepi laut bulanan (Jan 2021 – Agu 2026), nowcast Kalman, ramalan 6/12 bulan,
+    dan posisi penghalang keras. Posisi diukur dari ujung laut transek (0 m), sehingga
+    nilai yang naik berarti tepi mundur ke darat."""
     fig = go.Figure()
 
     if transek_id not in y_df.index:
         fig.add_annotation(
-            text="Deret waktu satelit tidak tersedia untuk transek non-domain.",
+            text="Deret waktu satelit hanya tersedia untuk transek bermangrove.",
             xref="paper", yref="paper", x=0.5, y=0.5, showarrow=False,
             font=dict(family=FONT_FAMILY, size=12.5, color=theme.TEXT_MUTED)
         )
-        fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", height=280)
+        fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", height=300)
         return fig
 
     s = y_df.loc[transek_id].dropna()
-    dates = pd.to_datetime(s.index)
+    dates = pd.PeriodIndex(s.index, freq="M").to_timestamp()
     positions = s.values
+    t_now = pd.Timestamp("2026-08-01")
 
-    # 1. Observasi Tepi Laut Bulanan (Sentinel-1/2)
     fig.add_trace(go.Scatter(
-        x=dates,
-        y=positions,
-        mode="lines+markers",
-        name="Posisi Tepi Teramati",
-        line=dict(color="#0f766e", width=2.5),
-        fill="tozeroy",
-        fillcolor="rgba(15, 118, 110, 0.06)",
-        marker=dict(size=4.5, color="#0f766e", line=dict(color="#ffffff", width=1)),
-        hovertemplate="<b>%{x|%b %Y}</b><br>Posisi Garis Tepi: <b>%{y:.1f} m</b><extra></extra>",
+        x=dates, y=positions, mode="markers", name="Tepi teramati (Sentinel-1/2)",
+        marker=dict(size=5.5, color="#0f766e", line=dict(color="#ffffff", width=0.8)),
+        hovertemplate="<b>%{x|%b %Y}</b><br>Posisi tepi: <b>%{y:.0f} m</b><extra></extra>",
         hoverlabel=HOVER_STYLE
     ))
 
-    # 2. Garis Batas Penghalang Keras (Hard Barrier)
-    jarak_barrier = master_row.get("jarak_penghalang_m", None)
     y_now = master_row.get("Y_now_m", None)
-    if pd.notnull(jarak_barrier) and pd.notnull(y_now):
-        b_pos = y_now + jarak_barrier
+    sd_now = master_row.get("MS_uncertainty", None)
+    ms_now = master_row.get("MS_current_m", None)
+    ys_extra = list(positions)
+    b_pos = None
+    if pd.notnull(y_now) and pd.notnull(ms_now) and not bool(master_row.get("B_hard_tersensor", False)):
+        b_pos = y_now + ms_now
+    if pd.notnull(y_now):
+        # Ramalan rerata 6 & 12 bulan = posisi penghalang dikurangi ruang tersisa yang diramalkan
+        fc_x, fc_y = [t_now], [y_now]
+        for h, col in [(6, "MS_pred_6m"), (12, "MS_pred_12m")]:
+            ms_h = master_row.get(col, None)
+            if pd.notnull(ms_h) and pd.notnull(ms_now):
+                fc_x.append(t_now + pd.DateOffset(months=h))
+                fc_y.append(y_now + ms_now - ms_h)
+        ys_extra += fc_y
+        if pd.notnull(sd_now):
+            lo, hi = y_now - 1.96 * sd_now, y_now + 1.96 * sd_now
+            ys_extra += [lo, hi]
+            fig.add_trace(go.Scatter(
+                x=[t_now, t_now], y=[lo, hi], mode="lines", name="Selang 95% nowcast",
+                line=dict(color="#f59e0b", width=7), opacity=0.4,
+                hovertemplate=f"Selang 95%: {lo:.0f} – {hi:.0f} m<extra></extra>", hoverlabel=HOVER_STYLE
+            ))
+        n_fc = len(fc_x)
         fig.add_trace(go.Scatter(
-            x=[dates.min(), dates.max()],
-            y=[b_pos, b_pos],
-            mode="lines",
-            name=f"Penghalang Keras ({b_pos:.0f} m)",
-            line=dict(color="#e11d48", width=1.8, dash="dash"),
-            hovertemplate="Penghalang Keras: <b>%{y:.0f} m</b><extra></extra>",
+            x=fc_x, y=fc_y, mode="lines+markers", name="Nowcast & ramalan 6/12 bln (Kalman)",
+            line=dict(color="#d97706", width=2.2, dash="dot"),
+            marker=dict(size=[11] + [7] * (n_fc - 1), color="#d97706",
+                        symbol=["diamond"] + ["circle"] * (n_fc - 1)),
+            hovertemplate="<b>%{x|%b %Y}</b><br>Posisi taksiran: <b>%{y:.0f} m</b><extra></extra>",
             hoverlabel=HOVER_STYLE
         ))
 
-    # 3. Garis Pantai Basis (500 m)
+    x_end = t_now + pd.DateOffset(months=13)
+    jauh = b_pos is not None and (b_pos - float(np.nanmax(ys_extra))) > 400
+    if jauh:
+        fig.add_annotation(
+            xref="paper", yref="paper", x=0.01, y=0.97, xanchor="left", showarrow=False,
+            text=f"Penghalang keras {ms_now:,.0f} m di belakang tepi (di luar skala grafik)".replace(",", "."),
+            font=dict(family=FONT_FAMILY, size=11.5, color="#e11d48"),
+            bgcolor="rgba(255,255,255,0.9)", bordercolor="#fecdd3", borderwidth=1, borderpad=4
+        )
+    elif b_pos is not None:
+        ys_extra.append(b_pos)
+        fig.add_trace(go.Scatter(
+            x=[dates.min(), x_end], y=[b_pos, b_pos], mode="lines",
+            name=f"Penghalang keras ({ms_now:.0f} m dari tepi)",
+            line=dict(color="#e11d48", width=1.8, dash="dash"),
+            hovertemplate="Penghalang keras: <b>%{y:.0f} m</b><extra></extra>", hoverlabel=HOVER_STYLE
+        ))
+
     fig.add_trace(go.Scatter(
-        x=[dates.min(), dates.max()],
-        y=[500, 500],
-        mode="lines",
-        name="Garis Pantai Basis (500 m)",
+        x=[dates.min(), x_end], y=[500, 500], mode="lines", name="Garis pantai acuan (500 m)",
         line=dict(color="#94a3b8", width=1.3, dash="dot"),
-        hovertemplate="Garis Pantai Basis: <b>500 m</b><extra></extra>",
-        hoverlabel=HOVER_STYLE
+        hovertemplate="Garis pantai acuan: <b>500 m</b><extra></extra>", hoverlabel=HOVER_STYLE
     ))
+    ys_extra.append(500)
+
+    lo_y, hi_y = float(np.nanmin(ys_extra)), float(np.nanmax(ys_extra))
+    pad = max(40.0, (hi_y - lo_y) * 0.12)
 
     fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        height=280,
-        margin=dict(l=45, r=20, t=15, b=25),
-        xaxis=dict(
-            showgrid=False,
-            showline=True,
-            linecolor="#cbd5e1",
-            linewidth=1,
-            tickformat="%b %Y",
-            tickfont=dict(family=FONT_FAMILY, size=11, color="#64748b"),
-            title=None
-        ),
-        yaxis=dict(
-            showgrid=True,
-            gridcolor="rgba(226, 232, 240, 0.7)",
-            gridwidth=0.8,
-            zeroline=False,
-            showline=False,
-            ticksuffix=" m",
-            tickfont=dict(family=FONT_FAMILY, size=11, color="#64748b"),
-            title=None
-        ),
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1,
-            bgcolor="rgba(0,0,0,0)",
-            font=dict(family=FONT_FAMILY, size=11, color="#475569")
-        ),
+        height=330,
+        margin=dict(l=60, r=20, t=45, b=25),
+        xaxis=dict(showgrid=False, showline=True, linecolor="#cbd5e1", linewidth=1, tickformat="%b %Y",
+                   tickfont=dict(family=FONT_FAMILY, size=11, color="#64748b"), title=None),
+        yaxis=dict(showgrid=True, gridcolor="rgba(226, 232, 240, 0.7)", gridwidth=0.8, zeroline=False,
+                   showline=False, ticksuffix=" m", tickfont=dict(family=FONT_FAMILY, size=11, color="#64748b"),
+                   range=[lo_y - pad, hi_y + pad],
+                   title=dict(text="jarak dari laut (naik = mundur ke darat)", font=dict(size=11, color="#64748b"))),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, bgcolor="rgba(0,0,0,0)",
+                    font=dict(family=FONT_FAMILY, size=11, color="#475569")),
         font=dict(family=FONT_FAMILY)
     )
     return fig
@@ -614,3 +624,88 @@ def plot_scenario_comparison(domain_df: pd.DataFrame) -> go.Figure:
     )
     return fig
 
+
+
+WARNA_LAHAN = {
+    "mangrove": "#0f766e", "dataran lumpur": "#94a3b8", "tambak terhubung pasang": "#0284c7",
+    "tambak mulai bervegetasi": "#0d9488", "tambak tergenang": "#38bdf8", "tambak aktif": "#64748b",
+    "sawah": "#f59e0b", "vegetasi darat": "#16a34a", "lahan terbuka": "#cbd5e1",
+    "terbangun": "#475569", "terbangun baru": "#e11d48", "perairan": "#2563eb",
+}
+
+def plot_citra_penampang(transek_id: str, potongan: list[dict], segmen_df: pd.DataFrame,
+                         tepi_tahunan: dict, b_pos: float = None, label_acuan: str = "Garis pantai acuan") -> go.Figure:
+    """Penampang melintang dari citra satelit: potongan citra selebar koridor ±150 m disusun per
+    sumber/tahun di atas sumbu jarak 0–3.500 m, dengan klasifikasi tutupan lahan di baris terbawah.
+
+    tepi_tahunan: {tahun: posisi tepi median (m)} untuk ditandai pada baris Sentinel-2 tahun tsb.
+    """
+    fig = go.Figure()
+    n = len(potongan)
+    tinggi_baris = 0.92
+    tickvals, ticktext = [], []
+
+    # 1. Baris citra (atas -> bawah)
+    for r, p in enumerate(potongan):
+        y_atas = n + 1 - r
+        fig.add_layout_image(dict(source=p["uri"], xref="x", yref="y", x=0, y=y_atas, sizex=3500, sizey=tinggi_baris,
+                                  xanchor="left", yanchor="top", sizing="stretch", layer="below"))
+        tickvals.append(y_atas - tinggi_baris / 2)
+        ticktext.append(p["label"].replace("Citra resolusi tinggi (Esri, terkini)", "Resolusi tinggi<br>(Esri)"))
+        tahun = p.get("tahun")
+        if tahun in tepi_tahunan and pd.notnull(tepi_tahunan[tahun]):
+            x_t = tepi_tahunan[tahun]
+            fig.add_trace(go.Scatter(
+                x=[x_t, x_t], y=[y_atas - tinggi_baris, y_atas], mode="lines",
+                line=dict(color="#fde047", width=3), showlegend=tahun == min(tepi_tahunan),
+                name="Tepi mangrove terdeteksi (median tahunan)", legendgroup="tepi",
+                hovertemplate=f"Tepi mangrove {tahun}: <b>{x_t:.0f} m</b><extra></extra>", hoverlabel=HOVER_STYLE
+            ))
+
+    # 2. Baris klasifikasi tutupan lahan
+    sub = segmen_df[segmen_df["transek_id"] == transek_id].sort_values("dari_m")
+    shown = set()
+    for _, row in sub.iterrows():
+        kelas = str(row.get("tutupan_lahan", "lainnya")).lower()
+        lebar = row["sampai_m"] - row["dari_m"]
+        fig.add_trace(go.Bar(
+            y=[0.55], x=[lebar], base=[row["dari_m"]], orientation="h", width=0.5,
+            marker=dict(color=WARNA_LAHAN.get(kelas, "#94a3b8"), line=dict(width=0)),
+            name=kelas.title(), legendgroup=kelas, showlegend=kelas not in shown,
+            customdata=[[kelas.title(), row["sampai_m"], lebar]],
+            hovertemplate="<b>%{customdata[0]}</b><br>%{base:.0f} – %{customdata[1]:.0f} m (lebar %{customdata[2]:.0f} m)<extra></extra>",
+            hoverlabel=HOVER_STYLE
+        ))
+        shown.add(kelas)
+    tickvals.append(0.55)
+    ticktext.append("Klasifikasi<br>tutupan lahan")
+
+    # 3. Garis acuan vertikal di seluruh baris
+    y_span = [0.25, n + 1.02]
+    fig.add_trace(go.Scatter(
+        x=[500, 500], y=y_span, mode="lines", line=dict(color="#22d3ee", width=2, dash="dash"),
+        name=f"{label_acuan} (500 m)", hovertemplate=f"{label_acuan}: <b>500 m</b><extra></extra>", hoverlabel=HOVER_STYLE
+    ))
+    if b_pos is not None and pd.notnull(b_pos) and 0 < b_pos < 3500:
+        fig.add_trace(go.Scatter(
+            x=[b_pos, b_pos], y=y_span, mode="lines", line=dict(color="#e11d48", width=2.2, dash="dash"),
+            name=f"Penghalang keras (posisi {b_pos:,.0f} m pada transek)".replace(",", "."),
+            hovertemplate=f"Penghalang keras: <b>{b_pos:.0f} m</b> dari ujung laut transek<extra></extra>", hoverlabel=HOVER_STYLE
+        ))
+
+    fig.update_layout(
+        barmode="overlay",
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        height=int(n * 96 + 150),
+        margin=dict(l=10, r=15, t=10, b=30),
+        xaxis=dict(range=[0, 3500], tickvals=[0, 500, 1000, 1500, 2000, 2500, 3000, 3500],
+                   ticktext=["0 m (laut)", "500 m", "1.000 m", "1.500 m", "2.000 m", "2.500 m", "3.000 m", "3.500 m (darat)"],
+                   tickfont=dict(family=FONT_FAMILY, size=11, color="#64748b"), showgrid=False, zeroline=False,
+                   showline=True, linecolor="#cbd5e1"),
+        yaxis=dict(range=[0.2, n + 1.04], tickvals=tickvals, ticktext=ticktext, showgrid=False, zeroline=False,
+                   tickfont=dict(family=FONT_FAMILY, size=11.5, color="#334155"), fixedrange=True),
+        legend=dict(orientation="h", yanchor="top", y=-0.12, xanchor="left", x=0, bgcolor="rgba(0,0,0,0)",
+                    font=dict(family=FONT_FAMILY, size=11.5, color="#334155"), itemclick=False, itemdoubleclick=False),
+        font=dict(family=FONT_FAMILY),
+    )
+    return fig

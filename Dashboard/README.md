@@ -15,7 +15,7 @@ Aplikasi Web Sistem Pendukung Keputusan (*Decision Support System* / DSS) Spasia
 ## 1. Ikhtisar Ilmiah
 
 Hutan mangrove di pesisir utara Jawa (Pantura) mengalami ancaman ganda yang dikenal sebagai **coastal squeeze**:
-1. **Sumbu Laut (Tekanan Vertikal)**: Amblesan tanah (*land subsidence* hingga 4,8 cm/th menurut InSAR) dipadu kenaikan muka laut memicu defisit elevasi yang mengancam menenggelamkan tegakan mangrove secara permanen sebelum 2050 (median tahun 2068).
+1. **Sumbu Laut (Tekanan Vertikal)**: Amblesan tanah (InSAR 1–15 cm/tahun di pesisir utara Jawa; GNSS Pekalongan 11,6 cm/tahun) ditambah kenaikan muka laut 0,39 cm/tahun melampaui akresi sedimen alami (0,5 cm/tahun). Defisit elevasi ini diperkirakan menghabiskan modal elevasi tegakan di Pekalongan sekitar 2040, Cirebon 2049, dan Semarang–Demak 2061 (median Monte Carlo).
 2. **Sumbu Darat (Restriksi Lateral)**: Infrastruktur keras buatan manusia (jalan arteri Pantura, jalan tol tanggul laut, pemukiman, serta pematang tambak beton) berjarak dekat ($\le 500\text{ m}$) di belakang tegakan, mengunci ruang akomodasi alami mangrove untuk bermigrasi mundur ke darat.
 
 Dashboard ini menyatukan pemodelan *state-space* (Filter Kalman pada deret waktu Sentinel-1/2), analisis laju InSAR 2017–2023, data pasang surut global EOT20, serta inventarisasi tutupan lahan Dynamic World & GMW ke dalam antarmuka interaktif institusional.
@@ -55,13 +55,14 @@ Dashboard/
 * **4 Mode Peta Tematik Otomatis Sinkron**:
   1. *Tipologi 4 Kuadran Mangrove*: Fokus 920 transek domain mangrove aktif (RED, ORANGE, YELLOW, GREEN).
   2. *Rekomendasi Aksi Lapangan*: Komposisi menyeluruh 11 rekomendasi intervensi biofisik pesisir Pantura.
-  3. *Hotspot Kritis Tenggelam (< 2050)*: Penandaan 46 transek darurat amblesan ekstrem vs transek non-kritis.
+  3. *Hotspot Tenggelam Padat Penduduk*: 46 transek klaster Getis-Ord Gi* (FDR 5%) dari peluang tenggelam sebelum 2050 × penduduk radius 1 km.
   4. *Laju Penurunan Tanah InSAR*: Gradien termal laju amblesan tanah (< 1,0 hingga > 4,0 cm/th).
 * **Sebaran Analitis Responsif**: Diagram batang horizontal adaptif dengan hover tooltip gelap kontras (`#04342c`).
 * **Inspeksi & Ekspor Data**: Filter data transek dan tombol unduh CSV interaktif.
 
 ### Tab 2: Dinamika Tepi Laut & Kausalitas Penggerak
-* **Temuan Model Ekonometrika Spasial**: Ringkasan empiris regresi WLS klaster, Huber robust, dan SIMEX terkait pengaruh defisit vertikal dan restriksi lateral terhadap pergerakan mangrove.
+* **Perubahan Mangrove 2021–2025**: 424 ekspansi, 84 kehilangan, 412 stabil, dan 44 transek kemungkinan kehilangan tegakan per Agustus 2026.
+* **Penggerak Perubahan**: Regresi WLS dengan galat baku klaster dan regresi logistik (Tabel 6 esai): amblesan +0,95 m/th per SD terhadap mundurnya tepi laut; kepadatan terbangun −1,38 m/th per SD terhadap pelebaran sabuk.
 * **Inspektur Mikro per Transek**:
   * *Rapor Evaluasi Komprehensif*: Menampilkan tipologi intervensi, laju amblesan, estimasi tahun tenggelam, ruang mundur, dan jarak penghalang.
   * *Deret Waktu Posisi Tepi Bulanan*: Visualisasi posisi tepi laut bulanan Jan 2021 – Agu 2026 hasil ekstraksi Sentinel-1/2 beserta estimasi tren laju pergerakan ($v_{\text{edge}}$).
@@ -74,7 +75,7 @@ Dashboard/
   * Dilengkapi filter ganda (*Wilayah Koridor* & *Rekomendasi Kebijakan*) serta 3 kartu KPI (Total Ruas, Panjang Pantai, Penduduk Terlindungi).
   * Tombol ekspor rencana aksi tabular CSV untuk pelaporan dinas/Bappeda.
 * **Simulator Kebijakan Interaktif "What-If"**:
-  * Pengujian sensitivitas laju akresi sedimen penangkap lumpur ($A = 0{,}2 - 2{,}0\text{ cm/th}$), horizon target waktu (2050 vs 2100), dan opsi pembukaan pematang tambak (*Pembukaan Ruang Mundur Mangrove*).
+  * Menjalankan ulang 2.000 simulasi Monte Carlo tipologi esai untuk akresi ($0{,}2 - 1{,}5\text{ cm/th}$), kenaikan muka laut ($0 - 0{,}5\text{ cm/th}$), horizon (2050 vs 2100), dan ambang penghalang dekat (250 / 500 / 1.000 m). Pada parameter dasar hasilnya identik dengan esai (15 / 242 / 153 / 510) dan seluruh skenario Lampiran 9 tereproduksi.
   * Dilengkapi **Dropdown Wilayah Mandiri** untuk simulasi skala makro Pantura maupun koridor lokal.
   * **Grafik Batang Komparatif (*Grouped Bar Chart*)**: Membandingkan secara langsung kondisi Baseline Eksisting vs Hasil Skenario Simulasi, didukung kartu metrik delta pergeseran risiko.
 
@@ -104,7 +105,7 @@ Sistem menggunakan penamaan resmi yang seragam di seluruh peta, grafik, legenda,
 11. `Restorasi Hidrologis Tambak` (10 transek)
 
 ### C. Status Kerentanan Hotspot
-* **`Hotspot Kritis Tenggelam (< 2050)`** (`#dc2626`): 46 transek darurat elevasi kritis.
+* **`Hotspot Tenggelam Padat Penduduk`** (`#dc2626`): 46 transek (Gi* FDR 5%, peluang tenggelam < 2050 × penduduk).
 * **`Transek Pesisir Non-Kritis`** (`#64748b` / `#94a3b8`): Pesisir berdaya tahan melampaui horizon 2050.
 
 ---

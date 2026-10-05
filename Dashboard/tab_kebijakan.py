@@ -1,7 +1,7 @@
 """
 Tab 3: Rencana Aksi & Simulator Kebijakan (SABUK HIJAU).
-Menyediakan matriks kawasan prioritas terpadu, unduhan rencana aksi CSV,
-dan simulator interaktif 'What-If' akresi sedimen dan horizon waktu.
+Menyediakan matriks kawasan program yang diurutkan berdasarkan prioritas, unduhan rencana aksi CSV,
+dan simulator 'What-If' yang menjalankan ulang Monte Carlo tipologi esai.
 """
 
 import streamlit as st
@@ -12,233 +12,239 @@ import data as data
 import theme as theme
 import charts as charts
 
+# Parameter skenario dasar esai (Bagian 2.2.4)
+DASAR = dict(akresi=0.5, slr=0.39, horizon=2100, ms_dekat=500)
+
+@st.cache_data(show_spinner=False)
+def _tabel_kawasan(cache_version: str = "v3") -> pd.DataFrame:
+    """Kawasan program diperkaya dengan risiko, kelayakan, koordinat, dan penduduk unik."""
+    master = data.master_df()
+    kaw = pd.DataFrame(data.kawasan_gdf().drop(columns="geometry"))
+    agg = master.groupby("kawasan_id").agg(
+        p_tgl_2100=("P_tenggelam_2100", "median"),
+        p_tgl_2050=("P_tenggelam_2050", "median"),
+        rfi=("RFI_score", "median"),
+        n_hotspot=("hotspot_tenggelam", "sum"),
+        lat=("lat", "mean"), lon=("lon", "mean"),
+    )
+    kaw = kaw.join(agg, on="kawasan_id")
+    kaw["pop_unik"] = kaw["kawasan_id"].map(data.penduduk_unik_per_kawasan()).fillna(0)
+    # Urutan prioritas: hotspot tenggelam -> peluang tenggelam 2100 -> kelayakan restorasi (RFI)
+    kaw["_p_urut"] = kaw["p_tgl_2100"].round(2)
+    kaw = kaw.sort_values(["n_hotspot", "_p_urut", "rfi"], ascending=[False, False, False]).reset_index(drop=True)
+    return kaw
+
 def render():
-    ui.section_title("Rencana Aksi Presisi & Simulasi Kebijakan",
-                     "Pedoman intervensi fisik terpadu per ruas kawasan pesisir (≥ 500 m) dan pengujian sensitivitas mitigasi.")
+    ui.section_title("Rencana Aksi & Simulasi Kebijakan",
+                     "Di mana harus bertindak lebih dulu, apa tindakannya, dan seberapa peka hasilnya terhadap asumsi.")
 
     master = data.master_df()
-    kawasan = data.kawasan_gdf()
 
-    # --- 1. Pedoman Operasional Intervensi 4 Kuadran (N-Box Berwarna) ------ #
+    # --- 1. Pedoman Operasional Intervensi 4 Tipologi ---------------------- #
     ui.mod_title_lg(
-        "Pedoman Operasional Intervensi 4 Kuadran",
-        "Panduan tindakan mitigasi fisik spesifik per kuadran matriks defisit vertikal laut dan restriksi lateral darat."
+        "Pedoman Aksi Pantai Bermangrove (920 transek)",
+        "Tipologi laut × darat; angka dalam kurung = panjang kawasan program dan jumlah transek."
     )
-    q_col1, q_col2, q_col3, q_col4 = st.columns(4)
+    q_cols = st.columns(4)
     colors = [theme.COLOR_RED, theme.COLOR_ORANGE, theme.COLOR_YELLOW, theme.COLOR_GREEN]
-
     for i, code in enumerate(C.TIPOLOGI_ORDER):
-        col = [q_col1, q_col2, q_col3, q_col4][i]
-        with col:
+        with q_cols[i]:
             ui.nbox(
-                title=f"{C.TIPOLOGI_LABEL[code]} ({C.TIPOLOGI_KM[code]} km)",
+                title=f"{C.TIPOLOGI_LABEL[code]} ({ui.angka(C.TIPOLOGI_KM[code], 1)} km · {C.TIPOLOGI_N[code]} transek)",
                 body=f"<span style='font-size:12.5px;color:#334155;'>{C.TIPOLOGI_ACTION[code]}</span>",
                 accent=colors[i]
             )
 
     st.write("")
+    pedoman_tanpa_mangrove(master)
+
+    st.write("")
     st.markdown("<hr>", unsafe_allow_html=True)
 
-    # --- 2. Tabel Matriks Rencana Aksi Kawasan (Filter Ganda & KPI) -------- #
+    # --- 2. Matriks Kawasan Prioritas -------------------------------------- #
     ui.mod_title_lg(
-        "Matriks Kawasan Prioritas Intervensi Pesisir",
-        "Rencana penanganan terpadu per ruas garis pantai kontinu (≥ 500 m) hasil agregasi spasial transek analitis."
+        "Daftar Kawasan Program Berdasarkan Prioritas",
+        "Ruas pantai bersebelahan dengan rekomendasi sama digabung menjadi kawasan program. "
+        "Urutan: jumlah hotspot tenggelam → peluang tenggelam sebelum 2100 → kelayakan restorasi (RFI)."
     )
 
+    kaw = _tabel_kawasan()
     f_col1, f_col2 = st.columns([1.2, 1.8])
     with f_col1:
-        sel_w_name = st.selectbox(
-            "Wilayah Koridor Pesisir:",
-            options=C.REGION_NAMES,
-            index=0,
-            help="Saring ruas kawasan prioritas berdasarkan koridor wilayah."
-        )
+        sel_w_name = st.selectbox("Wilayah:", options=C.REGION_NAMES, index=0,
+                                  help="Saring kawasan program berdasarkan wilayah studi.")
         w_code = C.NAME_TO_CODE[sel_w_name]
-
     with f_col2:
-        rek_list = ["Semua Rekomendasi"] + sorted(kawasan["rekomendasi"].unique().tolist())
-        sel_rek = st.selectbox(
-            "Rekomendasi Kebijakan:",
-            options=rek_list,
-            index=0,
-            help="Saring ruas berdasarkan klasifikasi tindakan aksi lapangan."
-        )
+        rek_list = ["Semua Rekomendasi"] + [r for r in C.REKOMENDASI_11 if r in set(kaw["rekomendasi"])]
+        sel_rek = st.selectbox("Rekomendasi:", options=rek_list, index=0,
+                               help="Saring kawasan berdasarkan jenis tindakan lapangan.")
 
-    # Terapkan filter ganda
-    filtered_kawasan = kawasan.copy()
+    filt = kaw.copy()
     if w_code != "SEMUA":
-        filtered_kawasan = filtered_kawasan[filtered_kawasan["wilayah"] == w_code]
+        filt = filt[filt["wilayah"] == w_code]
     if sel_rek != "Semua Rekomendasi":
-        filtered_kawasan = filtered_kawasan[filtered_kawasan["rekomendasi"] == sel_rek]
+        filt = filt[filt["rekomendasi"] == sel_rek]
 
-    tot_km = filtered_kawasan["panjang_km"].sum() if "panjang_km" in filtered_kawasan.columns else 0
-    tot_pop = filtered_kawasan["pop"].sum() if "pop" in filtered_kawasan.columns else 0
-    tot_ruas = len(filtered_kawasan)
+    ids_filt = tuple(sorted(master[master["kawasan_id"].isin(filt["kawasan_id"])]["transek_id"]))
+    pop_total = data.penduduk_unik(ids_filt)
 
-    # 3 Kartu Metrik Ringkas ala Coraly
-    k1, k2, k3 = st.columns(3)
+    k1, k2, k3, k4 = st.columns(4)
     with k1:
-        ui.kpi(f"{tot_ruas:,}".replace(",", "."), "ruas kawasan prioritas")
+        ui.kpi(ui.angka(len(filt)), "kawasan program")
     with k2:
-        ui.kpi(f"{tot_km:.1f} km", "panjang garis pantai intervensi")
+        ui.kpi(f"{ui.angka(filt['panjang_km'].sum(), 1)} km", "panjang garis pantai")
     with k3:
-        ui.kpi(f"{int(tot_pop):,}".replace(",", "."), "estimasi penduduk terlindungi (jiwa)")
+        ui.kpi(ui.angka(int(filt["n_hotspot"].sum())), "transek hotspot tenggelam padat penduduk")
+    with k4:
+        ui.kpi(ui.angka(round(pop_total, -2)), "penduduk terpapar dalam radius 1 km (jiwa unik)")
 
     st.write("")
 
-    cols_show = ["kawasan_id", "wilayah", "rekomendasi", "panjang_km", "transek", "pop", "hotspot"]
-    avail_cols = [c for c in cols_show if c in filtered_kawasan.columns]
-    
-    df_table = filtered_kawasan[avail_cols].copy()
-    # Map kode wilayah ke nama lengkap jika ada
-    if "wilayah" in df_table.columns:
-        df_table["wilayah"] = df_table["wilayah"].map(lambda x: C.CODE_TO_NAME.get(x, x))
-    if "hotspot" in df_table.columns:
-        df_table["hotspot"] = df_table["hotspot"].map(lambda x: "Kritis (< 2050)" if x and x > 0 else "Non-Kritis")
-    if "panjang_km" in df_table.columns:
-        df_table["panjang_km"] = df_table["panjang_km"].round(2)
-    if "pop" in df_table.columns:
-        df_table["pop"] = df_table["pop"].round(0).astype(int)
-
-    df_table = df_table.rename(columns={
-        "kawasan_id": "ID Kawasan",
-        "wilayah": "Koridor Wilayah",
-        "rekomendasi": "Rekomendasi Kebijakan",
-        "panjang_km": "Panjang (km)",
-        "transek": "Jumlah Transek",
-        "pop": "Populasi 1km (Jiwa)",
-        "hotspot": "Status Hotspot"
+    tbl = pd.DataFrame({
+        "Peringkat": range(1, len(filt) + 1),
+        "ID Kawasan": filt["kawasan_id"].to_numpy(),
+        "Wilayah": filt["wilayah"].map(C.CODE_TO_NAME).to_numpy(),
+        "Rekomendasi": filt["rekomendasi"].to_numpy(),
+        "Hotspot (transek)": filt["n_hotspot"].astype(int).to_numpy(),
+        "P(tenggelam < 2100)": filt["p_tgl_2100"].round(2).to_numpy(),
+        "RFI": filt["rfi"].round(2).to_numpy(),
+        "Panjang (km)": filt["panjang_km"].round(2).to_numpy(),
+        "Transek": filt["transek"].astype(int).to_numpy(),
+        "Penduduk Terpapar 1 km": filt["pop_unik"].round(0).astype(int).to_numpy(),
+        "Lintang": filt["lat"].round(5).to_numpy(),
+        "Bujur": filt["lon"].round(5).to_numpy(),
     })
+    st.dataframe(
+        tbl, use_container_width=True, hide_index=True, height=390,
+        column_config={
+            "P(tenggelam < 2100)": st.column_config.ProgressColumn(format="%.2f", min_value=0, max_value=1),
+            "RFI": st.column_config.ProgressColumn("RFI (kelayakan)", format="%.2f", min_value=0, max_value=1),
+            "Panjang (km)": st.column_config.NumberColumn(format="%.2f"),
+            "Penduduk Terpapar 1 km": st.column_config.NumberColumn(format="localized"),
+            "Lintang": st.column_config.NumberColumn(format="%.5f"),
+            "Bujur": st.column_config.NumberColumn(format="%.5f"),
+        }
+    )
+    st.caption("RFI = Restoration Feasibility Index (rerata peringkat ruang peluang, kesesuaian genangan, rendahnya amblesan, "
+               "dan porsi tambak terbengkalai). Koordinat = titik tengah kawasan, dapat disalin ke Google Maps/GPS.")
 
-    st.dataframe(df_table, use_container_width=True, hide_index=True)
-
-    csv_data = df_table.to_csv(index=False).encode("utf-8")
     st.download_button(
-        label="Unduh Tabel Rencana Aksi Kawasan (CSV)",
-        data=csv_data,
-        file_name="rencana_aksi_sabuk_hijau_pantura.csv",
+        label="Unduh Daftar Kawasan Prioritas (CSV)",
+        data=tbl.to_csv(index=False).encode("utf-8"),
+        file_name="kawasan_prioritas_sabuk_hijau.csv",
         mime="text/csv",
-        help="Ekspor matriks rencana aksi untuk pelaporan dinas atau Bappeda"
+        help="Ekspor daftar kawasan untuk pelaporan dinas atau Bappeda"
     )
 
     st.write("")
     st.markdown("<hr>", unsafe_allow_html=True)
 
-    # --- 3. Simulator Skenario Kebijakan Interaktif (Grafik Dinamis + Delta) #
+    # --- 3. Simulator Skenario (Monte Carlo Esai) -------------------------- #
     ui.mod_title_lg(
-        "Simulator 'What-If': Uji Sensitivitas Intervensi & Horizon Waktu",
-        "Eksplorasi pergeseran risiko dan alokasi kuadran saat laju akresi sedimen ditingkatkan atau horizon waktu diubah."
+        "Simulator 'What-If': Seberapa Peka Tipologi terhadap Asumsi?",
+        "Menjalankan ulang 2.000 simulasi Monte Carlo tipologi esai dengan parameter pilihan Anda. "
+        "Pada parameter dasar (akresi 0,5 · SLR 0,39 · 2100 · 500 m) hasilnya identik dengan esai."
     )
 
-    f_sim1, f_sim2, f_sim3, f_sim4 = st.columns([1.2, 1.3, 0.9, 1.1])
-    with f_sim1:
-        sel_w_sim = st.selectbox(
-            "Wilayah Simulasi:",
-            options=C.REGION_NAMES,
-            index=0,
-            help="Pilih koridor wilayah untuk mensimulasikan dampak akresi sedimen secara spesifik atau agregat seluruh Pantura."
-        )
+    f1, f2, f3, f4, f5 = st.columns([1.2, 1.2, 1.2, 0.9, 1.1])
+    with f1:
+        sel_w_sim = st.selectbox("Wilayah Simulasi:", options=C.REGION_NAMES, index=0)
         w_code_sim = C.NAME_TO_CODE[sel_w_sim]
-    with f_sim2:
+    with f2:
         akresi_sim = st.slider(
-            "Laju Akresi Sedimen (cm/th):",
-            min_value=0.2, max_value=2.0, value=0.5, step=0.1,
-            help="Nilai baseline Pb-210 = 0,5 cm/th. Nilai > 1,0 cm/th mengasumsikan pembangunan penangkap sedimen intensif (permeable dam)."
+            "Akresi sedimen (cm/th):", min_value=0.2, max_value=1.5, value=DASAR["akresi"], step=0.1,
+            help="Dasar 0,5 cm/th (Pb-210). Nilai lebih tinggi mencerminkan skenario penangkap sedimen. "
+                 "Rentang 0,2–1,5 sesuai uji ketahanan esai."
         )
-    with f_sim3:
-        horizon_sim = st.radio(
-            "Target Horizon:",
-            options=[2050, 2100],
-            index=1,
-            horizontal=True,
-            help="Tahun batas evaluasi daya tahan elevasi mangrove terhadap kenaikan muka air laut dan amblesan tanah."
+    with f3:
+        slr_sim = st.slider(
+            "Kenaikan muka laut (cm/th):", min_value=0.0, max_value=0.5, value=DASAR["slr"], step=0.01,
+            help="Dasar 0,39 cm/th (altimetri Laut Jawa). Rentang uji esai 0–0,5."
         )
-    with f_sim4:
-        st.write("")
-        buka_tambak = st.checkbox(
-            "Buka Pematang Tambak",
-            value=True,
-            help="Fasilitasi pembukaan pematang tambak terbengkalai di belakang tegakan untuk memperluas ruang mundur alami (Pembukaan Ruang Mundur Mangrove)."
+    with f4:
+        horizon_sim = st.radio("Horizon:", options=[2050, 2100], index=1, horizontal=True,
+                               help="Tekanan laut tinggi = peluang tenggelam sebelum tahun ini > 0,5.")
+    with f5:
+        ms_dekat_sim = st.select_slider(
+            "Penghalang dianggap dekat (m):", options=[250, 500, 1000], value=DASAR["ms_dekat"],
+            help="Tekanan darat tinggi bila penghalang keras berada dalam jarak ini di belakang tepi."
         )
 
-    # Filter domain mangrove sesuai wilayah simulasi terpilih
-    domain_df = master[master["domain_mangrove"] == True].copy()
+    sim = data.simulasi_tipologi(round(akresi_sim, 2), round(slr_sim, 2), int(horizon_sim), float(ms_dekat_sim))
     if w_code_sim != "SEMUA":
-        domain_df = domain_df[domain_df["wilayah"] == w_code_sim]
+        sim = sim[sim["wilayah"] == w_code_sim]
 
-    # Rumus Ilmiah Esai: Defisit D = S + SLR - A
-    # S = subs_cm_yr, SLR = 0.39 cm/th, A = akresi_sim
-    # Waktu hingga tenggelam: T = (0.5 * R) / D
-    import numpy as np
-    defisit_sim = domain_df["subs_cm_yr"] + 0.39 - akresi_sim
-    elevasi = domain_df["modal_elevasi_cm"].fillna(100.0)
-
-    # Jika D <= 0 (akresi >= amblesan + SLR), mangrove tidak tenggelam (T -> 2200 / aman)
-    # Jika D > 0, tahun tenggelam = 2026 + (elevasi / defisit_sim)
-    tahun_sim = np.where(defisit_sim <= 0, 2200.0, 2026.0 + (elevasi / defisit_sim.replace(0, 0.001)))
-    tahun_sim = np.clip(tahun_sim, 2026.0, 2200.0)
-
-    terancam = tahun_sim < horizon_sim
-    if buka_tambak:
-        barrier_dekat = domain_df["jarak_penghalang_m"] <= 500.0
-    else:
-        barrier_dekat = (domain_df["jarak_penghalang_m"] <= 500.0) | (domain_df["lahan_utama"] == "tambak aktif")
-
-    sim_types = []
-    for s, b in zip(terancam, barrier_dekat):
-        if s and b: sim_types.append("RED")
-        elif s and not b: sim_types.append("ORANGE")
-        elif not s and b: sim_types.append("YELLOW")
-        else: sim_types.append("GREEN")
-
-    domain_df["sim_type"] = sim_types
-
-    # Grafik Batang Horizontal Komparatif: Baseline vs Skenario
-    fig_sim = charts.plot_scenario_comparison(domain_df)
+    fig_sim = charts.plot_scenario_comparison(sim)
     st.plotly_chart(fig_sim, use_container_width=True, config={"displayModeBar": False, "responsive": True})
 
-    # Hitung Delta Perubahan Kuadran
-    n_red_orig = int((domain_df["Intervention_Type"] == "RED").sum())
-    n_red_new = int((domain_df["sim_type"] == "RED").sum())
-    diff_red = n_red_new - n_red_orig
-
-    n_orange_orig = int((domain_df["Intervention_Type"] == "ORANGE").sum())
-    n_orange_new = int((domain_df["sim_type"] == "ORANGE").sum())
-    diff_orange = n_orange_new - n_orange_orig
-
-    n_green_orig = int((domain_df["Intervention_Type"] == "GREEN").sum())
-    n_green_new = int((domain_df["sim_type"] == "GREEN").sum())
-    diff_green = n_green_new - n_green_orig
-
-    # Tiga Kartu Delta Metrik
-    d1, d2, d3 = st.columns(3)
-    with d1:
-        str_r = f"{diff_red:+d} transek" if diff_red != 0 else "0 transek"
-        ui.kpi(str_r, f"perubahan status RED (kritis: {n_red_new})")
-    with d2:
-        str_o = f"{diff_orange:+d} transek" if diff_orange != 0 else "0 transek"
-        ui.kpi(str_o, f"perubahan status ORANGE (mundur: {n_orange_new})")
-    with d3:
-        str_g = f"{diff_green:+d} transek" if diff_green != 0 else "0 transek"
-        ui.kpi(str_g, f"perubahan zona GREEN (lestari: {n_green_new})")
+    base = sim["Intervention_Type"].value_counts()
+    new = sim["sim_type"].value_counts()
+    d_cols = st.columns(4)
+    for col, t in zip(d_cols, C.TIPOLOGI_ORDER):
+        diff = int(new.get(t, 0)) - int(base.get(t, 0))
+        with col:
+            ui.kpi(f"{diff:+d}" if diff else "0", f"perubahan {t} (dasar {int(base.get(t, 0))} → {int(new.get(t, 0))})")
 
     st.write("")
-
-    scope_lbl = f"di {sel_w_sim}"
-    if diff_red < 0:
-        ui.note(
-            f"<b>Hasil Skenario ({sel_w_sim}):</b> Peningkatan laju akresi sedimen ke <b>{akresi_sim:.1f} cm/th</b> berhasil "
-            f"membebaskan <b>{abs(diff_red)} transek</b> dari zona prioritas darurat (RED). "
-            f"Kawasan berdaya lentur tinggi (GREEN) kini mencakup <b>{n_green_new} transek</b>."
-        )
-    elif diff_red > 0:
-        ui.note(
-            f"<b>Hasil Skenario ({sel_w_sim}):</b> Horizon waktu atau batasan ruang darat yang lebih ketat menambah <b>{diff_red} transek</b> "
-            f"ke dalam zona bahaya kritis (RED), menuntut akselerasi pembangunan struktur penangkap sedimen."
-        )
+    berubah = sim[sim["sim_type"] != sim["Intervention_Type"]]
+    is_dasar = (round(akresi_sim, 2) == DASAR["akresi"] and round(slr_sim, 2) == DASAR["slr"]
+                and int(horizon_sim) == DASAR["horizon"] and int(ms_dekat_sim) == DASAR["ms_dekat"])
+    jaccard_ro = _jaccard(sim)
+    if is_dasar:
+        ui.note(f"<b>Skenario dasar esai ({sel_w_sim}).</b> Ubah parameter di atas untuk melihat transek mana yang berpindah kelas.")
+    elif berubah.empty:
+        ui.note(f"<b>Hasil ({sel_w_sim}):</b> tidak ada transek yang berpindah kelas. Tipologi tahan terhadap perubahan asumsi ini.")
     else:
+        per_w = berubah.groupby("wilayah").size().sort_values(ascending=False)
+        rincian = ", ".join(f"{C.CODE_TO_NAME[w]} {n}" for w, n in per_w.items())
         ui.note(
-            f"<b>Hasil Skenario ({sel_w_sim}):</b> Jumlah transek berstatus darurat (RED) relatif seimbang pada konfigurasi parameter ini "
-            f"({n_red_new} transek)."
+            f"<b>Hasil ({sel_w_sim}):</b> {len(berubah)} dari {len(sim)} transek bermangrove "
+            f"({ui.angka(len(berubah) / max(len(sim), 1) * 100, 1)}%; ±{ui.angka(len(berubah) * 0.25, 2)} km pantai) berpindah kelas. "
+            f"Kesamaan himpunan RED ∪ ORANGE dengan skenario dasar (Jaccard) = {ui.angka(jaccard_ro, 2)}. "
+            f"Perpindahan terbanyak: {rincian}."
         )
+        with st.expander("Lihat transek yang berpindah kelas"):
+            tb = berubah.merge(master[["transek_id", "lat", "lon", "kawasan_id"]], on="transek_id")
+            tb = tb.rename(columns={"transek_id": "ID Transek", "wilayah": "Wilayah", "Intervention_Type": "Kelas Dasar",
+                                    "sim_type": "Kelas Skenario", "sim_yakin": "Keyakinan Skenario",
+                                    "kawasan_id": "Kawasan", "lat": "Lintang", "lon": "Bujur"})
+            tb["Keyakinan Skenario"] = tb["Keyakinan Skenario"].round(2)
+            st.dataframe(tb, use_container_width=True, hide_index=True, height=300)
 
+def pedoman_tanpa_mangrove(master: pd.DataFrame):
+    """Tabel aturan + besaran 7 rekomendasi pantai tanpa mangrove (Lampiran 6 esai)."""
+    ui.mod_title_lg(
+        "Pedoman Aksi Pantai Tanpa Mangrove (1.445 transek)",
+        "Ditentukan dari jenis lahan peluang × ancaman tenggelam sebelum 2100 (peluang &gt; 0,5)."
+    )
+    kaw = data.kawasan_gdf()
+    non = master[master["domain_mangrove"] != True]
+    rows = []
+    for lahan, ancam, rek, warna, aksi in C.AKSI_NONMANGROVE:
+        km = kaw[kaw["rekomendasi"] == rek]["panjang_km"].sum()
+        n = int((non["rekomendasi"] == rek).sum())
+        rows.append([
+            lahan, ancam,
+            f'<span class="dot" style="background:{warna};display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px"></span><b>{rek}</b>',
+            ui.angka(n), ui.angka(km, 2),
+            f'<span class="catatan">{aksi}</span>',
+        ])
+    ui.tabel_html(
+        ["Jenis lahan", "Terancam tenggelam", "Rekomendasi", "Transek", "Panjang (km)", "Tindakan"],
+        rows, align=["left", "left", "left", "right", "right", "left"],
+        note="Dua rekomendasi penangkap sedimen (±74 km) adalah ruas terancam tenggelam yang perlu menaikkan elevasi "
+             "sebelum penanaman, terutama di Pekalongan, Semarang–Demak, dan Cirebon."
+    )
+    with st.expander("Panjang per kawasan (km)"):
+        tb = (kaw[kaw["rekomendasi"].isin([a[2] for a in C.AKSI_NONMANGROVE])]
+              .pivot_table(index="rekomendasi", columns="wilayah", values="panjang_km", aggfunc="sum", fill_value=0)
+              .reindex(index=[a[2] for a in C.AKSI_NONMANGROVE], columns=["PKL", "SEM", "CIR", "SBY", "JPR"], fill_value=0))
+        tb.columns = [C.CODE_TO_NAME[c] for c in tb.columns]
+        tb["Total"] = tb.sum(axis=1)
+        st.dataframe(tb.round(2), use_container_width=True)
+
+def _jaccard(sim: pd.DataFrame) -> float:
+    a = sim["Intervention_Type"].isin(["RED", "ORANGE"])
+    b = sim["sim_type"].isin(["RED", "ORANGE"])
+    union = (a | b).sum()
+    return float((a & b).sum() / union) if union else 1.0

@@ -421,3 +421,18 @@ label[data-testid="stWidgetLabel"] p { color: var(--text-2) !important; font-wei
 [data-testid="stDeckGlJsonChart"] .maplibregl-ctrl-bottom-right {
   display: none !important;
 }
+
+/* Judul kelompok legenda */
+.legend-head { font-size:12px; font-weight:600; color:{{TEXT_SECONDARY}}; margin:8px 0 -4px; }
+
+/* Tabel ringkasan kawasan */
+.ringkas-wrap { background:#fff; border:0.5px solid {{CARD_BORDER}}; border-radius:12px; padding:6px 4px 10px; overflow-x:auto; }
+.ringkas-tbl { width:100%; border-collapse:collapse; font-size:13.5px; color:{{TEXT}}; }
+.ringkas-tbl th { font-weight:600; font-size:12px; color:{{TEXT_SECONDARY}}; padding:10px 10px; border-bottom:1px solid #e2e8f0; vertical-align:bottom; }
+.ringkas-tbl th:last-child, .ringkas-tbl td:last-child { width:30%; }
+.ringkas-tbl td { padding:9px 10px; border-bottom:1px solid #f1f5f9; vertical-align:top; }
+.ringkas-tbl tr:last-child td { border-bottom:none; }
+.ringkas-tbl .catatan { font-size:12px; color:{{TEXT_SECONDARY}}; line-height:1.45; }
+.ringkas-note { font-size:11.5px; color:{{TEXT_SECONDARY}}; padding:8px 12px 0; }
+.chip { display:inline-block; padding:1px 8px; border-radius:999px; font-size:12px; font-weight:600; color:#fff; }
+.ringkas-tbl td:nth-child(5) { white-space:nowrap; }
